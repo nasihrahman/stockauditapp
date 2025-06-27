@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Stock Audit</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="info-panel">
+    <img src="/logo.png" alt="Company Logo" class="logo" />
+    <div class="company-info">
+      <h1>Admin Panel</h1>
+      <p>Manage Categories & Questions</p>
+    </div>
+  </header>
+  <main>
+    <h2>Add Category</h2>
+    <form method="POST" action="/admin/category">
+      <input type="text" name="name" placeholder="Category name" required />
+      <button type="submit">Add</button>
+    </form>
+    <h2>Add Question</h2>
+    <form method="POST" action="/admin/question">
+      <input type="text" name="text" placeholder="Question text" required />
+      <select name="category" id="category-select" required>
+        <% categories.forEach(function(cat) { %>
+          <option value="<%= cat._id %>"><%= cat.name %></option>
+        <% }) %>
+      </select>
+      <input type="text" id="new-category" name="newCategory" placeholder="Or add new category" />
+      <button type="submit">Add</button>
+    </form>
+    <h2>Questions</h2>
+    <ul>
+      <% questions.forEach(function(q) { %>
+        <li>
+          <%= q.text %> (<%= q.category ? q.category.name : 'No Category' %>)
+          <form method="POST" action="/admin/question/delete/<%= q._id %>" style="display:inline">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+    <script>
+      // If user types in new category, disable select
+      const newCatInput = document.getElementById('new-category');
+      const catSelect = document.getElementById('category-select');
+      newCatInput.addEventListener('input', function() {
+        catSelect.disabled = !!this.value.trim();
+      });
+    </script>
+  </main>
+</body>
+</html>

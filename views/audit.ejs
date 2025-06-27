@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Audit</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="info-panel">
+    <img src="/logo.png" alt="Company Logo" class="logo" />
+    <div class="company-info">
+      <h1>Stock Auditing System</h1>
+    </div>
+  </header>
+  <main>
+    <h2>Audit Questions</h2>
+    <% categories.forEach(function(cat) { %>
+      <section>
+        <h3><%= cat.name %></h3>
+        <ul>
+        <% questions.filter(q => q.category && q.category._id.toString() === cat._id.toString()).forEach(function(q) { %>
+          <li>
+            <form method="POST" action="/audit/answer/<%= q._id %>" enctype="multipart/form-data">
+              <label><%= q.text %></label><br>
+              <input type="radio" name="response" value="yes" required> Yes
+              <input type="radio" name="response" value="no"> No
+              <input type="radio" name="response" value="na"> N/A<br>
+              <textarea name="comment" placeholder="Add comment..."></textarea><br>
+              <input type="file" name="images" multiple accept="image/*"><br>
+              <button type="submit">Submit</button>
+            </form>
+          </li>
+        <% }) %>
+        </ul>
+      </section>
+    <% }) %>
+  </main>
+</body>
+</html>

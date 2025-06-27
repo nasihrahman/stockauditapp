@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Audit (Static Demo)</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="company-section">
+        <div class="logo">🏢</div>
+        <div class="company-info">
+          <h1>Aurora Company</h1>
+          <p>Stock Auditing System</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="#" class="admin-button">Admin</a>
+        <div class="total-score">
+          <h2>Total Score</h2>
+          <span class="score-badge" id="totalScore">0</span>
+          <div class="score-details" id="totalScoreDetails">0 / 0 (0%)</div>
+        </div>
+      </div>
+      <div class="info-panel">
+        <div class="info-item"><div class="info-label">Location:</div><div class="info-value">AURFS001 - Aurora - Marassi Galleria Mall</div></div>
+        <div class="info-item"><div class="info-label">Date:</div><div class="info-value">2025-06-10</div></div>
+        <div class="info-item"><div class="info-label">Branch:</div><div class="info-value">Aurora - Marassi Galleria Mall</div></div>
+        <div class="info-item"><div class="info-label">Manager On Duty:</div><div class="info-value">Chef Shubash Khotiyal</div></div>
+        <div class="info-item"><div class="info-label">G.W.R Inspector:</div><div class="info-value">Mira Fattouh</div></div>
+      </div>
+    </div>
+  </header>
+  <div class="main-container">
+    <main>
+      <div class="category-card" data-category-id="demo-cat-1">
+        <div class="category-header">
+          <div class="category-title">
+            Hygiene
+            <span class="category-score-badge category-score" data-category-id="demo-cat-1">0/2 (0%)</span>
+          </div>
+          <button type="button" class="save-category-btn" data-category-id="demo-cat-1">Save Category Answers</button>
+          <button type="button" class="save-all-category-btn" data-category-id="demo-cat-1">Save All Answers</button>
+        </div>
+        <ul class="questions-list">
+          <li class="question-item" data-category-id="demo-cat-1" data-question-id="demo-q-1">
+            <form class="question-form">
+              <div class="question-content">
+                <div class="question-text">1. Are all surfaces clean?</div>
+                <div class="question-controls">
+                  <div class="radio-group">
+                    <div class="radio-option"><input type="radio" name="response-demo-q-1" value="yes" id="demo-q-1-yes"><label for="demo-q-1-yes">Yes</label></div>
+                    <div class="radio-option"><input type="radio" name="response-demo-q-1" value="no" id="demo-q-1-no"><label for="demo-q-1-no">No</label></div>
+                    <div class="radio-option"><input type="radio" name="response-demo-q-1" value="na" id="demo-q-1-na"><label for="demo-q-1-na">N/A</label></div>
+                  </div>
+                  <span class="question-score-badge" data-question-id="demo-q-1">0</span>
+                  <label class="add-image-label">📷 Add image<input type="file" class="hidden-file-input" accept="image/*"></label>
+                </div>
+              </div>
+              <input type="text" class="comment-input" placeholder="Add your comments here..." name="comment" autocomplete="off">
+              <button type="button" class="delete-comment-btn">Delete Comment</button>
+              <div class="image-preview" data-question-id="demo-q-1"></div>
+            </form>
+          </li>
+          <li class="question-item" data-category-id="demo-cat-1" data-question-id="demo-q-2">
+            <form class="question-form">
+              <div class="question-content">
+                <div class="question-text">2. Are handwashing stations stocked?</div>
+                <div class="question-controls">
+                  <div class="radio-group">
+                    <div class="radio-option"><input type="radio" name="response-demo-q-2" value="yes" id="demo-q-2-yes"><label for="demo-q-2-yes">Yes</label></div>
+                    <div class="radio-option"><input type="radio" name="response-demo-q-2" value="no" id="demo-q-2-no"><label for="demo-q-2-no">No</label></div>
+                    <div class="radio-option"><input type="radio" name="response-demo-q-2" value="na" id="demo-q-2-na"><label for="demo-q-2-na">N/A</label></div>
+                  </div>
+                  <span class="question-score-badge" data-question-id="demo-q-2">0</span>
+                  <label class="add-image-label">📷 Add image<input type="file" class="hidden-file-input" accept="image/*"></label>
+                </div>
+              </div>
+              <input type="text" class="comment-input" placeholder="Add your comments here..." name="comment" autocomplete="off">
+              <button type="button" class="delete-comment-btn">Delete Comment</button>
+              <div class="image-preview" data-question-id="demo-q-2"></div>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <div class="no-questions" style="display:none;">
+        <h3>No audit questions available</h3>
+        <p>Please add categories and questions to get started.</p>
+        <a href="#" class="admin-link">Go to Admin Panel</a>
+      </div>
+    </main>
+  </div>
+  <script src="/js/audit.js"></script>
+</body>
+</html>
