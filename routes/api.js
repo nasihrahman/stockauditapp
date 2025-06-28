@@ -3,16 +3,17 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const { Answer } = require('../models/audit');
+const { cloudinary, storage } = require('../cloudinary'); // Uncomment if using Cloudinary
 
 // Multer setup for image uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../public/uploads'));
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, path.join(__dirname, '../public/uploads'));
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + '-' + file.originalname);
+//   }
+// });
 const upload = multer({ storage });
 
 // GET /api/answers - get all answers
@@ -41,7 +42,8 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
     if (!questionId || !questionId.match(/^[a-fA-F0-9]{24}$/)) {
       return res.status(400).json({ success: false, error: 'Invalid questionId' });
     }
-    let images = req.files ? req.files.map(f => '/uploads/' + f.filename) : [];
+    let images = req.files ? req.files.map(f => f.path) : [];
+
     // Only proceed if at least one of response, comment, or images is present
     if (!response && !comment && images.length === 0) {
       return res.status(400).json({ success: false, error: 'No answer data provided.' });
