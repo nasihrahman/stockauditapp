@@ -4,37 +4,907 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stock Audit</title>
-  <link rel="stylesheet" href="/style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #1e40af 0%, #3730a3 50%, #581c87 100%);
+      color: white;
+      padding: 0;
+      margin: 0 0 40px 0;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 32px;
+      position: relative;
+    }
+    
+    .company-section {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex: 1;
+    }
+    
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px);
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .company-info h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.025em;
+    }
+    
+    .company-info p {
+      opacity: 0.9;
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+    
+    .admin-button {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .admin-button:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+      text-decoration: none;
+      color: white;
+    }
+    
+    .admin-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .total-score {
+      text-align: right;
+    }
+    
+    .total-score h2 {
+      font-size: 1.125rem;
+      margin-bottom: 8px;
+      opacity: 0.9;
+      font-weight: 600;
+    }
+    
+    .score-badge {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,0.2);
+      color: white;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 1.75rem;
+      display: inline-block;
+      margin-bottom: 4px;
+      min-width: 80px;
+    }
+    
+    .score-details {
+      font-size: 1rem;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+    
+    .info-panel {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(16px);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      align-items: center;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+    
+    .info-label {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
+    }
+    
+    .info-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .edit-icon {
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .edit-icon:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    
+    .category-card {
+      background: white;
+      border-radius: 16px;
+      margin-bottom: 32px;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    
+    .category-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .category-header {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      padding: 24px 32px;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .category-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .category-score-badge {
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-size: 1.1rem;
+      border: 2px solid #bfdbfe;
+      min-width: 120px;
+      text-align: center;
+    }
+    
+    .questions-list {
+      padding: 0;
+      list-style: none;
+    }
+    
+    .question-item {
+      padding: 32px;
+      border-bottom: 1px solid #f1f5f9;
+      transition: all 0.2s ease;
+    }
+    
+    .question-item:last-child {
+      border-bottom: none;
+    }
+    
+    .question-item:hover {
+      background: #fafbfc;
+    }
+    
+    .question-form {
+      width: 100%;
+    }
+    
+    .question-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 24px;
+    }
+    
+    .question-text {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #1e293b;
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .question-controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-shrink: 0;
+    }
+    
+    .radio-group {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      border: 2px solid #e2e8f0;
+      background: white;
+      font-weight: 600;
+    }
+    
+    .radio-option:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    
+    .radio-option.selected-yes {
+      background: #ecfdf5;
+      border-color: #22c55e;
+      color: #166534;
+    }
+    
+    .radio-option.selected-no {
+      background: #fef2f2;
+      border-color: #ef4444;
+      color: #dc2626;
+    }
+    
+    .radio-option input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    
+    .radio-option label {
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .question-score-badge {
+      background: #f0f9ff;
+      color: #0c4a6e;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 1.1rem;
+      border: 2px solid #bae6fd;
+      min-width: 40px;
+      text-align: center;
+    }
+    
+    .add-image-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: #3730a3;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 10px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      background: white;
+      transition: all 0.2s ease;
+    }
+    
+    .add-image-label:hover {
+      background: #f8fafc;
+      border-color: #3730a3;
+    }
+    
+    .comment-input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 1rem;
+      background: white;
+      transition: all 0.2s ease;
+      resize: none;
+      font-family: inherit;
+      font-weight: 500;
+    }
+    
+    .comment-input:focus {
+      outline: none;
+      border-color: #3730a3;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(55, 48, 163, 0.1);
+    }
+    
+    .comment-input::placeholder {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    
+    .hidden-file-input {
+      display: none;
+    }
+    
+    .no-questions {
+      text-align: center;
+      padding: 80px 32px;
+      color: #64748b;
+    }
+    
+    .no-questions h3 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: #475569;
+      font-weight: 700;
+    }
+    
+    .no-questions p {
+      font-size: 1.125rem;
+      margin-bottom: 32px;
+      font-weight: 500;
+    }
+    
+    .admin-link {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.125rem;
+      transition: all 0.3s ease;
+    }
+    
+    .admin-link:hover {
+      transform: translateY(-2px);
+      text-decoration: none;
+      color: white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .save-category-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .save-category-btn:hover {
+      background: #1d4ed8;
+    }
+    
+    .save-all-category-btn {
+      background: #22c55e;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .save-all-category-btn:hover {
+      background: #16a34a;
+    }
+    
+    @media (max-width: 1024px) {
+      .info-panel {
+        gap: 24px;
+      }
+      
+      .info-item {
+        min-width: 180px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+        padding: 24px;
+      }
+      
+      .company-section {
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .header-actions {
+        flex-direction: column-reverse;
+        gap: 16px;
+      }
+      
+      .info-panel {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px 24px;
+      }
+      
+      .info-item {
+        min-width: auto;
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .question-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      
+      .question-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .radio-group {
+        flex: 1;
+      }
+      
+      .main-container {
+        padding: 24px 16px;
+      }
+      
+      .category-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+        padding: 20px 24px;
+      }
+      
+      .question-item {
+        padding: 24px 20px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .question-controls {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+      }
+      
+      .radio-group {
+        justify-content: space-around;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="info-panel">
-    <img src="/logo.png" alt="Company Logo" class="logo" />
-    <div class="company-info">
-      <h1>Stock Auditing System</h1>
+  <header class="header">
+    <div class="header-content">
+      <div class="company-section">
+        <div class="logo">🏢</div>
+        <div class="company-info">
+          <h1>Aurora Company</h1>
+          <p>Stock Auditing System</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <a href="/admin" class="admin-button">
+          <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Admin
+        </a>
+        
+        <div class="total-score">
+          <h2>Total Score</h2>
+          <span class="score-badge" id="totalScore">0</span>
+          <div class="score-details" id="totalScoreDetails">0 / 0 (0%)</div>
+        </div>
+      </div>
+      
+      <div class="info-panel">
+        <div class="info-item">
+          <div class="info-label">Location:</div>
+          <div class="info-value">
+            AURFS001 - Aurora - Marassi Galleria Mall
+            <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Date:</div>
+          <div class="info-value">2025-06-10</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Branch:</div>
+          <div class="info-value">Aurora - Marassi Galleria Mall</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Manager On Duty:</div>
+          <div class="info-value">Chef Shubash Khotiyal</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">G.W.R Inspector:</div>
+          <div class="info-value">Mira Fattouh</div>
+        </div>
+      </div>
     </div>
   </header>
-  <main>
-    <h2>Audit Questions</h2>
-    <% categories.forEach(function(cat) { %>
-      <section>
-        <h3><%= cat.name %></h3>
-        <ul>
-        <% questions.filter(q => q.category && q.category._id.toString() === cat._id.toString()).forEach(function(q) { %>
-          <li>
-            <form method="POST" action="/audit/answer/<%= q._id %>" enctype="multipart/form-data">
-              <label><%= q.text %></label><br>
-              <input type="radio" name="response" value="yes" required> Yes
-              <input type="radio" name="response" value="no"> No
-              <input type="radio" name="response" value="na"> N/A<br>
-              <textarea name="comment" placeholder="Add comment..."></textarea><br>
-              <input type="file" name="images" multiple accept="image/*"><br>
-              <button type="submit">Submit</button>
-            </form>
-          </li>
+
+  <div class="main-container">
+    <main>
+      <% if (categories && categories.length) { %>
+        <% categories.forEach(function(cat) { %>
+          <div class="category-card" data-category-id="<%= cat._id %>">
+            <div class="category-header">
+              <div class="category-title">
+                <%= cat.name %>
+                <span class="category-score-badge category-score" data-category-id="<%= cat._id %>">0/0 (0%)</span>
+              </div>
+              <button type="button" class="save-category-btn" data-category-id="<%= cat._id %>" style="margin-left:auto;">Save Category Answers</button>
+              <button type="button" class="save-all-category-btn" data-category-id="<%= cat._id %>" style="margin-left:12px;background:#22c55e;color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:600;cursor:pointer;">Save All Answers</button>
+            </div>
+            <ul class="questions-list">
+              <% questions.filter(q => q.category && q.category._id.toString() === cat._id.toString()).forEach(function(q, idx) { %>
+                <li class="question-item" data-category-id="<%= cat._id %>" data-question-id="<%= q._id %>">
+                  <form method="POST" action="/audit/answer/<%= q._id %>" enctype="multipart/form-data" class="question-form">
+                    <div class="question-content">
+                      <div class="question-text"><%= idx + 1 %>. <%= q.text %></div>
+                      <div class="question-controls">
+                        <div class="radio-group">
+                          <div class="radio-option">
+                            <input type="radio" name="response-<%= q._id %>" value="yes" id="<%= q._id %>-yes" data-score="1">
+                            <label for="<%= q._id %>-yes">Yes</label>
+                          </div>
+                          <div class="radio-option">
+                            <input type="radio" name="response-<%= q._id %>" value="no" id="<%= q._id %>-no" data-score="0">
+                            <label for="<%= q._id %>-no">No</label>
+                          </div>
+                          <div class="radio-option">
+                            <input type="radio" name="response-<%= q._id %>" value="na" id="<%= q._id %>-na" data-score="0">
+                            <label for="<%= q._id %>-na">N/A</label>
+                          </div>
+                        </div>
+                        <span class="question-score-badge" data-question-id="<%= q._id %>">0</span>
+                        <label class="add-image-label">
+                          📷 Add image
+                          <input type="file" name="images" class="hidden-file-input" accept="image/*">
+                        </label>
+                      </div>
+                    </div>
+                    <input type="text" class="comment-input" placeholder="Add your comments here..." name="comment" autocomplete="off">
+                    <div class="image-preview" data-question-id="<%= q._id %>"></div>
+                  </form>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
         <% }) %>
-        </ul>
-      </section>
-    <% }) %>
-  </main>
+      <% } else { %>
+        <div class="no-questions">
+          <h3>No audit questions available</h3>
+          <p>Please add categories and questions to get started.</p>
+          <a href="/admin" class="admin-link">Go to Admin Panel</a>
+        </div>
+      <% } %>
+    </main>
+  </div>
+
+  <script>
+    // --- AJAX: Fetch and prefill answers on load ---
+    function fetchAndPrefillAnswers() {
+      fetch('/api/answers')
+        .then(res => res.json())
+        .then(data => {
+          if (data.answers) {
+            data.answers.forEach(ans => {
+              // Set radio
+              if (ans.response) {
+                const radio = document.querySelector(`input[type="radio"][name='response-${ans.question}'][value='${ans.response}']`);
+                if (radio) {
+                  radio.checked = true;
+                  // Trigger change event to update score UI
+                  radio.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+              }
+              // Set comment
+              if (ans.comment) {
+                const comment = document.querySelector(`.question-item[data-question-id='${ans.question}'] .comment-input`);
+                if (comment) comment.value = ans.comment;
+              }
+              // Set image preview(s)
+              if (ans.images && ans.images.length) {
+                const preview = document.querySelector(`.question-item[data-question-id='${ans.question}'] .image-preview`);
+                if (preview) {
+                  preview.innerHTML = ans.images.map(img => `<img src='${img}' style='max-width:100px;max-height:100px;border-radius:8px;margin-right:6px;'>`).join('');
+                }
+              }
+            });
+            updateScores();
+          }
+        });
+    }
+
+    // --- AJAX: Save answer ---
+    function saveAnswer(questionId, data, isImage) {
+      let fetchOptions = {
+        method: 'POST',
+        body: undefined
+      };
+      if (isImage) {
+        const formData = new FormData();
+        Object.keys(data).forEach(k => formData.append(k, data[k]));
+        fetchOptions.body = formData;
+      } else {
+        fetchOptions.headers = { 'Content-Type': 'application/json' };
+        fetchOptions.body = JSON.stringify(data);
+      }
+      fetch('/api/answer', fetchOptions)
+        .then(res => res.json())
+        .then(resp => {
+          if (resp.success && resp.answer && resp.answer.images && isImage) {
+            const preview = document.querySelector(`.question-item[data-question-id='${questionId}'] .image-preview`);
+            if (preview) {
+              preview.innerHTML = resp.answer.images.map(img => `<img src='${img}' style='max-width:100px;max-height:100px;border-radius:8px;margin-right:6px;'>`).join('');
+            }
+          }
+        })
+        .catch(() => {
+          alert('Failed to save answer. Please try again.');
+        });
+    }
+
+    // --- Listen for radio changes ---
+    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        updateScores();
+        const questionItem = this.closest('.question-item');
+        const questionId = questionItem.getAttribute('data-question-id');
+        const response = this.value;
+        const comment = questionItem.querySelector('.comment-input').value;
+        saveAnswer(questionId, { questionId, response, comment });
+      });
+    });
+
+    // --- Listen for comment changes (debounced) ---
+    document.querySelectorAll('.comment-input').forEach(function(input) {
+      let timeout;
+      input.addEventListener('input', function() {
+        clearTimeout(timeout);
+        const questionItem = this.closest('.question-item');
+        const questionId = questionItem.getAttribute('data-question-id');
+        const radios = questionItem.querySelectorAll('input[type="radio"]');
+        let response = '';
+        radios.forEach(r => { if (r.checked) response = r.value; });
+        const comment = this.value;
+        timeout = setTimeout(() => {
+          saveAnswer(questionId, { questionId, response: response || undefined, comment });
+        }, 500);
+      });
+      // Optional: Add a button for comment save
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = 'Add Comment';
+      btn.className = 'add-comment-btn';
+      btn.style.marginLeft = '8px';
+      input.parentNode.insertBefore(btn, input.nextSibling);
+      btn.addEventListener('click', function() {
+        const questionItem = input.closest('.question-item');
+        const questionId = questionItem.getAttribute('data-question-id');
+        const radios = questionItem.querySelectorAll('input[type="radio"]');
+        let response = '';
+        radios.forEach(r => { if (r.checked) response = r.value; });
+        const comment = input.value;
+        saveAnswer(questionId, { questionId, response: response || undefined, comment });
+      });
+    });
+
+    // --- Listen for image uploads ---
+    document.querySelectorAll('input[type="file"]').forEach(function(input) {
+      input.addEventListener('change', function() {
+        const questionItem = this.closest('.question-item');
+        const questionId = questionItem.getAttribute('data-question-id');
+        const radios = questionItem.querySelectorAll('input[type="radio"]');
+        let response = '';
+        radios.forEach(r => { if (r.checked) response = r.value; });
+        const comment = questionItem.querySelector('.comment-input').value;
+        if (this.files && this.files.length) {
+          const formData = new FormData();
+          formData.append('questionId', questionId);
+          formData.append('response', response);
+          formData.append('comment', comment);
+          formData.append('images', this.files[0]);
+          fetch('/api/answer', {
+            method: 'POST',
+            body: formData
+          })
+            .then(res => res.json())
+            .then(resp => {
+              if (resp.success && resp.answer && resp.answer.images) {
+                const preview = questionItem.querySelector('.image-preview');
+                if (preview) {
+                  preview.innerHTML = resp.answer.images.map(img => `<img src='${img}' style='max-width:100px;max-height:100px;border-radius:8px;margin-right:6px;'>`).join('');
+                }
+              }
+            })
+            .catch(() => {
+              alert('Failed to upload image.');
+            });
+        }
+      });
+    });
+
+    // --- Save All Answers in Category ---
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.save-all-category-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const categoryId = btn.getAttribute('data-category-id');
+          const questionItems = document.querySelectorAll(`.question-item[data-category-id='${categoryId}']`);
+          const savePromises = [];
+          questionItems.forEach(function(questionItem) {
+            const questionId = questionItem.getAttribute('data-question-id');
+            const radios = questionItem.querySelectorAll('input[type="radio"]');
+            let response = '';
+            radios.forEach(r => { if (r.checked) response = r.value; });
+            const comment = questionItem.querySelector('.comment-input').value;
+            savePromises.push(
+              fetch('/api/answer', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ questionId, response: response || undefined, comment })
+              })
+              .then(res => res.json())
+            );
+          });
+          Promise.all(savePromises).then(results => {
+            if (results.every(r => r.success)) {
+              alert('All answers in this category have been saved!');
+            } else {
+              alert('Some answers failed to save. Please try again.');
+            }
+          });
+        });
+      });
+      
+      fetchAndPrefillAnswers();
+      // updateScores(); // Not needed, fetchAndPrefillAnswers triggers it
+    });
+
+    // --- Dynamic scoring function ---
+    function updateScores() {
+      let totalScore = 0;
+      let totalPossible = 0;
+      // For each category
+      document.querySelectorAll('.category-card').forEach(function(catCard) {
+        const catId = catCard.getAttribute('data-category-id');
+        let catScore = 0;
+        let catPossible = 0;
+        // For each question in this category
+        catCard.querySelectorAll('.question-item').forEach(function(qItem) {
+          const qId = qItem.getAttribute('data-question-id');
+          let score = 0;
+          const radios = qItem.querySelectorAll('input[type="radio"]');
+          let answered = false;
+          radios.forEach(radio => {
+            if (radio.checked) {
+              answered = true;
+              if (radio.value === 'yes') score = 1;
+            }
+          });
+          // Update per-question badge
+          const badge = qItem.querySelector('.question-score-badge');
+          if (badge) badge.textContent = answered ? score : '0';
+          // Always count this question toward possible
+          catScore += score;
+          catPossible += 1;
+        });
+        // Update per-category badge
+        const catBadge = catCard.querySelector('.category-score-badge');
+        let percent = catPossible ? Math.round((catScore / catPossible) * 100) : 0;
+        if (catBadge) catBadge.textContent = `${catScore}/${catPossible} (${percent}%)`;
+        totalScore += catScore;
+        totalPossible += catPossible;
+      });
+      // Update total score
+      const totalScoreElem = document.getElementById('totalScore');
+      const totalScoreDetails = document.getElementById('totalScoreDetails');
+      let totalPercent = totalPossible ? Math.round((totalScore / totalPossible) * 100) : 0;
+      if (totalScoreElem) totalScoreElem.textContent = totalScore;
+      if (totalScoreDetails) totalScoreDetails.textContent = `${totalScore} / ${totalPossible} (${totalPercent}%)`;
+    }
+  </script>
 </body>
 </html>
+

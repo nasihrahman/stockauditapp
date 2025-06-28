@@ -7,12 +7,13 @@ const app = express();
 dotenv.config();
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/stock');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/stockaudit');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // <-- Add this line to support JSON body parsing
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes

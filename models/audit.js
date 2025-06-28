@@ -26,19 +26,4 @@ module.exports = {
   Answer: mongoose.model('Answer', AnswerSchema)
 };
 
-// DEBUG: Log all question IDs on server start
-if (require.main === module) {
-  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/stockaudit', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(async () => {
-      const questions = await module.exports.Question.find();
-      console.log('All Question IDs in DB:');
-      questions.forEach(q => console.log(q._id.toString(), q.text));
-      process.exit(0);
-    })
-    .catch(err => {
-      console.error('DB connection error:', err);
-      process.exit(1);
-    });
-}
-
 
