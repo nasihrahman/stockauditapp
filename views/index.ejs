@@ -31,7 +31,7 @@
     }
     
     .header {
-            background:white;
+            background: white;
             color: white;
             padding: 20px;
             position: relative;
@@ -60,7 +60,7 @@
   justify-content: space-between;
   padding: 1rem;
   gap: 1rem;
-  background: rgb(23, 40, 50);
+background: rgb(23, 40, 50);
   color: white;
   border-radius: 1rem;
 }
@@ -866,6 +866,64 @@
 }
 
     /* --- END: User custom style overrides --- */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(30,41,59,0.85);
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+    }
+    .image-modal.active {
+      display: flex;
+    }
+    .image-modal-content {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      background: #fff;
+      padding: 16px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .image-modal-img {
+      max-width: 80vw;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,41,59,0.15);
+      object-fit: contain;
+      background: #fff;
+    }
+    .image-modal-close {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+    .image-modal-close:hover {
+      background: #dc2626;
+    }
   </style>
   
 </head>
@@ -1020,6 +1078,14 @@
         </div>
       <% } %>
     </main>
+  </div>
+
+  <div id="imageModal" class="image-modal">
+    <div class="image-modal-content">
+      <button class="image-modal-close" id="closeModalBtn">&times;</button>
+
+      <img src="" alt="Preview" class="image-modal-img" id="imageModalImg">
+    </div>
   </div>
 
   <script>
@@ -1270,6 +1336,17 @@
           imageEl.style.objectFit = 'cover';
           imageEl.style.display = 'block';
           imageEl.style.position = 'relative';
+          // --- Modal open on click ---
+          imageEl.style.cursor = 'pointer';
+          imageEl.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('imageModalImg');
+
+            modalImg.src = img;
+            modal.classList.add('active');
+          });
+          // ...existing code for removeBtn...
           const removeBtn = document.createElement('button');
           removeBtn.type = 'button';
           removeBtn.className = 'remove-image-btn';
@@ -1295,10 +1372,9 @@
         });
       }
     }
-
-   
-document.addEventListener('DOMContentLoaded', function () {
-  fetchAndPrefillAnswers();
+    // --- Modal close logic ---
+    document.addEventListener('DOMContentLoaded', function () {
+      fetchAndPrefillAnswers();
     const editBtn = document.getElementById('edit-all-btn');
     const infoValues = document.querySelectorAll('.info-panel .info-value');
     let isEditing = false;
@@ -1324,8 +1400,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Optionally, on save, you could collect and send the edited values via fetch() here.
     });
-  });
-    
+      const modal = document.getElementById('imageModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      closeModalBtn.addEventListener('click', function() {
+        modal.classList.remove('active');
+        document.getElementById('modalImage').src = '';
+      });
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          document.getElementById('modalImage').src = '';
+        }
+      });
+    });
 
     // --- INFO PANEL EDITABLE WITH EDIT ICON ---
     document.querySelectorAll('.info-item').forEach(function(item) {
@@ -1347,6 +1434,171 @@ document.addEventListener('DOMContentLoaded', function () {
           valueDiv.style.color = '';
           valueDiv.style.borderBottom = '';
         });
+      }
+    });
+
+    // Modal close logic
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('imageModalImg');
+    const modalClose = document.getElementById('imageModalClose');
+    modalClose.addEventListener('click', function() {
+      modal.classList.remove('active');
+      setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
+    });
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
+      }
+    });
+  </script>
+
+  <!-- Image Modal Overlay -->
+  <div id="imageModal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.85);align-items:center;justify-content:center;">
+    <span id="closeModalBtn" style="position:absolute;top:32px;right:48px;font-size:2.5rem;color:#fff;cursor:pointer;z-index:10001;font-weight:700;">&times;</span>
+    <img id="modalImage" src="" alt="Preview" style="max-width:90vw;max-height:80vh;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.25);border:4px solid #fff;">
+  </div>
+  <style>
+    #imageModal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(30,41,59,0.85); align-items: center; justify-content: center; }
+    #imageModal.active { display: flex !important; }
+    #imageModal img { max-width: 90vw; max-height: 80vh; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); border: 4px solid #fff; }
+    #closeModalBtn { position: absolute; top: 32px; right: 48px; font-size: 2.5rem; color: #fff; cursor: pointer; z-index: 10001; font-weight: 700; transition: color 0.2s; }
+    #closeModalBtn:hover { color: #f87171; }
+  </style>
+  <script>
+    // --- IMAGE PREVIEW + REMOVE BUTTON ---
+    function renderImagePreview(questionId, images) {
+      const preview = document.querySelector(`.question-item[data-question-id='${questionId}'] .image-preview`);
+      if (preview) {
+        preview.innerHTML = '';
+        images.forEach((img, idx) => {
+          const wrapper = document.createElement('div');
+          wrapper.style.display = 'inline-block';
+          wrapper.style.position = 'relative';
+          wrapper.style.marginRight = '14px';
+          wrapper.style.marginBottom = '8px';
+          const imageEl = document.createElement('img');
+          imageEl.src = img;
+          imageEl.alt = 'Preview';
+          imageEl.style.maxWidth = '220px';
+          imageEl.style.maxHeight = '220px';
+          imageEl.style.borderRadius = '12px';
+          imageEl.style.boxShadow = '0 2px 8px rgba(30,41,59,0.10)';
+          imageEl.style.border = '2.5px solid #e0e7ef';
+          imageEl.style.objectFit = 'cover';
+          imageEl.style.display = 'block';
+          imageEl.style.position = 'relative';
+          // --- Modal open on click ---
+          imageEl.style.cursor = 'pointer';
+          imageEl.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = img;
+            modal.classList.add('active');
+          });
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'remove-image-btn';
+          removeBtn.innerHTML = '&times;';
+          removeBtn.title = 'Remove image';
+          removeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch(`/api/answer/image-remove`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ questionId, image: img })
+            })
+              .then(res => res.json())
+              .then(resp => {
+                if (resp.success && resp.answer && resp.answer.images) {
+                  renderImagePreview(questionId, resp.answer.images);
+                }
+              });
+          });
+          wrapper.appendChild(imageEl);
+          wrapper.appendChild(removeBtn);
+          preview.appendChild(wrapper);
+        });
+      }
+    }
+    // --- Modal close logic ---
+    document.addEventListener('DOMContentLoaded', function () {
+      fetchAndPrefillAnswers();
+    const editBtn = document.getElementById('edit-all-btn');
+    const infoValues = document.querySelectorAll('.info-panel .info-value');
+    let isEditing = false;
+
+    editBtn.addEventListener('click', function () {
+      isEditing = !isEditing;
+
+      infoValues.forEach(valueDiv => {
+        if (isEditing) {
+          valueDiv.setAttribute('contenteditable', 'true');
+          valueDiv.style.background = '#fff';
+          valueDiv.style.borderBottom = '2px solid #3730a3';
+          valueDiv.style.color = '#3730a3';
+        } else {
+          valueDiv.removeAttribute('contenteditable');
+          valueDiv.style.background = '';
+          valueDiv.style.borderBottom = '';
+          valueDiv.style.color = '';
+        }
+      });
+
+      editBtn.innerText = isEditing ? 'Save Info' : 'Edit Info';
+
+      // Optionally, on save, you could collect and send the edited values via fetch() here.
+    });
+      const modal = document.getElementById('imageModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      closeModalBtn.addEventListener('click', function() {
+        modal.classList.remove('active');
+        document.getElementById('modalImage').src = '';
+      });
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          document.getElementById('modalImage').src = '';
+        }
+      });
+    });
+
+    // --- INFO PANEL EDITABLE WITH EDIT ICON ---
+    document.querySelectorAll('.info-item').forEach(function(item) {
+      const valueDiv = item.querySelector('.info-value');
+      const editIcon = item.querySelector('.edit-icon');
+      if (editIcon && valueDiv) {
+        editIcon.style.cursor = 'pointer';
+        editIcon.addEventListener('click', function(e) {
+          e.preventDefault();
+          valueDiv.setAttribute('contenteditable', 'true');
+          valueDiv.focus();
+          valueDiv.style.background = '#fff';
+          valueDiv.style.color = '#3730a3';
+          valueDiv.style.borderBottom = '2px solid #3730a3';
+        });
+        valueDiv.addEventListener('blur', function() {
+          valueDiv.removeAttribute('contenteditable');
+          valueDiv.style.background = '';
+          valueDiv.style.color = '';
+          valueDiv.style.borderBottom = '';
+        });
+      }
+    });
+
+    // Modal close logic
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('imageModalImg');
+    const modalClose = document.getElementById('imageModalClose');
+    modalClose.addEventListener('click', function() {
+      modal.classList.remove('active');
+      setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
+    });
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
       }
     });
   </script>
