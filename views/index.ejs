@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stock Audit</title>
+  <!-- Add Raleway font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
       background: #f8fafc;
       color: #1e293b;
-      line-height: 1.6;
     }
     
     .container {
@@ -49,55 +49,16 @@
       margin: 0 auto;
       padding: 32px 24px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      justify-content: flex-start;
+      align-items: flex-start;
       gap: 32px;
       position: relative;
     }
-    
-    .company-section {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex: 1;
-    }
-    
-    .logo {
-      width: 64px;
-      height: 64px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(16px);
-      border: 2px solid rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-    
-    .company-info h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-      letter-spacing: -0.025em;
-    }
-    
-    .company-info p {
-      opacity: 0.9;
-      font-size: 1.125rem;
-      font-weight: 500;
-    }
-    
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
-    }
-    
     .admin-button {
+      position: absolute;
+      top: 32px;
+      right: 32px;
+      z-index: 10;
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(12px);
       border: 2px solid rgba(255,255,255,0.2);
@@ -445,6 +406,119 @@
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
     
+    .summary-panel {
+      background: #fff;
+      border: 1.5px solid #e0e7ef;
+      border-radius: 18px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      margin: 2.5rem auto 2rem auto;
+      box-shadow: 0 8px 32px rgba(30,41,59,0.10);
+      max-width: 600px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .summary-title {
+      color: #3730a3;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .summary-table {
+      margin-bottom: 0;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f8fafc;
+      box-shadow: 0 2px 8px rgba(30,41,59,0.04);
+    }
+    .summary-table th {
+      background: #e0e7ef;
+      color: #3730a3;
+      font-weight: 700;
+      border: none;
+      padding: 1rem 0.75rem;
+      font-size: 1.05rem;
+    }
+    .summary-table td {
+      padding: 0.85rem 0.75rem;
+      vertical-align: middle;
+      border-color: #e0e7ef;
+      font-size: 1.05rem;
+    }
+    .summary-table tr {
+      transition: background 0.2s;
+    }
+    .summary-table tr:hover {
+      background: #f1f5f9;
+    }
+    .badge {
+      border-radius: 8px;
+      padding: 0.4em 1.1em;
+      font-size: 0.98em;
+      font-weight: 600;
+      background: #e0e7ef;
+      color: #3730a3;
+      border: 1.5px solid #c7d2fe;
+      box-shadow: 0 1px 4px rgba(55,48,163,0.06);
+    }
+    .badge.bg-success {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+    .badge.bg-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+    .badge.bg-secondary {
+      background: #e0e7ef;
+      color: #3730a3;
+      border-color: #c7d2fe;
+    }
+    .image-preview img {
+      max-width: 220px;
+      max-height: 220px;
+      border-radius: 12px;
+      margin-right: 14px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(30,41,59,0.10);
+      border: 2.5px solid #e0e7ef;
+      object-fit: cover;
+      transition: transform 0.2s;
+      position: relative;
+    }
+    .remove-image-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #fff;
+      color: #dc2626;
+      border: 2px solid #fecaca;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(220,38,38,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+    }
+    .remove-image-btn:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
     @media (max-width: 1024px) {
       .info-panel {
         gap: 24px;
@@ -472,6 +546,53 @@
         flex-direction: column-reverse;
         gap: 16px;
       }
+      .summary-panel {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .summary-title {
+      color: var(--gray-800);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .summary-table {
+      margin-bottom: 0;
+    }
+
+    .summary-table th {
+      background: var(--light-bg);
+      color: var(--gray-700);
+      font-weight: 600;
+      border: none;
+      padding: 1rem 0.75rem;
+    }
+
+    .summary-table td {
+      padding: 0.75rem;
+      vertical-align: middle;
+      border-color: var(--gray-200);
+    }
+
+    .info-panel, .category-section, .summary-panel {
+        margin: 1rem;
+      }
+
+      .summary-table {
+        font-size: 0.9rem;
+      }
+
+      .summary-table th,
+      .summary-table td {
+        padding: 0.5rem 0.25rem;
+      }
+
       
       .info-panel {
         flex-direction: column;
@@ -540,14 +661,7 @@
         </div>
       </div>
       
-      <div class="header-actions">
-        <a href="/admin" class="admin-button">
-          <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          Admin
-        </a>
+      
         
         <div class="total-score">
           <h2>Total Score</h2>
@@ -555,6 +669,16 @@
           <div class="score-details" id="totalScoreDetails">0 / 0 (0%)</div>
         </div>
       </div>
+      <div>
+        <div class="header-actions">
+        <a href="/admin" class="admin-button">
+          <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Admin
+        </a>
+      
       
       <div class="info-panel">
         <div class="info-item">
@@ -586,6 +710,28 @@
       </div>
     </div>
   </header>
+  </div>
+ <div class="summary-panel">
+      <h4 class="summary-title">
+        <i class="fas fa-chart-bar me-2"></i>
+        Quick Summary
+      </h4>
+      <div class="table-responsive">
+        <table class="table table-hover summary-table" id="summaryTable">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Score</th>
+              <th>Percentage</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="summaryTableBody">
+            <!-- Dynamic rows will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
 
   <div class="main-container">
     <main>
@@ -628,7 +774,6 @@
                     </div>
                     <input type="text" class="comment-input" placeholder="Add your comments here..." name="comment" autocomplete="off">
                     <div class="image-preview" data-question-id="<%= q._id %>"></div>
-                    <button type="button" class="save-answer-btn" style="margin-top:8px;float:right;">Save Answer</button>
                   </form>
                 </li>
               <% }) %>
@@ -646,8 +791,10 @@
   </div>
 
   <script>
+    let isPrefilling = false;
     // --- AJAX: Fetch and prefill answers on load ---
     function fetchAndPrefillAnswers() {
+      isPrefilling = true; // ⛳️ Start prefilling
       fetch('/api/answers')
         .then(res => res.json())
         .then(data => {
@@ -663,20 +810,18 @@
                 }
               }
               // Set comment
-              if (ans.comment) {
-                const comment = document.querySelector(`.question-item[data-question-id='${ans.question}'] .comment-input`);
-                if (comment) comment.value = ans.comment;
-              }
+              const comment = document.querySelector(`.question-item[data-question-id='${ans.question}'] .comment-input`);
+              if (comment && typeof ans.comment === 'string') comment.value = ans.comment;
               // Set image preview(s)
               if (ans.images && ans.images.length) {
-                const preview = document.querySelector(`.question-item[data-question-id='${ans.question}'] .image-preview`);
-                if (preview) {
-                  preview.innerHTML = ans.images.map(img => `<img src='${img}' style='max-width:100px;max-height:100px;border-radius:8px;margin-right:6px;'>`).join('');
-                }
+                renderImagePreview(ans.question, ans.images);
               }
             });
             updateScores();
           }
+        })
+        .finally(() => {
+          isPrefilling = false; // ✅ Done prefilling
         });
     }
 
@@ -698,10 +843,7 @@
         .then(res => res.json())
         .then(resp => {
           if (resp.success && resp.answer && resp.answer.images && isImage) {
-            const preview = document.querySelector(`.question-item[data-question-id='${questionId}'] .image-preview`);
-            if (preview) {
-              preview.innerHTML = resp.answer.images.map(img => `<img src='${img}' style='max-width:100px;max-height:100px;border-radius:8px;margin-right:6px;'>`).join('');
-            }
+            renderImagePreview(questionId, resp.answer.images);
           }
         })
         .catch(() => {
@@ -709,9 +851,92 @@
         });
     }
 
+    // --- Scoring logic: update per-question, per-category, and total scores ---
+    function updateScores() {
+      // Per-question score badge
+      document.querySelectorAll('.question-item').forEach(function(item) {
+        const radios = item.querySelectorAll('input[type="radio"]');
+        let score = 0;
+        radios.forEach(r => {
+          if (r.checked && r.value === 'yes') score = 1;
+        });
+        const badge = item.querySelector('.question-score-badge');
+        if (badge) badge.textContent = score;
+      });
+
+      // Per-category and total
+      let totalScore = 0, totalPossible = 0;
+      document.querySelectorAll('.category-card').forEach(function(catCard) {
+        const catId = catCard.getAttribute('data-category-id');
+        const questions = catCard.querySelectorAll('.question-item');
+        let catScore = 0, catPossible = 0;
+        questions.forEach(function(item) {
+          const radios = item.querySelectorAll('input[type="radio"]');
+          let answered = false;
+          radios.forEach(r => {
+            if (r.checked) {
+              answered = true;
+              if (r.value === 'yes') catScore += 1;
+            }
+          });
+          // Only count as possible if not N/A
+          if (answered && radios[2] && !radios[2].checked) catPossible += 1;
+          // If N/A is selected, do not count as possible
+          if (answered && radios[2] && radios[2].checked) {
+            // N/A selected, do not increment possible
+          } else if (answered) {
+            // Yes/No selected, increment possible
+            // Already handled above
+          }
+        });
+        totalScore += catScore;
+        totalPossible += catPossible;
+        // Update category badge
+        const catBadge = catCard.querySelector('.category-score-badge');
+        if (catBadge) {
+          catBadge.textContent = `${catScore}/${catPossible} (${catPossible ? Math.round(catScore/catPossible*100) : 0}%)`;
+        }
+      });
+      // Update total
+      document.getElementById('totalScore').textContent = totalScore;
+      document.getElementById('totalScoreDetails').textContent = `${totalScore} / ${totalPossible} (${totalPossible ? Math.round(totalScore/totalPossible*100) : 0}%)`;
+      // Update summary panel
+      updateSummaryPanel();
+    }
+
+    // --- DYNAMIC SUMMARY PANEL ---
+    function updateSummaryPanel() {
+      const tbody = document.getElementById('summaryTableBody');
+      tbody.innerHTML = '';
+      document.querySelectorAll('.category-card').forEach(function(catCard) {
+        const catName = catCard.querySelector('.category-title').childNodes[0].textContent.trim();
+        const catBadge = catCard.querySelector('.category-score-badge');
+        let score = catBadge ? catBadge.textContent : '0/0 (0%)';
+        let [scored, possible] = score.split('/');
+        possible = possible.split(' ')[0];
+        let percent = score.match(/\((\d+)%\)/);
+        percent = percent ? percent[1] : '0';
+        let status = 'Pending', badgeClass = 'badge bg-secondary';
+        if (possible > 0) {
+          if (percent >= 80) { status = 'Pass'; badgeClass = 'badge bg-success'; }
+          else if (percent >= 50) { status = 'Warning'; badgeClass = 'badge bg-secondary'; }
+          else { status = 'Fail'; badgeClass = 'badge bg-danger'; }
+        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="fw-semibold">${catName}</td>
+          <td>${scored}/${possible}</td>
+          <td>${percent}%</td>
+          <td><span class="${badgeClass}">${status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    
     // --- Listen for radio changes ---
     document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
       radio.addEventListener('change', function() {
+        if (isPrefilling) return;
         updateScores();
         const questionItem = this.closest('.question-item');
         const questionId = questionItem.getAttribute('data-question-id');
@@ -724,7 +949,7 @@
     // --- Listen for comment changes (debounced) ---
     document.querySelectorAll('.comment-input').forEach(function(input) {
       let timeout;
-      input.addEventListener('input', function() {
+      input.addEventListener('input', function () {
         clearTimeout(timeout);
         const questionItem = this.closest('.question-item');
         const questionId = questionItem.getAttribute('data-question-id');
@@ -732,25 +957,30 @@
         let response = '';
         radios.forEach(r => { if (r.checked) response = r.value; });
         const comment = this.value;
+        // 🚫 Prevent overwriting comment with empty string unless explicitly cleared
+        if (isPrefilling) return;
+        if (comment.trim() === '') return;
         timeout = setTimeout(() => {
           saveAnswer(questionId, { questionId, response: response || undefined, comment });
         }, 500);
       });
-      // Optional: Add a button for comment save
+      // Replace Add Comment button with Clear Comment button
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.textContent = 'Add Comment';
-      btn.className = 'add-comment-btn';
+      btn.textContent = 'Clear Comment';
+      btn.className = 'clear-comment-btn';
       btn.style.marginLeft = '8px';
       input.parentNode.insertBefore(btn, input.nextSibling);
       btn.addEventListener('click', function() {
+        if (isPrefilling) return;
+        input.value = '';
         const questionItem = input.closest('.question-item');
         const questionId = questionItem.getAttribute('data-question-id');
         const radios = questionItem.querySelectorAll('input[type="radio"]');
         let response = '';
         radios.forEach(r => { if (r.checked) response = r.value; });
-        const comment = input.value;
-        saveAnswer(questionId, { questionId, response: response || undefined, comment });
+        // Explicitly clear comment in backend
+        saveAnswer(questionId, { questionId, response: response || undefined, comment: '' });
       });
     });
 
@@ -776,10 +1006,7 @@
             .then(res => res.json())
             .then(resp => {
               if (resp.success && resp.answer && resp.answer.images) {
-                const preview = questionItem.querySelector('.image-preview');
-                if (preview) {
-                  preview.innerHTML = resp.answer.images.map(img => `<img src='${img}' style='max-width:100px;max-height:100px;border-radius:8px;margin-right:6px;'>`).join('');
-                }
+                renderImagePreview(questionId, resp.answer.images);
               }
             })
             .catch(() => {
@@ -789,22 +1016,83 @@
       });
     });
 
+    // --- IMAGE PREVIEW + REMOVE BUTTON ---
+    function renderImagePreview(questionId, images) {
+      const preview = document.querySelector(`.question-item[data-question-id='${questionId}'] .image-preview`);
+      if (preview) {
+        preview.innerHTML = '';
+        images.forEach((img, idx) => {
+          const wrapper = document.createElement('div');
+          wrapper.style.display = 'inline-block';
+          wrapper.style.position = 'relative';
+          wrapper.style.marginRight = '14px';
+          wrapper.style.marginBottom = '8px';
+          const imageEl = document.createElement('img');
+          imageEl.src = img;
+          imageEl.alt = 'Preview';
+          imageEl.style.maxWidth = '220px';
+          imageEl.style.maxHeight = '220px';
+          imageEl.style.borderRadius = '12px';
+          imageEl.style.boxShadow = '0 2px 8px rgba(30,41,59,0.10)';
+          imageEl.style.border = '2.5px solid #e0e7ef';
+          imageEl.style.objectFit = 'cover';
+          imageEl.style.display = 'block';
+          imageEl.style.position = 'relative';
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'remove-image-btn';
+          removeBtn.innerHTML = '&times;';
+          removeBtn.title = 'Remove image';
+          removeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch(`/api/answer/image-remove`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ questionId, image: img })
+            })
+              .then(res => res.json())
+              .then(resp => {
+                if (resp.success && resp.answer && resp.answer.images) {
+                  renderImagePreview(questionId, resp.answer.images);
+                }
+              });
+          });
+          wrapper.appendChild(imageEl);
+          wrapper.appendChild(removeBtn);
+          preview.appendChild(wrapper);
+        });
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
       fetchAndPrefillAnswers();
       // updateScores(); // Not needed, fetchAndPrefillAnswers triggers it
     });
 
-    // Add event listeners for Save Answer buttons
-    document.querySelectorAll('.save-answer-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const questionItem = btn.closest('.question-item');
-        const questionId = questionItem.getAttribute('data-question-id');
-        const radios = questionItem.querySelectorAll('input[type="radio"]');
-        let response = '';
-        radios.forEach(r => { if (r.checked) response = r.value; });
-        const comment = questionItem.querySelector('.comment-input').value;
-        saveAnswer(questionId, { questionId, response: response || undefined, comment });
-      });
+    // Remove Save Answer button event listeners and elements
+    document.querySelectorAll('.save-answer-btn').forEach(function(btn) { btn.remove(); });
+
+    // --- INFO PANEL EDITABLE WITH EDIT ICON ---
+    document.querySelectorAll('.info-item').forEach(function(item) {
+      const valueDiv = item.querySelector('.info-value');
+      const editIcon = item.querySelector('.edit-icon');
+      if (editIcon && valueDiv) {
+        editIcon.style.cursor = 'pointer';
+        editIcon.addEventListener('click', function(e) {
+          e.preventDefault();
+          valueDiv.setAttribute('contenteditable', 'true');
+          valueDiv.focus();
+          valueDiv.style.background = '#fff';
+          valueDiv.style.color = '#3730a3';
+          valueDiv.style.borderBottom = '2px solid #3730a3';
+        });
+        valueDiv.addEventListener('blur', function() {
+          valueDiv.removeAttribute('contenteditable');
+          valueDiv.style.background = '';
+          valueDiv.style.color = '';
+          valueDiv.style.borderBottom = '';
+        });
+      }
     });
   </script>
 </body>

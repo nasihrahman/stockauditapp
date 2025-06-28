@@ -49,16 +49,19 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
     let answer = await Answer.findOne({ question: questionId });
     if (answer) {
       if (typeof response !== 'undefined') answer.response = response;
+      // Always set comment, even if empty string
       if (typeof comment !== 'undefined') answer.comment = comment;
       if (images.length > 0) {
         answer.images = answer.images.concat(images);
       }
+      // Do NOT delete the answer if comment is empty; just save it
       await answer.save();
     } else {
       answer = await Answer.create({
         question: questionId,
         response,
-        comment,
+        // Always set comment, even if empty string
+        comment: typeof comment !== 'undefined' ? comment : '',
         images
       });
     }
