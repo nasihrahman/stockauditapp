@@ -31,7 +31,7 @@
     }
     
     .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background:white;
             color: white;
             padding: 20px;
             position: relative;
@@ -54,14 +54,16 @@
         } */
     
     .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            position: relative;
-            z-index: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  gap: 1rem;
+  background: rgb(23, 40, 50);
+  color: white;
+  border-radius: 1rem;
+}
     .admin-button {
       position: absolute;
       top: 32px;
@@ -160,7 +162,12 @@
       gap: 32px;
       align-items: center;
     }
-    
+    .info-panel,
+.summary-panel {
+  flex: 1 1 48%;
+  box-sizing: border-box;
+}
+
     .info-item {
       display: flex;
       align-items: center;
@@ -627,14 +634,15 @@
         font-weight: 300;
     }
     .total-score {
-        text-align: center;
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 25px 35px;
-        border: 1px solid rgba(255,255,255,0.2);
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  text-align: center;
+}
     .total-score h2 {
         font-size: 1.2rem;
         margin-bottom: 15px;
@@ -653,25 +661,19 @@
         opacity: 0.8;
     }
     .admin-button {
-        background: rgba(255,255,255,0.2);
-        color: white;
-        text-decoration: none;
-        padding: 12px 24px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255,255,255,0.3);
-        backdrop-filter: blur(10px);
-        margin-bottom: 20px;
-    }
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  transition: background 0.3s;
+}
     .admin-button:hover {
-        background: rgba(255,255,255,0.3);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
+  background: rgba(255, 255, 255, 0.25);
+}
     .admin-icon {
         width: 20px;
         height: 20px;
@@ -680,12 +682,34 @@
         background: rgba(255,255,255,0.95);
         border-radius: 16px;
         padding: 24px;
+        position: relative;
+        padding-top: 40px;
         margin-top: 20px;
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255,255,255,0.3);
         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         max-width: 48%;
     }
+
+    .info-header {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+  }
+  #edit-all-btn {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease;
+  }
+  #edit-all-btn:hover {
+    background-color: #4338ca;
+  }
     .info-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -811,6 +835,25 @@
   padding: 0 1rem;
 }
 @media (max-width: 768px) {
+  .total-score {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .admin-label {
+    display: none;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-button {
+    align-self: flex-end;
+  }
+
   .info-panel,
   .summary-panel {
     max-width: 100%;
@@ -847,14 +890,14 @@
         </div>
       </div>
      
-        <div class="header-actions">
         <a href="/admin" class="admin-button">
-          <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          Admin
-        </a>
+  <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+    <path d="M4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1"/>
+  </svg>
+  <span class="admin-label">Admin</span>
+</a>
+
       
       
       
@@ -864,7 +907,11 @@
     
       
   <div class="info-panel">
-      
+
+      <div class="info-header">
+  <button id="edit-all-btn">Edit Info</button>
+</div>
+
         <div class="info-item">
           <div class="info-label">Location:</div>
           <div class="info-value">
@@ -1249,13 +1296,36 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      fetchAndPrefillAnswers();
-      // updateScores(); // Not needed, fetchAndPrefillAnswers triggers it
-    });
+   
+document.addEventListener('DOMContentLoaded', function () {
+  fetchAndPrefillAnswers();
+    const editBtn = document.getElementById('edit-all-btn');
+    const infoValues = document.querySelectorAll('.info-panel .info-value');
+    let isEditing = false;
 
-    // Remove Save Answer button event listeners and elements
-    document.querySelectorAll('.save-answer-btn').forEach(function(btn) { btn.remove(); });
+    editBtn.addEventListener('click', function () {
+      isEditing = !isEditing;
+
+      infoValues.forEach(valueDiv => {
+        if (isEditing) {
+          valueDiv.setAttribute('contenteditable', 'true');
+          valueDiv.style.background = '#fff';
+          valueDiv.style.borderBottom = '2px solid #3730a3';
+          valueDiv.style.color = '#3730a3';
+        } else {
+          valueDiv.removeAttribute('contenteditable');
+          valueDiv.style.background = '';
+          valueDiv.style.borderBottom = '';
+          valueDiv.style.color = '';
+        }
+      });
+
+      editBtn.innerText = isEditing ? 'Save Info' : 'Edit Info';
+
+      // Optionally, on save, you could collect and send the edited values via fetch() here.
+    });
+  });
+    
 
     // --- INFO PANEL EDITABLE WITH EDIT ICON ---
     document.querySelectorAll('.info-item').forEach(function(item) {
