@@ -72,21 +72,30 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
 });
 
 // Remove image from answer
-router.post('/answer/remove-image', async (req, res) => {
+router.post('/answer/image-remove', async (req, res) => {
   try {
-    const { questionId, imgIdx } = req.body;
+    const { questionId, image } = req.body;
+
     if (!questionId || !questionId.match(/^[a-fA-F0-9]{24}$/)) {
       return res.status(400).json({ success: false, error: 'Invalid questionId' });
     }
+
     const answer = await Answer.findOne({ question: questionId });
     if (!answer) return res.status(404).json({ success: false, error: 'Answer not found' });
-    if (!answer.images || !answer.images[imgIdx]) return res.status(400).json({ success: false, error: 'Image not found' });
-    answer.images.splice(imgIdx, 1);
+
+    const index = answer.images.indexOf(image);
+    if (index === -1) {
+      return res.status(400).json({ success: false, error: 'Image not found in answer' });
+    }
+
+    answer.images.splice(index, 1);
     await answer.save();
+
     res.json({ success: true, answer });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
 
 module.exports = router;
