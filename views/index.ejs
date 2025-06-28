@@ -929,38 +929,33 @@ background: rgb(23, 40, 50);
 </head>
 <body>
   
-  <header class="header">
-    <div class="header-content">
-      <div class="company-section">
-        <div class="logo">🏢</div>
-        <div class="company-info">
-          <h1>Aurora Company</h1>
-          <p>Stock Auditing System</p>
+ <header class="header">
+        <div class="header-content">
+            <div class="company-section">
+                <div class="logo">🏢</div>
+                <div class="company-info">
+                    <h1>Aurora Company</h1>
+                    <p>Stock Auditing System</p>
+                </div>
+            </div>
+            
+            <div class="score-section">
+                <a href="/admin" class="admin-button">
+                    <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                        <path d="M4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1"/>
+                    </svg>
+                    <span class="admin-label">Admin</span>
+                </a>
+                
+                <div class="total-score">
+                    <h2>Total Score</h2>
+                    <span class="score-badge" id="totalScore">3</span>
+                    <div class="score-details" id="totalScoreDetails">3 / 3 (100%)</div>
+                </div>
+            </div>
         </div>
-      </div>
-      
-      
-        
-        <div class="total-score">
-          <h2>Total Score</h2>
-          <span class="score-badge" id="totalScore">0</span>
-          <div class="score-details" id="totalScoreDetails">0 / 0 (0%)</div>
-        </div>
-      </div>
-     
-        <a href="/admin" class="admin-button">
-  <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
-    <path d="M4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1"/>
-  </svg>
-  <span class="admin-label">Admin</span>
-</a>
-
-      
-      
-      
-    </div>
-  </header>
+    </header>
   <div class="panels-container">
     
       
@@ -1438,7 +1433,7 @@ background: rgb(23, 40, 50);
     });
 
     // Modal close logic
-    const modal = document.getElementById('imageModal');
+    // const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('imageModalImg');
     const modalClose = document.getElementById('imageModalClose');
     modalClose.addEventListener('click', function() {

@@ -4,52 +4,562 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Stock Audit</title>
-  <link rel="stylesheet" href="/style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    
+    .info-panel {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+    
+    .company-info h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .company-info p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    .admin-section {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #f1f5f9;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .category-selector {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .category-selector h3 {
+      margin-bottom: 1rem;
+      color: #475569;
+      font-size: 1.1rem;
+    }
+    
+    .category-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .category-tab {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      color: #64748b;
+    }
+    
+    .category-tab:hover {
+      border-color: #667eea;
+      background: #f8fafc;
+    }
+    
+    .category-tab.active {
+      background: #667eea;
+      border-color: #667eea;
+      color: white;
+      font-weight: 600;
+    }
+    
+    .selected-category {
+      background: #ecfdf5;
+      border: 2px solid #22c55e;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .selected-category.show {
+      display: block;
+    }
+    
+    .selected-category-text {
+      color: #166534;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      align-items: end;
+    }
+    
+    .form-control {
+      flex: 1;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background: white;
+    }
+    
+    input[type="text"]:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 0.875rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+    
+    .btn-danger:hover {
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+    
+    .questions-list {
+      list-style: none;
+    }
+    
+    .question-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    
+    .question-item:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    
+    .question-text {
+      flex: 1;
+      font-weight: 500;
+      color: #1e293b;
+    }
+    
+    .question-category {
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin: 0 1rem;
+    }
+    
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    
+    .status-active {
+      background: #22c55e;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #64748b;
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 0.5rem;
+      color: #374151;
+    }
+    
+    .new-category-input {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 8px;
+    }
+    
+    .new-category-input label {
+      color: #92400e;
+      margin-bottom: 0.5rem;
+    }
+    
+    .new-category-input input {
+      border-color: #f59e0b;
+    }
+    
+    .new-category-input input:focus {
+      border-color: #d97706;
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
+      
+      .category-tabs {
+        gap: 0.25rem;
+      }
+      
+      .category-tab {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      
+      .question-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+      
+      .question-category {
+        margin: 0;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="info-panel">
-    <img src="/logo.png" alt="Company Logo" class="logo" />
+    <div class="logo">⚙️</div>
     <div class="company-info">
       <h1>Admin Panel</h1>
       <p>Manage Categories & Questions</p>
     </div>
   </header>
+  
   <main>
-    <h2>Add Category</h2>
-    <form method="POST" action="/admin/category">
-      <input type="text" name="name" placeholder="Category name" required />
-      <button type="submit">Add</button>
-    </form>
-    <h2>Add Question</h2>
-    <form method="POST" action="/admin/question">
-      <input type="text" name="text" placeholder="Question text" required />
-      <select name="category" id="category-select" required>
-        <% categories.forEach(function(cat) { %>
-          <option value="<%= cat._id %>"><%= cat.name %></option>
-        <% }) %>
-      </select>
-      <input type="text" id="new-category" name="newCategory" placeholder="Or add new category" />
-      <button type="submit">Add</button>
-    </form>
-    <h2>Questions</h2>
-    <ul>
-      <% questions.forEach(function(q) { %>
-        <li>
-          <%= q.text %> (<%= q.category ? q.category.name : 'No Category' %>)
-          <form method="POST" action="/admin/question/delete/<%= q._id %>" style="display:inline">
-            <button type="submit">Delete</button>
-          </form>
-        </li>
-      <% }) %>
-    </ul>
-    <script>
-      // If user types in new category, disable select
-      const newCatInput = document.getElementById('new-category');
-      const catSelect = document.getElementById('category-select');
-      newCatInput.addEventListener('input', function() {
-        catSelect.disabled = !!this.value.trim();
-      });
-    </script>
+    <!-- Add Category Section -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span>📁</span>
+          Add Category
+        </h2>
+      </div>
+      
+      <form method="POST" action="/admin/category">
+        <div class="form-row">
+          <div class="form-control">
+            <label for="category-name">Category Name</label>
+            <input type="text" id="category-name" name="name" placeholder="Enter category name..." required />
+          </div>
+          <button type="submit">Add Category</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Category Selection & Add Question Section -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span>❓</span>
+          Add Questions
+        </h2>
+      </div>
+      
+      <!-- Category Selector -->
+      <div class="category-selector">
+        <h3>Select Active Category</h3>
+        <% if (categories && categories.length > 0) { %>
+          <div class="category-tabs">
+            <% categories.forEach(function(cat) { %>
+              <div class="category-tab" data-category-id="<%= cat._id %>" data-category-name="<%= cat.name %>">
+                <span class="status-indicator status-active"></span>
+                <%= cat.name %>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <h3>No Categories Available</h3>
+            <p>Please add a category first before creating questions.</p>
+          </div>
+        <% } %>
+        
+        <div class="selected-category" id="selected-category">
+          <div class="selected-category-text">
+            <span>✅</span>
+            <span>Adding questions to: <strong id="selected-category-name"></strong></span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Question Form -->
+      <form method="POST" action="/admin/question" id="question-form">
+        <div class="form-group">
+          <label for="question-text">Question Text</label>
+          <input type="text" id="question-text" name="text" placeholder="Enter your question..." required />
+        </div>
+        
+        <div class="form-group">
+          <label for="category-select">Select Category</label>
+          <select id="category-select" name="category" required>
+            <option value="">Choose a category...</option>
+            <% if (categories && categories.length > 0) { %>
+              <% categories.forEach(function(cat) { %>
+                <option value="<%= cat._id %>"><%= cat.name %></option>
+              <% }); %>
+            <% } %>
+          </select>
+        </div>
+        
+        <div class="new-category-input">
+          <label for="new-category">Or Add New Category</label>
+          <input type="text" id="new-category" name="newCategory" placeholder="Enter new category name..." />
+        </div>
+        
+        <button type="submit" id="add-question-btn">
+          Add Question
+        </button>
+      </form>
+    </div>
+
+    <!-- Questions List -->
+    <div class="admin-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span>📝</span>
+          All Questions (<%= questions ? questions.length : 0 %>)
+        </h2>
+      </div>
+      
+      <% if (questions && questions.length > 0) { %>
+        <ul class="questions-list">
+          <% questions.forEach(function(q) { %>
+            <li class="question-item">
+              <span class="question-text"><%= q.text %></span>
+              <span class="question-category">
+                <%= q.category ? q.category.name : 'No Category' %>
+              </span>
+              <form method="POST" action="/admin/question/delete/<%= q._id %>" style="display:inline">
+                <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this question?')">
+                  Delete
+                </button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <div class="empty-state">
+          <h3>No Questions Yet</h3>
+          <p>Start by adding some questions to your categories.</p>
+        </div>
+      <% } %>
+    </div>
   </main>
+
+  <script>
+    // Category selection functionality
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const selectedCategoryDiv = document.getElementById('selected-category');
+    const selectedCategoryNameSpan = document.getElementById('selected-category-name');
+    const categorySelect = document.getElementById('category-select');
+    const addQuestionBtn = document.getElementById('add-question-btn');
+    const questionForm = document.getElementById('question-form');
+    const questionTextInput = document.getElementById('question-text');
+    const newCategoryInput = document.getElementById('new-category');
+    
+    // Category tab click handlers
+    categoryTabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const categoryId = this.dataset.categoryId;
+        const categoryName = this.dataset.categoryName;
+        
+        // Update visual selection
+        categoryTabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Update form
+        categorySelect.value = categoryId;
+        selectedCategoryDiv.classList.add('show');
+        selectedCategoryNameSpan.textContent = categoryName;
+        
+        // Focus on question input
+        setTimeout(() => {
+          questionTextInput.focus();
+        }, 200);
+      });
+    });
+    
+    // Category select dropdown handler
+    categorySelect.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      if (selectedOption.value) {
+        const categoryName = selectedOption.text;
+        selectedCategoryDiv.classList.add('show');
+        selectedCategoryNameSpan.textContent = categoryName;
+        
+        // Highlight corresponding tab
+        categoryTabs.forEach(tab => {
+          tab.classList.remove('active');
+          if (tab.dataset.categoryId === selectedOption.value) {
+            tab.classList.add('active');
+          }
+        });
+      } else {
+        selectedCategoryDiv.classList.remove('show');
+        categoryTabs.forEach(t => t.classList.remove('active'));
+      }
+    });
+    
+    // New category input handler
+    newCategoryInput.addEventListener('input', function() {
+      const hasValue = !!this.value.trim();
+      categorySelect.disabled = hasValue;
+      
+      if (hasValue) {
+        // Clear category selection when typing new category
+        categorySelect.value = '';
+        selectedCategoryDiv.classList.remove('show');
+        categoryTabs.forEach(t => t.classList.remove('active'));
+      }
+    });
+    
+    // Re-enable category select when new category is cleared
+    newCategoryInput.addEventListener('blur', function() {
+      if (!this.value.trim()) {
+        categorySelect.disabled = false;
+      }
+    });
+    
+    // Form submission handler
+    questionForm.addEventListener('submit', function(e) {
+      const hasSelectedCategory = categorySelect.value;
+      const hasNewCategory = newCategoryInput.value.trim();
+      
+      if (!hasSelectedCategory && !hasNewCategory) {
+        e.preventDefault();
+        alert('Please select a category or enter a new category name!');
+        return;
+      }
+    });
+    
+    // Keyboard shortcut: Ctrl+Enter to submit form
+    questionTextInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && e.ctrlKey) {
+        questionForm.submit();
+      }
+    });
+    
+    // Auto-clear form after successful submission (if page doesn't redirect)
+    window.addEventListener('load', function() {
+      // This would typically be handled by server-side redirect
+      // but can be useful for AJAX submissions
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('success')) {
+        questionTextInput.value = '';
+        newCategoryInput.value = '';
+        categorySelect.value = '';
+        categorySelect.disabled = false;
+        selectedCategoryDiv.classList.remove('show');
+        categoryTabs.forEach(t => t.classList.remove('active'));
+      }
+    });
+  </script>
 </body>
 </html>
