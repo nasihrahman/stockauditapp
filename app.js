@@ -7,7 +7,7 @@ const app = express();
 dotenv.config();
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/stockaudit');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/stock');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
