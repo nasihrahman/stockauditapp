@@ -19,11 +19,11 @@
     }
     
     .info-panel {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #1e293b;
       color: white;
       padding: 2rem;
       margin-bottom: 2rem;
-      border-radius: 12px;
+      
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -321,6 +321,26 @@
         margin: 0;
       }
     }
+    .header-actions {
+  margin-left: auto;
+}
+
+.home-btn {
+  text-decoration: none;
+  font-size: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  padding: 0.25rem 0.75rem;
+  color: #1e293b;
+  font-weight: bold;
+  border: 2px solid #e2e8f0;
+  transition: background 0.3s;
+}
+
+.home-btn:hover {
+  background: #e2e8f0;
+}
+
   </style>
 </head>
 <body>
@@ -330,6 +350,9 @@
       <h1>Admin Panel</h1>
       <p>Manage Categories & Questions</p>
     </div>
+     <div class="header-actions">
+    <a href="/" class="home-btn" title="Go Home">🏠</a>
+  </div>
   </header>
   
   <main>
@@ -367,13 +390,19 @@
         <h3>Select Active Category</h3>
         <% if (categories && categories.length > 0) { %>
           <div class="category-tabs">
-            <% categories.forEach(function(cat) { %>
-              <div class="category-tab" data-category-id="<%= cat._id %>" data-category-name="<%= cat.name %>">
-                <span class="status-indicator status-active"></span>
-                <%= cat.name %>
-              </div>
-            <% }); %>
-          </div>
+  <% categories.forEach(function(cat) { %>
+    <div class="category-tab-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+      <div class="category-tab" data-category-id="<%= cat._id %>" data-category-name="<%= cat.name %>">
+        <span class="status-indicator status-active"></span>
+        <%= cat.name %>
+      </div>
+      <button class="btn-danger btn-delete-cat" data-id="<%= cat._id %>" title="Delete Category">
+        ✖
+      </button>
+    </div>
+  <% }); %>
+</div>
+
         <% } else { %>
           <div class="empty-state">
             <h3>No Categories Available</h3>
@@ -560,6 +589,36 @@
         categoryTabs.forEach(t => t.classList.remove('active'));
       }
     });
+   
+  // Existing code...
+
+  // Delete category with confirmation
+  const deleteButtons = document.querySelectorAll('.btn-delete-cat');
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', async function () {
+      const catId = this.dataset.id;
+      const confirmed = confirm('Are you sure you want to delete this category and all its questions?');
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch(`/admin/category/${catId}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('Category deleted successfully.');
+          window.location.reload();
+        } else {
+          alert(data.message || 'Failed to delete category.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('An error occurred while deleting the category.');
+      }
+    });
+  });
+
+
   </script>
 </body>
 </html>

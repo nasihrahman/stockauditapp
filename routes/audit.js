@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { Category, Question, Answer } = require('../models/audit');
-const { storage } = require('../cloudinary'); // Use Cloudinary storage
+const { storage } = require('../cloudinary');
 const multer = require('multer');
-const upload = multer({ storage }); // ✅ Only declare ONCE
+const upload = multer({ storage });
 
 // --- Admin Routes ---
 router.get('/admin', async (req, res) => {
@@ -15,6 +15,17 @@ router.get('/admin', async (req, res) => {
 router.post('/admin/category', async (req, res) => {
   await Category.create({ name: req.body.name });
   res.redirect('/admin');
+});
+
+router.delete('/admin/category/:id', async (req, res) => {
+  try {
+    const categoryId = req.params.id;
+    await Question.deleteMany({ category: categoryId });
+    await Category.findByIdAndDelete(categoryId);
+    res.json({ success: true });
+  } catch (err) {
+    res.json({ success: false, error: err.message });
+  }
 });
 
 router.post('/admin/question', async (req, res) => {
@@ -41,7 +52,7 @@ router.get('/audit', async (req, res) => {
 
 // --- Handle Answers + Image Uploads (Cloudinary) ---
 router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, res) => {
-  const images = req.files ? req.files.map(f => f.path) : []; // Cloudinary path
+  const images = req.files ? req.files.map(f => f.path) : [];
   await Answer.create({
     question: req.params.questionId,
     response: req.body.response,
