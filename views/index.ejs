@@ -1022,6 +1022,29 @@ background: rgb(23, 40, 50);
   }
 }
 
+.clear-comment-btn {
+  margin-top: 0.3rem;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clear-comment-btn:hover {
+  background-color: #b91c1c;
+}
+
+/* Optional mobile spacing */
+@media (max-width: 600px) {
+  .clear-comment-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
 
   </style>
   
@@ -1143,6 +1166,8 @@ background: rgb(23, 40, 50);
                       </div>
                     </div>
                     <input type="text" class="comment-input" placeholder="Add your comments here..." name="comment" autocomplete="off">
+                    <!-- <button type="button" class="clear-comment-btn" data-question-id="<%= q._id %>">❌ Clear Comment</button> -->
+
                     <div class="image-preview" data-question-id="<%= q._id %>"></div>
                   </form>
                 </li>
