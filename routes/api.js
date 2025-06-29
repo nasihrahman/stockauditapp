@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const { Answer } = require('../models/audit');
+const Info = require('../models/Info');
 const { cloudinary, storage } = require('../cloudinary'); // Uncomment if using Cloudinary
 
 // Multer setup for image uploads
@@ -94,6 +95,35 @@ router.post('/answer/image-remove', async (req, res) => {
     await answer.save();
 
     res.json({ success: true, answer });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.get('/info', async (req, res) => {
+  try {
+    let info = await Info.findOne();
+    if (!info) info = await Info.create({}); // Create default if missing
+    res.json({ success: true, info });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/info - update info panel values
+router.post('/info', async (req, res) => {
+  try {
+    const body = req.body;
+
+    let info = await Info.findOne();
+    if (!info) {
+      info = await Info.create(body);
+    } else {
+      Object.assign(info, body);
+      await info.save();
+    }
+
+    res.json({ success: true, info });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

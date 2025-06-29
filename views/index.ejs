@@ -33,7 +33,7 @@
     .header {
             background: white;
             color: white;
-            padding: 20px;
+           
             position: relative;
             overflow: hidden;
         }
@@ -62,9 +62,9 @@
   gap: 1rem;
 background: rgb(23, 40, 50);
   color: white;
-  border-radius: 1rem;
+      
 }
-    .admin-button {
+    /* .admin-button {
       position: absolute;
       top: 32px;
       right: 32px;
@@ -83,7 +83,7 @@ background: rgb(23, 40, 50);
       font-weight: 600;
       transition: all 0.3s ease;
       cursor: pointer;
-    }
+    } */
     
     .admin-button:hover {
       background: rgba(255,255,255,0.2);
@@ -92,10 +92,7 @@ background: rgb(23, 40, 50);
       color: white;
     }
     
-    .admin-icon {
-      width: 18px;
-      height: 18px;
-    }
+    
     .total-score {
       text-align: right;
     }
@@ -424,7 +421,7 @@ background: rgb(23, 40, 50);
       font-weight: 500;
     }
     
-    .admin-link {
+    /* .admin-link {
       display: inline-block;
       background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
       color: white;
@@ -434,14 +431,8 @@ background: rgb(23, 40, 50);
       font-weight: 600;
       font-size: 1.125rem;
       transition: all 0.3s ease;
-    }
+    } */
     
-    .admin-link:hover {
-      transform: translateY(-2px);
-      text-decoration: none;
-      color: white;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
     
     .summary-panel {
       background: #fff;
@@ -449,7 +440,7 @@ background: rgb(23, 40, 50);
       border-radius: 18px;
       padding: 2.5rem 2rem 2rem 2rem;
       margin: 2.5rem auto 2rem auto;
-      box-shadow: 0 8px 32px rgba(30,41,59,0.10);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
       max-width: 600px;
       text-align: center;
       display: flex;
@@ -619,11 +610,11 @@ background: rgb(23, 40, 50);
         gap: 15px;
     }
     .logo {
-        font-size: 48px;
+        font-size: 30px;
         filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
     }
     .company-info h1 {
-        font-size: 2.5rem;
+        font-size: 1rem;
         font-weight: 700;
         margin-bottom: 8px;
         text-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -660,24 +651,51 @@ background: rgb(23, 40, 50);
         margin-top: 8px;
         opacity: 0.8;
     }
-    .admin-button {
-  display: flex;
+ 
+  .admin-button {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  margin-bottom: 0.5rem;
+  align-self: flex-end;
+  /* display: inline-flex; */
+  justify-content: start;
   align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: white;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.admin-label {
+  display: none !important;
+}
+.admin-icon {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+}
+
+.total-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
   background: rgba(255, 255, 255, 0.15);
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
   border-radius: 0.75rem;
-  transition: background 0.3s;
+  text-align: center;
+  width: 100%;
 }
-    .admin-button:hover {
-  background: rgba(255, 255, 255, 0.25);
+
+@media (max-width: 768px) {
+  .score-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding-right: 0; /* remove right side gap */
+  }
 }
-    .admin-icon {
-        width: 20px;
-        height: 20px;
-    }
+
     .info-panel {
         background: rgba(255,255,255,0.95);
         border-radius: 16px;
@@ -756,7 +774,7 @@ background: rgb(23, 40, 50);
         border: 2px solid #667eea;
         outline: none;
     }
-    .edit-icon {
+    /* .edit-icon {
         width: 16px;
         height: 16px;
         color: #94a3b8;
@@ -766,7 +784,7 @@ background: rgb(23, 40, 50);
     }
     .edit-icon:hover {
         color: #667eea;
-    }
+    } */
     .summary-panel {
         background: white;
         margin: 30px auto;
@@ -841,18 +859,16 @@ background: rgb(23, 40, 50);
     width: 100%;
   }
 
-  .admin-label {
-    display: none;
-  }
+ 
 
   .header-content {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .admin-button {
+  /* .admin-button {
     align-self: flex-end;
-  }
+  } */
 
   .info-panel,
   .summary-panel {
@@ -924,75 +940,144 @@ background: rgb(23, 40, 50);
     .image-modal-close:hover {
       background: #dc2626;
     }
+   #toggle-edit-btn {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  background:#1e293b;
+  color: white;
+  font-weight: 400;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+#toggle-edit-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+#toggle-edit-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.2);
+}
+.logo img {
+  max-width: 350px;     /* Large screen/laptop default */
+  height: auto;
+  margin-right: 30px;
+}
+
+/* Medium screen (e.g. tablets) */
+@media (max-width: 1024px) {
+  .logo img {
+    max-width: 140px;
+  }
+}
+
+/* Small screen (e.g. phones) */
+@media (max-width: 600px) {
+  .logo img {
+    max-width: 100px;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.action-buttons button:hover {
+  background-color: #1e40af;
+}
+
+@media (max-width: 600px) {
+  .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .action-buttons button {
+    width: 90%;
+    max-width: 320px;
+  }
+}
+
+
   </style>
   
 </head>
 <body>
   
  <header class="header">
-        <div class="header-content">
-            <div class="company-section">
-                <div class="logo">🏢</div>
-                <div class="company-info">
-                    <h1>Aurora Company</h1>
-                    <p>Stock Auditing System</p>
-                </div>
-            </div>
-            
-            <div class="score-section">
-                <a href="/admin" class="admin-button">
-                    <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
-                        <path d="M4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1"/>
-                    </svg>
-                    <span class="admin-label">Admin</span>
-                </a>
-                
-                <div class="total-score">
-                    <h2>Total Score</h2>
-                    <span class="score-badge" id="totalScore">3</span>
-                    <div class="score-details" id="totalScoreDetails">3 / 3 (100%)</div>
-                </div>
-            </div>
-        </div>
-    </header>
+  <div class="header-content">
+
+    <!-- Company Info + Logo -->
+    <div class="company-section">
+      <div class="logo">
+        <img src="/images/logo.png" alt="Company Logo" />
+      </div>
+      <div class="company-info">
+        <h1>Stock Auditing System</h1>
+        <p>Company Audit Portal</p>
+      </div>
+    </div>
+
+    <!-- Score & Admin -->
+    <div class="score-section">
+
+      <!-- Admin Button moved above -->
+      <a href="/admin" class="admin-button">
+        <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" />
+          <path d="M4 20v-1c0-2.21 3.58-4 8-4s8 1.79 8 4v1" />
+        </svg>
+      </a>
+
+      <!-- Score Card -->
+      <div class="total-score">
+        <h2>Total Score</h2>
+        <span class="score-badge" id="totalScore">3</span>
+        <div class="score-details" id="totalScoreDetails">3 / 3 (100%)</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
   <div class="panels-container">
     
       
   <div class="info-panel">
-
-      <div class="info-header">
-  <button id="edit-all-btn">Edit Info</button>
+  <div class="info-grid">
+    <div class="info-item"><span class="info-label">Company:</span> <span class="info-value" name="company" ></span></div>
+    <div class="info-item"><span class="info-label">Location:</span> <span class="info-value" name="location" ></span></div>
+    <div class="info-item"><span class="info-label">Date:</span> <span class="info-value" name="date"></span></div>
+    <div class="info-item"><span class="info-label">Branch:</span> <span class="info-value" name="branch"></span></div>
+    <div class="info-item"><span class="info-label">Manager:</span> <span class="info-value" name="manager"></span></div>
+    <div class="info-item"><span class="info-label">Inspector:</span> <span class="info-value" name="inspector"></span></div>
+  </div>
+  <button id="toggle-edit-btn"  style="margin-top:20px;">Edit info</button>
 </div>
-
-        <div class="info-item">
-          <div class="info-label">Location:</div>
-          <div class="info-value">
-            AURFS001 - Aurora - Marassi Galleria Mall
-            <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-          </div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Date:</div>
-          <div class="info-value">2025-06-10</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Branch:</div>
-          <div class="info-value">Aurora - Marassi Galleria Mall</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Manager On Duty:</div>
-          <div class="info-value">Chef Shubash Khotiyal</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">G.W.R Inspector:</div>
-          <div class="info-value">Mira Fattouh</div>
-        </div>
-        
-      </div>
       
 
   
@@ -1082,8 +1167,177 @@ background: rgb(23, 40, 50);
       <img src="" alt="Preview" class="image-modal-img" id="imageModalImg">
     </div>
   </div>
+<div class="action-buttons">
+    <button id="clearAllBtn">🗑️ Clear All</button>
+    <button id="exportPdfBtn">📄 Save & Export PDF</button>
+</div>
 
   <script>
+   document.getElementById('clearAllBtn').addEventListener('click', function() {
+    if (confirm('Are you sure you want to clear all responses? This action cannot be undone.')) {
+        clearAllResponses();
+    }
+});
+
+function clearAllResponses() {
+    // Clear all radio buttons
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.checked = false;
+    });
+    
+    // Clear all comments
+    document.querySelectorAll('.comment-input').forEach(input => {
+        input.value = '';
+    });
+    
+    // Clear all image previews
+    document.querySelectorAll('.image-preview').forEach(preview => {
+        preview.innerHTML = '';
+    });
+    
+    // Update scores
+    updateScores();
+    
+    // Send clear request to backend
+    fetch('/api/clear-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('All responses cleared successfully!');
+        }
+    })
+    .catch(err => {
+        console.error('Error clearing responses:', err);
+        alert('Error clearing responses. Please try again.');
+    });
+}
+
+// PDF Export Functionality
+document.getElementById('exportPdfBtn').addEventListener('click', function() {
+    this.textContent = '⏳ Generating PDF...';
+    this.disabled = true;
+    
+    generatePDF().then(() => {
+        this.textContent = '📄 Save & Export PDF';
+        this.disabled = false;
+    }).catch(err => {
+        console.error('PDF Generation Error:', err);
+        alert('Error generating PDF. Please try again.');
+        this.textContent = '📄 Save & Export PDF';
+        this.disabled = false;
+    });
+});
+
+async function generatePDF() {
+    try {
+        // Prepare audit data
+        const auditData = await prepareAuditData();
+        
+        // Send to backend for PDF generation
+        const response = await fetch('/api/generate-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(auditData)
+        });
+        
+        if (!response.ok) {
+            throw new Error('PDF generation failed');
+        }
+        
+        // Download the PDF
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Audit_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function prepareAuditData() {
+    // Get info panel data
+    const infoData = {
+        company: document.querySelector('[name="company"]').textContent.trim(),
+        location: document.querySelector('[name="location"]').textContent.trim(),
+        date: document.querySelector('[name="date"]').textContent.trim(),
+        branch: document.querySelector('[name="branch"]').textContent.trim(),
+        manager: document.querySelector('[name="manager"]').textContent.trim(),
+        inspector: document.querySelector('[name="inspector"]').textContent.trim()
+    };
+    
+    // Get category summaries
+    const categorySummaries = [];
+    document.querySelectorAll('.category-card').forEach(catCard => {
+        const catName = catCard.querySelector('.category-title').childNodes[0].textContent.trim();
+        const catBadge = catCard.querySelector('.category-score-badge');
+        const scoreText = catBadge ? catBadge.textContent : '0/0 (0%)';
+        
+        categorySummaries.push({
+            name: catName,
+            score: scoreText
+        });
+    });
+    
+    // Get total score
+    const totalScore = document.getElementById('totalScore').textContent;
+    const totalScoreDetails = document.getElementById('totalScoreDetails').textContent;
+    
+    // Get all questions and answers
+    const questionsData = [];
+    document.querySelectorAll('.question-item').forEach(item => {
+        const questionId = item.getAttribute('data-question-id');
+        const questionText = item.querySelector('.question-text').textContent.trim();
+        const categoryCard = item.closest('.category-card');
+        const categoryName = categoryCard.querySelector('.category-title').childNodes[0].textContent.trim();
+        
+        // Get selected answer
+        let selectedAnswer = 'Not Answered';
+        const radios = item.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+            if (radio.checked) {
+                selectedAnswer = radio.value.toUpperCase();
+            }
+        });
+        
+        // Get comment
+        const comment = item.querySelector('.comment-input').value.trim();
+        
+        // Get images
+        const images = [];
+        const imageElements = item.querySelectorAll('.image-preview img');
+        imageElements.forEach(img => {
+            images.push(img.src);
+        });
+        
+        questionsData.push({
+            id: questionId,
+            category: categoryName,
+            question: questionText,
+            answer: selectedAnswer,
+            comment: comment,
+            images: images
+        });
+    });
+    
+    return {
+        info: infoData,
+        categorySummaries: categorySummaries,
+        totalScore: totalScore,
+        totalScoreDetails: totalScoreDetails,
+        questions: questionsData,
+        generatedAt: new Date().toISOString()
+    };
+}
+
     let isPrefilling = false;
     // --- AJAX: Fetch and prefill answers on load ---
     function fetchAndPrefillAnswers() {
@@ -1410,192 +1664,150 @@ background: rgb(23, 40, 50);
     });
 
     // --- INFO PANEL EDITABLE WITH EDIT ICON ---
-    document.querySelectorAll('.info-item').forEach(function(item) {
-      const valueDiv = item.querySelector('.info-value');
-      const editIcon = item.querySelector('.edit-icon');
-      if (editIcon && valueDiv) {
-        editIcon.style.cursor = 'pointer';
-        editIcon.addEventListener('click', function(e) {
-          e.preventDefault();
-          valueDiv.setAttribute('contenteditable', 'true');
-          valueDiv.focus();
-          valueDiv.style.background = '#fff';
-          valueDiv.style.color = '#3730a3';
-          valueDiv.style.borderBottom = '2px solid #3730a3';
-        });
-        valueDiv.addEventListener('blur', function() {
-          valueDiv.removeAttribute('contenteditable');
-          valueDiv.style.background = '';
-          valueDiv.style.color = '';
-          valueDiv.style.borderBottom = '';
-        });
-      }
-    });
+    
 
     // Modal close logic
     // const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('imageModalImg');
-    const modalClose = document.getElementById('imageModalClose');
-    modalClose.addEventListener('click', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('imageModalImg');
+  const modalClose = document.getElementById('closeModalBtn'); // ✅ correct ID
+
+  // Close on X button
+  modalClose.addEventListener('click', function () {
+    modal.classList.remove('active');
+    modalImg.src = '';
+  });
+
+  // Close when clicking outside the modal content
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) {
       modal.classList.remove('active');
-      setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
-    });
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-        setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
-      }
-    });
+      modalImg.src = '';
+    }
+  });
+});
+
   </script>
 
-  <!-- Image Modal Overlay -->
+  <!-- Image Modal Overlay
   <div id="imageModal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.85);align-items:center;justify-content:center;">
     <span id="closeModalBtn" style="position:absolute;top:32px;right:48px;font-size:2.5rem;color:#fff;cursor:pointer;z-index:10001;font-weight:700;">&times;</span>
     <img id="modalImage" src="" alt="Preview" style="max-width:90vw;max-height:80vh;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.25);border:4px solid #fff;">
   </div>
   <style>
-    #imageModal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(30,41,59,0.85); align-items: center; justify-content: center; }
-    #imageModal.active { display: flex !important; }
-    #imageModal img { max-width: 90vw; max-height: 80vh; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); border: 4px solid #fff; }
-    #closeModalBtn { position: absolute; top: 32px; right: 48px; font-size: 2.5rem; color: #fff; cursor: pointer; z-index: 10001; font-weight: 700; transition: color 0.2s; }
-    #closeModalBtn:hover { color: #f87171; }
-  </style>
+    imageModal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(30,41,59,0.85); align-items: center; justify-content: center; }
+    imageModal.active { display: flex !important; }
+    imageModal img { max-width: 90vw; max-height: 80vh; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); border: 4px solid #fff; } 
+    closeModalBtn { position: absolute; top: 32px; right: 48px; font-size: 2.5rem; color: #fff; cursor: pointer; z-index: 10001; font-weight: 700; transition: color 0.2s; }
+    closeModalBtn:hover { color: #f87171; }
+ </style>  -->
   <script>
-    // --- IMAGE PREVIEW + REMOVE BUTTON ---
-    function renderImagePreview(questionId, images) {
-      const preview = document.querySelector(`.question-item[data-question-id='${questionId}'] .image-preview`);
-      if (preview) {
-        preview.innerHTML = '';
-        images.forEach((img, idx) => {
-          const wrapper = document.createElement('div');
-          wrapper.style.display = 'inline-block';
-          wrapper.style.position = 'relative';
-          wrapper.style.marginRight = '14px';
-          wrapper.style.marginBottom = '8px';
-          const imageEl = document.createElement('img');
-          imageEl.src = img;
-          imageEl.alt = 'Preview';
-          imageEl.style.maxWidth = '220px';
-          imageEl.style.maxHeight = '220px';
-          imageEl.style.borderRadius = '12px';
-          imageEl.style.boxShadow = '0 2px 8px rgba(30,41,59,0.10)';
-          imageEl.style.border = '2.5px solid #e0e7ef';
-          imageEl.style.objectFit = 'cover';
-          imageEl.style.display = 'block';
-          imageEl.style.position = 'relative';
-          // --- Modal open on click ---
-          imageEl.style.cursor = 'pointer';
-          imageEl.addEventListener('click', function(e) {
-            e.preventDefault();
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            modalImg.src = img;
-            modal.classList.add('active');
-          });
-          const removeBtn = document.createElement('button');
-          removeBtn.type = 'button';
-          removeBtn.className = 'remove-image-btn';
-          removeBtn.innerHTML = '&times;';
-          removeBtn.title = 'Remove image';
-          removeBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            fetch(`/api/answer/image-remove`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ questionId, image: img })
-            })
-              .then(res => res.json())
-              .then(resp => {
-                if (resp.success && resp.answer && resp.answer.images) {
-                  renderImagePreview(questionId, resp.answer.images);
-                }
-              });
-          });
-          wrapper.appendChild(imageEl);
-          wrapper.appendChild(removeBtn);
-          preview.appendChild(wrapper);
-        });
-      }
+// async function fetchInfoPanel() {
+//   const res = await fetch('/api/info');
+//   const data = await res.json();
+//   if (data.info) {
+//     document.querySelector('[name="company"]').textContent = data.info.company || '';
+//     document.querySelector('[name="location"]').textContent = data.info.location || '';
+//     document.querySelector('[name="date"]').textContent = data.info.date || '';
+//     document.querySelector('[name="branch"]').textContent = data.info.branch || '';
+//     document.querySelector('[name="manager"]').textContent = data.info.manager || '';
+//     document.querySelector('[name="inspector"]').textContent = data.info.inspector || '';
+//   }
+// }
+
+// async function saveInfoPanel() {
+//   const body = {
+//     company: document.querySelector('[name="company"]').textContent,
+//     location: document.querySelector('[name="location"]').textContent,
+//     date: document.querySelector('[name="date"]').textContent,
+//     branch: document.querySelector('[name="branch"]').textContent,
+//     manager: document.querySelector('[name="manager"]').textContent,
+//     inspector: document.querySelector('[name="inspector"]').textContent,
+//   };
+//   await fetch('/api/info', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify(body)
+//   });
+//   alert('Info panel saved!');
+// }
+
+// // Call fetchInfoPanel() on page load
+// document.addEventListener('DOMContentLoaded', fetchInfoPanel);
+
+// // Attach saveInfoPanel to your "Save Changes" button
+// document.getElementById('save-info-btn').addEventListener('click', saveInfoPanel);
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  fetchInfoPanel();
+
+  const editBtn = document.getElementById('toggle-edit-btn');
+  const infoFields = document.querySelectorAll('.info-value');
+  let editing = false;
+
+  editBtn.addEventListener('click', async () => {
+    editing = !editing;
+
+    if (editing) {
+      // Enable edit mode
+      editBtn.textContent = 'Save Changes';
+      infoFields.forEach(field => {
+        field.setAttribute('contenteditable', 'true');
+        field.style.backgroundColor = '#f8fafc';
+        field.style.border = '1px solid #4f46e5';
+        field.style.borderRadius = '4px';
+        field.style.padding = '4px 6px';
+        field.style.outline = 'none';
+      });
+    } else {
+      // Save mode
+      editBtn.textContent = 'Edit Info';
+      infoFields.forEach(field => {
+        field.removeAttribute('contenteditable');
+        field.style.backgroundColor = '';
+        field.style.border = '';
+        field.style.padding = '';
+      });
+      await saveInfoPanel();
     }
-    // --- Modal close logic ---
-    document.addEventListener('DOMContentLoaded', function () {
-      fetchAndPrefillAnswers();
-    const editBtn = document.getElementById('edit-all-btn');
-    const infoValues = document.querySelectorAll('.info-panel .info-value');
-    let isEditing = false;
+  });
+});
 
-    editBtn.addEventListener('click', function () {
-      isEditing = !isEditing;
+async function fetchInfoPanel() {
+  const res = await fetch('/api/info');
+  const data = await res.json();
+  if (data.info) {
+    document.querySelector('[name="company"]').textContent = data.info.company || '';
+    document.querySelector('[name="location"]').textContent = data.info.location || '';
+    document.querySelector('[name="date"]').textContent = data.info.date || '';
+    document.querySelector('[name="branch"]').textContent = data.info.branch || '';
+    document.querySelector('[name="manager"]').textContent = data.info.manager || '';
+    document.querySelector('[name="inspector"]').textContent = data.info.inspector || '';
+  }
+}
 
-      infoValues.forEach(valueDiv => {
-        if (isEditing) {
-          valueDiv.setAttribute('contenteditable', 'true');
-          valueDiv.style.background = '#fff';
-          valueDiv.style.borderBottom = '2px solid #3730a3';
-          valueDiv.style.color = '#3730a3';
-        } else {
-          valueDiv.removeAttribute('contenteditable');
-          valueDiv.style.background = '';
-          valueDiv.style.borderBottom = '';
-          valueDiv.style.color = '';
-        }
-      });
+async function saveInfoPanel() {
+  const body = {
+    company: document.querySelector('[name="company"]').textContent.trim(),
+    location: document.querySelector('[name="location"]').textContent.trim(),
+    date: document.querySelector('[name="date"]').textContent.trim(),
+    branch: document.querySelector('[name="branch"]').textContent.trim(),
+    manager: document.querySelector('[name="manager"]').textContent.trim(),
+    inspector: document.querySelector('[name="inspector"]').textContent.trim(),
+  };
 
-      editBtn.innerText = isEditing ? 'Save Info' : 'Edit Info';
+  await fetch('/api/info', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
 
-      // Optionally, on save, you could collect and send the edited values via fetch() here.
-    });
-      const modal = document.getElementById('imageModal');
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      closeModalBtn.addEventListener('click', function() {
-        modal.classList.remove('active');
-        document.getElementById('modalImage').src = '';
-      });
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          modal.classList.remove('active');
-          document.getElementById('modalImage').src = '';
-        }
-      });
-    });
+  alert('Info panel saved!');
+}
 
-    // --- INFO PANEL EDITABLE WITH EDIT ICON ---
-    document.querySelectorAll('.info-item').forEach(function(item) {
-      const valueDiv = item.querySelector('.info-value');
-      const editIcon = item.querySelector('.edit-icon');
-      if (editIcon && valueDiv) {
-        editIcon.style.cursor = 'pointer';
-        editIcon.addEventListener('click', function(e) {
-          e.preventDefault();
-          valueDiv.setAttribute('contenteditable', 'true');
-          valueDiv.focus();
-          valueDiv.style.background = '#fff';
-          valueDiv.style.color = '#3730a3';
-          valueDiv.style.borderBottom = '2px solid #3730a3';
-        });
-        valueDiv.addEventListener('blur', function() {
-          valueDiv.removeAttribute('contenteditable');
-          valueDiv.style.background = '';
-          valueDiv.style.color = '';
-          valueDiv.style.borderBottom = '';
-        });
-      }
-    });
-
-    // Modal close logic
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('imageModalImg');
-    const modalClose = document.getElementById('imageModalClose');
-    modalClose.addEventListener('click', function() {
-      modal.classList.remove('active');
-      setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
-    });
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-        setTimeout(() => { modal.style.display = 'none'; modalImg.src = ''; }, 200);
-      }
-    });
   </script>
 </body>
 </html>

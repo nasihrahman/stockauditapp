@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const dotenv = require('dotenv');
 const app = express();
+const expressPDFRoutes = require('./routes/Express');
+app.use(express.json({ limit: '20mb' })); // in case large data/images are passed
+app.use('/api', expressPDFRoutes);
+app.use(express.static('public'));
 
 dotenv.config();
 
