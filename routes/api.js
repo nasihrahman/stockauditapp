@@ -5,6 +5,8 @@ const path = require('path');
 const { Answer } = require('../models/audit');
 const Info = require('../models/Info');
 const { cloudinary, storage } = require('../cloudinary'); // Uncomment if using Cloudinary
+const PDFDocument = require('pdfkit');
+const { generatePDFContent } = require('./pdf'); // Adjust path if different
 
 // Multer setup for image uploads
 // const storage = multer.diskStorage({
@@ -126,6 +128,27 @@ router.post('/info', async (req, res) => {
     res.json({ success: true, info });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/generate-pdf - export audit report as PDF
+router.post('/generate-pdf', async (req, res) => {
+  try {
+    const doc = new PDFDocument({ autoFirstPage: false });
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=Audit_Report.pdf');
+    console.log('Generating PDF with data:', req.body);
+    doc.pipe(res);
+    await generatePDFContent(doc, req.body);
+    doc.end();
+  } catch (error) {
+    console.error('PDF generation failed:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ success: false, error: 'PDF generation failed.' });
+    } else {
+      res.end();
+    }
   }
 });
 

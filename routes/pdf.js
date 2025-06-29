@@ -75,8 +75,11 @@ async function generatePDFContent(doc, data) {
 
   // Company info at bottom - clean layout
   doc.fontSize(16).fillColor('#6b7280').font('Helvetica')
-    .text(`${data.info.company || 'Company Name'}`, 0, 500, { align: 'center' })
-    .text(`${data.info.location || 'Location'} - ${data.info.branch || 'Branch'}`, 0, 525, { align: 'center' })
+    // .text(`${data.info.company || 'Company Name'}`, 0, 500, { align: 'center' })
+    // .text(`Location: ${data.info.location || 'Location'} - ${data.info.branch || 'Branch'}`, 0, 525, { align: 'center' })
+    .text(`Company Name: ${data.info.company || 'N/A'}`, 0, 500, { align: 'center' })
+
+    .text(`Location: ${data.info.location || 'N/A'}`, 0, 525, { align: 'center' })
     .text(`Audit Date: ${data.info.date || 'N/A'}`, 0, 550, { align: 'center' })
     .text(`Inspector: ${data.info.inspector || 'N/A'}`, 0, 575, { align: 'center' });
 
@@ -257,20 +260,20 @@ async function generatePDFContent(doc, data) {
     }
 
     // Images section (if any) - reduced spacing
-    if (q.images?.length > 0) {
-      doc.y += 5; // Reduced from 10
-      for (const imageUrl of q.images) {
-        try {
-          const img = await downloadImageToBuffer(imageUrl);
-          doc.image(img, 60, doc.y, { fit: [480, 100] }); // Reduced height from 120
-          doc.y += 110; // Reduced from 130
-        } catch (err) {
-          doc.fillColor('#ef4444').fontSize(10)
-            .text('[Image could not be loaded]', 60, doc.y);
-          doc.y += 15; // Reduced from 20
-        }
-      }
-    }
+    // if (q.images?.length > 0) {
+    //   doc.y += 5; // Reduced from 10
+    //   for (const imageUrl of q.images) {
+    //     try {
+    //       const img = await downloadImageToBuffer(imageUrl);
+    //       doc.image(img, 60, doc.y, { fit: [480, 100] }); // Reduced height from 120
+    //       doc.y += 110; // Reduced from 130
+    //     } catch (err) {
+    //       doc.fillColor('#ef4444').fontSize(10)
+    //         .text('[Image could not be loaded]', 60, doc.y);
+    //       doc.y += 15; // Reduced from 20
+    //     }
+    //   }
+    // }
 
     // Reduced spacing between questions
     doc.y += 10; // Reduced from 25
