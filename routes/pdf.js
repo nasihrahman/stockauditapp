@@ -1,5 +1,11 @@
 const PDFDocument = require('pdfkit');
 const https = require('https');
+// const https = require('https');
+const http = require('http');
+const { URL } = require('url');
+
+
+
 
 function getAnswerColor(answer) {
   switch (answer?.toLowerCase()) {
@@ -40,6 +46,12 @@ function downloadImageToBuffer(url) {
   });
 }
 
+function forceJpgFormat(url) {
+  if (!url.includes('/upload/')) return url;
+  return url.replace('/upload/', '/upload/f_jpg/');
+}
+
+
 async function generatePDFContent(doc, data) {
   const totalScoreText = data.totalScoreDetails;
   const grade = getGrade(totalScoreText);
@@ -64,7 +76,7 @@ async function generatePDFContent(doc, data) {
   
   // Score percentage
   doc.fontSize(48).fillColor('#22c55e').font('Helvetica-Bold')
-    .text(`${percent}%`, centerX - 50, scoreY - 20, { align: 'left' });
+    .text(`${percent}%`, centerX - 70, scoreY - 20, { align: 'left' });
 
   // Grade display with color
   doc.fontSize(16).fillColor('#374151').font('Helvetica')
@@ -172,12 +184,13 @@ async function generatePDFContent(doc, data) {
   let questionNumber = 1;
 
   for (const q of data.questions) {
+          const score = data.categorySummaries.find(c => c.name === currentCategory)?.score || '0/0 (0%)';
+
     if (q.category !== currentCategory) {
       doc.addPage();
       currentCategory = q.category;
 
       // Category header
-      const score = data.categorySummaries.find(c => c.name === currentCategory)?.score || '0/0 (0%)';
       
       doc.rect(30, 40, 540, 50).fill('#1e293b');
       doc.fillColor('white').fontSize(18).font('Helvetica-Bold')
@@ -274,6 +287,30 @@ async function generatePDFContent(doc, data) {
     //     }
     //   }
     // }
+
+    if (q.images?.length > 0) {
+  doc.y += 5; // Reduced spacing before image
+
+  for (let imageUrl of q.images) {
+    try {
+      // Convert to .jpg to avoid .webp issue
+      imageUrl = forceJpgFormat(imageUrl);
+
+      const img = await downloadImageToBuffer(imageUrl);
+
+      doc.image(img, 60, doc.y, { fit: [480, 100] }); // render image
+      doc.y += 110; // move below image
+    } catch (err) {
+      console.error('Failed to load image:', imageUrl, err.message);
+
+      doc.fillColor('#ef4444').fontSize(10)
+        .text('[Image could not be loaded]', 60, doc.y);
+      doc.y += 15;
+    }
+  }
+}
+
+    
 
     // Reduced spacing between questions
     doc.y += 10; // Reduced from 25
