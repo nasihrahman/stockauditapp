@@ -294,7 +294,26 @@
       border-color: #d97706;
       box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
     }
-    
+    .category-filter-btn {
+  padding: 0.5rem 1rem;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #1e293b;
+  transition: background 0.3s, color 0.3s;
+}
+
+.category-filter-btn:hover {
+  background: #cbd5e1;
+}
+
+.category-filter-btn.active-filter {
+  background: #667eea;
+  color: white;
+}
+
     @media (max-width: 768px) {
       .form-row {
         flex-direction: column;
@@ -459,14 +478,15 @@
 
 <div style="margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
   <% categories.forEach(function(cat) { %>
-    <button class="category-filter-btn" data-category-id="<%= cat._id %>" style="padding: 0.5rem 1rem; background: #e2e8f0; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+    <button class="category-filter-btn" data-category-id="<%= cat._id %>">
       <%= cat.name %>
     </button>
   <% }) %>
-  <button class="category-filter-btn" data-category-id="all" style="padding: 0.5rem 1rem; background: #94a3b8; color: white; border: none; border-radius: 6px; font-weight: 600;">
+  <button class="category-filter-btn" data-category-id="all">
     Show All
   </button>
 </div>
+
       
       <% if (questions && questions.length > 0) { %>
         <ul class="questions-list">
@@ -655,6 +675,8 @@
 document.querySelectorAll('.category-filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const selected = btn.getAttribute('data-category-id');
+
+    // Apply filtering
     document.querySelectorAll('.question-item').forEach(item => {
       const itemCat = item.getAttribute('data-category-id');
       if (selected === 'all' || selected === itemCat) {
@@ -663,8 +685,15 @@ document.querySelectorAll('.category-filter-btn').forEach(btn => {
         item.style.display = 'none';
       }
     });
+
+    // Update active styles
+    document.querySelectorAll('.category-filter-btn').forEach(b => {
+      b.classList.remove('active-filter');
+    });
+    btn.classList.add('active-filter');
   });
 });
+
 
 let draggedItem = null;
 
