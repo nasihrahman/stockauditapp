@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const { Answer } = require('../models/audit');
+const { Question, Category, Answer } = require('../models/audit');
 const Info = require('../models/Info');
 const { cloudinary, storage } = require('../cloudinary'); // Uncomment if using Cloudinary
 const PDFDocument = require('pdfkit');
@@ -42,6 +42,8 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
 
   try {
     const { questionId, response, comment } = req.body;
+
+    
     if (!questionId || !questionId.match(/^[a-fA-F0-9]{24}$/)) {
       return res.status(400).json({ success: false, error: 'Invalid questionId' });
     }
@@ -149,6 +151,17 @@ router.post('/generate-pdf', async (req, res) => {
     } else {
       res.end();
     }
+  }
+});
+
+// --- Update Question ---
+router.put('/question/:id', async (req, res) => {
+  const { text, category } = req.body;
+  try {
+    await Question.findByIdAndUpdate(req.params.id, { text, category });
+    res.redirect('/admin'); // Redirect to admin panel after update
+  } catch (err) {
+    res.status(500).send('Failed to update question: ' + err.message);
   }
 });
 

@@ -451,25 +451,46 @@
     <!-- Questions List -->
     <div class="admin-section">
       <div class="section-header">
-        <h2 class="section-title">
-          <span>📝</span>
-          All Questions (<%= questions ? questions.length : 0 %>)
-        </h2>
-      </div>
+  <h2 class="section-title">
+    <span>📝</span>
+    All Questions (<%= questions ? questions.length : 0 %>)
+  </h2>
+</div>
+
+<div style="margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+  <% categories.forEach(function(cat) { %>
+    <button class="category-filter-btn" data-category-id="<%= cat._id %>" style="padding: 0.5rem 1rem; background: #e2e8f0; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+      <%= cat.name %>
+    </button>
+  <% }) %>
+  <button class="category-filter-btn" data-category-id="all" style="padding: 0.5rem 1rem; background: #94a3b8; color: white; border: none; border-radius: 6px; font-weight: 600;">
+    Show All
+  </button>
+</div>
       
       <% if (questions && questions.length > 0) { %>
         <ul class="questions-list">
           <% questions.forEach(function(q) { %>
-            <li class="question-item">
+<li class="question-item" 
+    draggable="true" 
+    data-category-id="<%= q.category ? q.category._id : 'none' %>" 
+    data-question-id="<%= q._id %>">
               <span class="question-text"><%= q.text %></span>
-              <span class="question-category">
-                <%= q.category ? q.category.name : 'No Category' %>
-              </span>
-              <form method="POST" action="/admin/question/delete/<%= q._id %>" style="display:inline">
-                <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this question?')">
-                  Delete
-                </button>
-              </form>
+
+<span class="question-category">
+  <%= q.category ? q.category.name : 'No Category' %>
+</span>
+
+<div style="display:flex; gap: 0.5rem;">
+  <a href="/edit-question/<%= q._id %>"  class="btn-edit" style="background: #38bdf8; padding: 0.5rem 0.75rem; border-radius: 6px; color: white; font-size: 0.875rem; text-decoration: none;">Edit</a>
+
+  <form method="POST" action="/admin/question/delete/<%= q._id %>">
+    <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this question?')">
+      Delete
+    </button>
+  </form>
+</div>
+
             </li>
           <% }); %>
         </ul>
@@ -617,6 +638,54 @@
       }
     });
   });
+// Filter questions by category
+document.querySelectorAll('.category-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const selected = btn.getAttribute('data-category-id');
+    document.querySelectorAll('.question-item').forEach(item => {
+      const itemCat = item.getAttribute('data-category-id');
+      if (selected === 'all' || selected === itemCat) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+let draggedItem = null;
+
+document.querySelectorAll('.question-item').forEach(item => {
+  item.addEventListener('dragstart', function () {
+    draggedItem = this;
+    this.style.opacity = '0.5';
+  });
+
+  item.addEventListener('dragend', function () {
+    this.style.opacity = '1';
+    draggedItem = null;
+  });
+
+  item.addEventListener('dragover', function (e) {
+    e.preventDefault();
+  });
+
+  item.addEventListener('drop', function (e) {
+  e.preventDefault();
+  if (!draggedItem || draggedItem === this) return;
+
+  const bounding = this.getBoundingClientRect();
+  const offset = e.clientY - bounding.top;
+
+  if (offset > bounding.height / 2) {
+    // Drop after this element
+    this.parentNode.insertBefore(draggedItem, this.nextSibling);
+  } else {
+    // Drop before this element
+    this.parentNode.insertBefore(draggedItem, this);
+  }
+});
+
+});
 
 
   </script>

@@ -60,10 +60,10 @@ async function generatePDFContent(doc, data) {
   // === COVER PAGE - NO LOGO, CLEAN DESIGN ===
   // Main title - centered and professional
   doc.fontSize(42).fillColor('#1e293b').font('Helvetica-Bold')
-    .text('SERVICE EXCELLENCE', 0, 150, { align: 'center' });
+    .text('AUDIT REPORT', 0, 150, { align: 'center' });
   
-  doc.fontSize(32).fillColor('#3b82f6')
-    .text('AUDIT REPORT', 0, 200, { align: 'center' });
+  // doc.fontSize(32).fillColor('#3b82f6')
+  //   .text('AUDIT REPORT', 0, 200, { align: 'center' });
 
   // Score display with background
   doc.moveDown(4);

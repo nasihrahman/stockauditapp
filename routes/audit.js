@@ -62,4 +62,18 @@ router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, 
   res.redirect('/audit');
 });
 
+// routes/edit.js or wherever you handle views
+router.get('/edit-question/:id', async (req, res) => {
+  const question = await Question.findById(req.params.id).populate('category');
+  const categories = await Category.find({});
+  res.render('edit-question', { question, categories });
+});
+
+router.post('/edit-question/:id', async (req, res) => {
+  const { text, category } = req.body;
+  await Question.findByIdAndUpdate(req.params.id, { text, category });
+  res.redirect('/admin');
+});
+
+
 module.exports = router;

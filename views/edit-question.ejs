@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Question</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #f0f4f8;
+    }
+
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <form method="POST" action="/api/question/<%= question._id %>?_method=PUT">
+    <h2>Edit Question</h2>
+    <label>Question Text</label>
+    <input type="text" name="text" value="<%= question.text %>" required />
+
+    <label>Category</label>
+    <select name="category" required>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat._id %>" <%= question.category && cat._id.toString() === question.category._id.toString() ? 'selected' : '' %>><%= cat.name %></option>
+      <% }); %>
+    </select>
+
+    <button type="submit">Update</button>
+  </form>
+</body>
+</html>

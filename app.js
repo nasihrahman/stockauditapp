@@ -7,7 +7,10 @@ const expressPDFRoutes = require('./routes/Express');
 app.use(express.json({ limit: '20mb' })); // in case large data/images are passed
 app.use('/api', expressPDFRoutes);
 app.use(express.static('public'));
+const methodOverride = require('method-override');
 
+// Allow method override using ?_method=PUT or hidden input in form
+app.use(methodOverride('_method'));
 dotenv.config();
 
 // MongoDB connection

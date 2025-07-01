@@ -1060,7 +1060,7 @@ background: rgb(23, 40, 50);
         <img src="/images/logo.png" alt="Company Logo" />
       </div>
       <div class="company-info">
-        <h1>Stock Auditing System</h1>
+        <h1>Food Safety Auditing</h1>
         <p>Company Audit Portal</p>
       </div>
     </div>
@@ -1715,56 +1715,7 @@ async function prepareAuditData() {
 
   </script>
 
-  <!-- Image Modal Overlay
-  <div id="imageModal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.85);align-items:center;justify-content:center;">
-    <span id="closeModalBtn" style="position:absolute;top:32px;right:48px;font-size:2.5rem;color:#fff;cursor:pointer;z-index:10001;font-weight:700;">&times;</span>
-    <img id="modalImage" src="" alt="Preview" style="max-width:90vw;max-height:80vh;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.25);border:4px solid #fff;">
-  </div>
-  <style>
-    imageModal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(30,41,59,0.85); align-items: center; justify-content: center; }
-    imageModal.active { display: flex !important; }
-    imageModal img { max-width: 90vw; max-height: 80vh; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); border: 4px solid #fff; } 
-    closeModalBtn { position: absolute; top: 32px; right: 48px; font-size: 2.5rem; color: #fff; cursor: pointer; z-index: 10001; font-weight: 700; transition: color 0.2s; }
-    closeModalBtn:hover { color: #f87171; }
- </style>  -->
-  <script>
-// async function fetchInfoPanel() {
-//   const res = await fetch('/api/info');
-//   const data = await res.json();
-//   if (data.info) {
-//     document.querySelector('[name="company"]').textContent = data.info.company || '';
-//     document.querySelector('[name="location"]').textContent = data.info.location || '';
-//     document.querySelector('[name="date"]').textContent = data.info.date || '';
-//     document.querySelector('[name="branch"]').textContent = data.info.branch || '';
-//     document.querySelector('[name="manager"]').textContent = data.info.manager || '';
-//     document.querySelector('[name="inspector"]').textContent = data.info.inspector || '';
-//   }
-// }
-
-// async function saveInfoPanel() {
-//   const body = {
-//     company: document.querySelector('[name="company"]').textContent,
-//     location: document.querySelector('[name="location"]').textContent,
-//     date: document.querySelector('[name="date"]').textContent,
-//     branch: document.querySelector('[name="branch"]').textContent,
-//     manager: document.querySelector('[name="manager"]').textContent,
-//     inspector: document.querySelector('[name="inspector"]').textContent,
-//   };
-//   await fetch('/api/info', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(body)
-//   });
-//   alert('Info panel saved!');
-// }
-
-// // Call fetchInfoPanel() on page load
-// document.addEventListener('DOMContentLoaded', fetchInfoPanel);
-
-// // Attach saveInfoPanel to your "Save Changes" button
-// document.getElementById('save-info-btn').addEventListener('click', saveInfoPanel);
-
-</script>
+  
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   fetchInfoPanel();
