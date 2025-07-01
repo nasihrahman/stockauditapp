@@ -437,7 +437,7 @@
           </select>
         </div>
         
-        <div class="new-category-input">
+        <div class="new-category-input" style = "display:none">
           <label for="new-category">Or Add New Category</label>
           <input type="text" id="new-category" name="newCategory" placeholder="Enter new category name..." />
         </div>
@@ -639,6 +639,19 @@
     });
   });
 // Filter questions by category
+// document.querySelectorAll('.category-filter-btn').forEach(btn => {
+//   btn.addEventListener('click', () => {
+//     const selected = btn.getAttribute('data-category-id');
+//     document.querySelectorAll('.question-item').forEach(item => {
+//       const itemCat = item.getAttribute('data-category-id');
+//       if (selected === 'all' || selected === itemCat) {
+//         item.style.display = 'flex';
+//       } else {
+//         item.style.display = 'none';
+//       }
+//     });
+//   });
+// });
 document.querySelectorAll('.category-filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const selected = btn.getAttribute('data-category-id');
@@ -652,6 +665,7 @@ document.querySelectorAll('.category-filter-btn').forEach(btn => {
     });
   });
 });
+
 let draggedItem = null;
 
 document.querySelectorAll('.question-item').forEach(item => {
@@ -670,21 +684,11 @@ document.querySelectorAll('.question-item').forEach(item => {
   });
 
   item.addEventListener('drop', function (e) {
-  e.preventDefault();
-  if (!draggedItem || draggedItem === this) return;
-
-  const bounding = this.getBoundingClientRect();
-  const offset = e.clientY - bounding.top;
-
-  if (offset > bounding.height / 2) {
-    // Drop after this element
-    this.parentNode.insertBefore(draggedItem, this.nextSibling);
-  } else {
-    // Drop before this element
-    this.parentNode.insertBefore(draggedItem, this);
-  }
-});
-
+    e.preventDefault();
+    if (draggedItem && draggedItem !== this) {
+      this.parentNode.insertBefore(draggedItem, this);
+    }
+  });
 });
 
 
