@@ -447,6 +447,7 @@ async function prepareAuditData() {
           formData.append('response', response);
           formData.append('comment', comment);
           formData.append('images', this.files[0]);
+          formData.append('companyId', getCompanyIdFromUrl()); 
           fetch('/api/answer', {
             method: 'POST',
             body: formData
@@ -664,4 +665,58 @@ async function saveInfoPanel() {
 }
 
 
+let currentQuestionId = null;
 
+document.querySelectorAll('.open-image-options').forEach(btn => {
+  btn.addEventListener('click', function () {
+    currentQuestionId = this.getAttribute('data-question-id'); // track which question to attach image to
+    document.getElementById('imageOptionModal').style.display = 'flex';
+  });
+});
+
+document.getElementById('uploadFileBtn').addEventListener('click', () => {
+  document.getElementById('hiddenImageInput').click();
+});
+
+document.getElementById('hiddenImageInput').addEventListener('change', function () {
+  if (this.files && this.files[0]) {
+    const questionItem = document.querySelector(`.question-item[data-question-id="${currentQuestionId}"]`);
+    const radios = questionItem.querySelectorAll('input[type="radio"]');
+    let response = '';
+    radios.forEach(r => { if (r.checked) response = r.value; });
+
+    if (!response) {
+      const naRadio = questionItem.querySelector(`input[value="na"]`);
+      if (naRadio) {
+        naRadio.checked = true;
+        response = 'na';
+      }
+    }
+
+    const comment = questionItem.querySelector('.comment-input').value;
+    const formData = new FormData();
+    formData.append('questionId', currentQuestionId);
+    formData.append('companyId', getCompanyIdFromUrl());  
+    formData.append('response', response);
+    formData.append('comment', comment);
+    formData.append('images', this.files[0]);
+
+    fetch('/api/answer', {
+      method: 'POST',
+      body: formData
+    })
+      .then(res => res.json())
+      .then(resp => {
+        if (resp.success && resp.answer && resp.answer.images) {
+          renderImagePreview(currentQuestionId, resp.answer.images);
+        } else {
+          alert('Upload failed.');
+        }
+      })
+      .catch(() => alert('Upload failed.'));
+
+    // Reset & close modal
+    this.value = '';
+    document.getElementById('imageOptionModal').style.display = 'none';
+  }
+});

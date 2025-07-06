@@ -380,6 +380,28 @@
 .home-btn:hover {
   background: #e2e8f0;
 }
+.view-audit-btn {
+  background: #10b981;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.header-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.header-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
 
   </style>
 </head>
@@ -390,9 +412,14 @@
       <h1>Admin Panel</h1>
       <p>Manage Categories & Questions</p>
     </div>
-     <div class="header-actions">
-    <a href="/" class="home-btn" title="Go Home">🏠</a>
-  </div>
+     <div class="header-actions" style="display: flex; gap: 1rem; align-items: center;">
+  <!-- <span style="font-weight: bold; font-size: 1rem;">Dashboard</span> -->
+   <a href="/" class="header-btn" title="Dashboard">Dashboard</a>
+  <a href="/audit/<%= company._id %>" class="header-btn" title="View Audit">
+    View Audit
+  </a>
+</div>
+
   </header>
   
   <main>

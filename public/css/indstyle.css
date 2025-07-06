@@ -502,6 +502,12 @@ background: rgb(23, 40, 50);
       color: #3730a3;
       border-color: #c7d2fe;
     }
+    .image-preview {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
     .image-preview img {
       max-width: 220px;
       max-height: 220px;
@@ -1183,3 +1189,91 @@ background: rgb(23, 40, 50);
   background-color: #3730a3;
 }
 
+/* Footer layout for mobile */
+.question-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.add-image-label {
+  flex: 1;
+  background-color: white;
+  color: #1e40af;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.question-score-badge {
+  margin-left: 0.5rem;
+  background-color: #eee;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  align-items: center;
+  align-content: center;
+}
+
+/* Responsive tuning */
+@media (max-width: 768px) {
+  .add-image-label {
+    width: 80%;
+  }
+
+  .question-score-badge {
+    width: 18%;
+    text-align: right;
+    font-size: 0.75rem;
+  }
+}
+.image-modal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.image-modal-box {
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.image-modal-box button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.image-modal-box button:hover {
+  background: #4338ca;
+}
+
+.hidden {
+  display: none;
+}

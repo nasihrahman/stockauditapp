@@ -12,7 +12,16 @@
 </head>
 <body>
   
- <header class="header">
+ <!-- <header class="header">
+  <div class="mobile-menu-icon" onclick="toggleMobileMenu()">
+  &#x22EE; Unicode for vertical three dots -->
+<!-- </div> -->
+
+<!-- Dropdown Menu -->
+<!-- <div id="mobileDropdown" class="mobile-dropdown hidden">
+  <a href="/dashboard">Dashboard</a>
+  <a href="editCompany(')">Admin</a>
+</div> --> 
   <div class="header-content">
 
     <!-- Left: Logo & Info -->
@@ -117,12 +126,18 @@
                             <label for="<%= q._id %>-na">N/A</label>
                           </div>
                         </div>
-                        <span class="question-score-badge" data-question-id="<%= q._id %>">0</span>
-                        <label class="add-image-label">
-                          📷 Add image
-                          <input type="file" name="images" class="hidden-file-input" accept="image/*">
-                        </label>
-                      </div>
+                        <!-- New wrapper for Add Image + Score Badge -->
+                          <div class="question-footer">
+                            <!-- <label class="add-image-label">
+                              📷 Add image
+                              <input type="file" name="images" class="hidden-file-input" accept="image/*">
+                            </label> -->
+                                <button type="button" class="open-image-options" data-question-id="<%= q._id %>">
+                                  📷 Add image
+                                </button>
+                            <span class="question-score-badge" data-question-id="<%= q._id %>">0</span>
+                          </div>
+                        </div>
                     </div>
                     <input type="text" class="comment-input" placeholder="Add your comments here..." name="comment" autocomplete="off">
                     <!-- <button type="button" class="clear-comment-btn" data-question-id="<%= q._id %>">❌ Clear Comment</button> -->
@@ -142,6 +157,17 @@
         </div>
       <% } %>
     </main>
+    <!-- 📷 Image Upload Modal -->
+<div id="imageOptionModal" class="image-modal-overlay">
+  <div class="image-modal-box">
+    <h4>Select Image Option</h4>
+    <button id="uploadFileBtn">📁 Upload from device</button>
+    <button id="captureCameraBtn">📷 Capture from camera</button>
+    <input type="file" id="hiddenImageInput" class="hidden" accept="image/*" capture="environment">
+    <button id="closeImageModal">Cancel</button>
+  </div>
+</div>
+
   </div>
 
   <div id="imageModal" class="image-modal">
