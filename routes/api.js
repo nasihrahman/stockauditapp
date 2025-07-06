@@ -243,6 +243,17 @@ router.post('/companies', async (req, res) => {
     res.status(500).json({ success: false, message: 'Error creating company' });
   }
 });
+//category rename route
+router.post('/category/edit', async (req, res) => {
+  const { categoryId, newName, companyId } = req.body;
+  try {
+    await Category.findByIdAndUpdate(categoryId, { name: newName });
+    res.redirect(`/admin?company=${companyId}`);
+  } catch (err) {
+    console.error('Error updating category name:', err);
+    res.status(500).send('Failed to update category');
+  }
+});
 
 
 module.exports = router;

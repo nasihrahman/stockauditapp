@@ -110,8 +110,11 @@ router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, 
 // routes/edit.js or wherever you handle views
 router.get('/edit-question/:id', async (req, res) => {
   const question = await Question.findById(req.params.id).populate('category');
-  const categories = await Category.find({});
-  res.render('edit-question', { question, categories });
+  if (!question) return res.status(404).send('Question not found');
+
+  const companyId = question.company; 
+  const categories = await Category.find({company: companyId});
+  res.render('edit-question', { question, categories, company: companyId});
 });
 
 router.post('/edit-question/:id', async (req, res) => {
@@ -130,6 +133,19 @@ router.post('/admin/category/reorder', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: 'Failed to reorder categories' });
+  }
+});
+
+
+// edit category name
+router.post('/api/category/edit', async (req, res) => {
+  const { categoryId, newName, companyId } = req.body;
+  try {
+    await Category.findByIdAndUpdate(categoryId, { name: newName });
+    res.redirect(`/admin?company=${companyId}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to update category');
   }
 });
 

@@ -17,6 +17,7 @@
       max-width: 600px;
       margin: auto;
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
     }
 
     input, select {
@@ -35,14 +36,22 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Edit Question Form -->
   <form method="POST" action="/api/question/<%= question._id %>?_method=PUT">
     <h2>Edit Question</h2>
     <label>Question Text</label>
     <input type="text" name="text" value="<%= question.text %>" required />
-    <input type="hidden" name="company" value="<%= company._id %>" />
+    
+    <input type="hidden" name="company" value="<%= company._id ? company._id : company %>" />
+
     <label>Category</label>
     <select name="category" required>
       <% categories.forEach(cat => { %>
@@ -50,7 +59,27 @@
       <% }); %>
     </select>
 
-    <button type="submit">Update</button>
+    <button type="submit">Update Question</button>
   </form>
+
+  <!-- Edit Category Form -->
+  <form method="POST" action="/api/category/edit">
+    <h2>Edit Category Name</h2>
+
+    <input type="hidden" name="companyId" value="<%= company._id ? company._id : company %>" />
+
+    <label>Select Category</label>
+    <select name="categoryId" required>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat._id %>"><%= cat.name %></option>
+      <% }); %>
+    </select>
+
+    <label>New Category Name</label>
+    <input type="text" name="newName" placeholder="Enter new category name..." required />
+
+    <button type="submit">Update Category</button>
+  </form>
+
 </body>
 </html>
