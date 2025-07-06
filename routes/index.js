@@ -1,15 +1,3 @@
-function getCompanyIdFromUrl() {
-  return window.location.pathname.split('/').pop(); // gets last segment from /audit/:companyId
-}
-
-function openAudit(id) {
-    window.location.href = `/audit/${id}`;
-  }
-
- function editCompany(id) {
-    window.location.href = `/admin?company=${id}`;
-  }
-
 // Placeholder for admin and API routes
 
    document.getElementById('clearAllBtn').addEventListener('click', function() {
@@ -33,10 +21,7 @@ function clearAllResponses() {
     document.querySelectorAll('.image-preview').forEach(preview => {
         preview.innerHTML = '';
     });
-    // Clear info panel fields
-    document.querySelectorAll('.info-value').forEach(field => {
-        field.textContent = '';
-    });
+    
     // Update scores
     updateScores();
     
@@ -59,16 +44,16 @@ function clearAllResponses() {
 
 // PDF Export Functionality
 document.getElementById('exportPdfBtn').addEventListener('click', function() {
-    this.textContent = ' Generating PDF...';
+    this.textContent = '⏳ Generating PDF...';
     this.disabled = true;
     
     generatePDF().then(() => {
-        this.textContent = ' Save & Export PDF';
+        this.textContent = '📄 Save & Export PDF';
         this.disabled = false;
     }).catch(err => {
         console.error('PDF Generation Error:', err);
         alert('Error generating PDF. Please try again.');
-        this.textContent = ' Save & Export PDF';
+        this.textContent = '📄 Save & Export PDF';
         this.disabled = false;
     });
 });
@@ -128,7 +113,6 @@ async function prepareAuditData() {
             score: scoreText
         });
     });
-
     
     // Get total score
     const totalScore = document.getElementById('totalScore').textContent;
@@ -217,7 +201,6 @@ async function prepareAuditData() {
 
     // --- AJAX: Save answer ---
     function saveAnswer(questionId, data, isImage) {
-        const companyId = getCompanyIdFromUrl();
       let fetchOptions = {
         method: 'POST',
         body: undefined
@@ -225,10 +208,8 @@ async function prepareAuditData() {
       if (isImage) {
         const formData = new FormData();
         Object.keys(data).forEach(k => formData.append(k, data[k]));
-        formData.append('companyId', companyId); 
         fetchOptions.body = formData;
       } else {
-        data.companyId = companyId;
         fetchOptions.headers = { 'Content-Type': 'application/json' };
         fetchOptions.body = JSON.stringify(data);
       }
@@ -298,89 +279,34 @@ async function prepareAuditData() {
     }
 
     // --- DYNAMIC SUMMARY PANEL ---
-    // function updateSummaryPanel() {
-    //   const tbody = document.getElementById('summaryTableBody');
-    //   tbody.innerHTML = '';
-    //   document.querySelectorAll('.category-card').forEach(function(catCard) {
-    //     const catName = catCard.querySelector('.category-title').childNodes[0].textContent.trim();
-    //     const catBadge = catCard.querySelector('.category-score-badge');
-    //     let score = catBadge ? catBadge.textContent : '0/0 (0%)';
-    //     let [scored, possible] = score.split('/');
-    //     possible = possible.split(' ')[0];
-    //     let percent = score.match(/\((\d+)%\)/);
-    //     percent = percent ? percent[1] : '0';
-    //     let status = 'Pending', badgeClass = 'badge bg-secondary';
-    //     if (possible > 0) {
-    //       if (percent >= 80) { status = 'Pass'; badgeClass = 'badge bg-success'; }
-    //       else if (percent >= 50) { status = 'Warning'; badgeClass = 'badge bg-secondary'; }
-    //       else { status = 'Fail'; badgeClass = 'badge bg-danger'; }
-    //     }
-    //     const tr = document.createElement('tr');
-    //     tr.innerHTML = `
-    //       <td class="fw-semibold">${catName}</td>
-    //       <td>${scored}/${possible}</td>
-    //       <td>${percent}%</td>
-    //       <td><span class="${badgeClass}">${status}</span></td>
-    //     `;
-    //     tbody.appendChild(tr);
-    //   });
-    // }
-    
     function updateSummaryPanel() {
-  const tbody = document.getElementById('summaryTableBody');
-  tbody.innerHTML = '';
-
-  document.querySelectorAll('.category-card').forEach(function (catCard) {
-    const catName = catCard.querySelector('.category-title').childNodes[0].textContent.trim();
-    const catBadge = catCard.querySelector('.category-score-badge');
-    const categoryId = catCard.getAttribute('data-category-id');
-
-    let score = catBadge ? catBadge.textContent : '0/0 (0%)';
-    let [scored, possible] = score.split('/');
-    possible = possible.split(' ')[0];
-    let percentMatch = score.match(/\((\d+)%\)/);
-    let percent = percentMatch ? percentMatch[1] : '0';
-
-    let status = 'Pending', badgeClass = 'badge bg-secondary';
-    if (possible > 0) {
-      if (percent >= 80) { status = 'Pass'; badgeClass = 'badge bg-success'; }
-      else if (percent >= 50) { status = 'Warning'; badgeClass = 'badge bg-secondary'; }
-      else { status = 'Fail'; badgeClass = 'badge bg-danger'; }
+      const tbody = document.getElementById('summaryTableBody');
+      tbody.innerHTML = '';
+      document.querySelectorAll('.category-card').forEach(function(catCard) {
+        const catName = catCard.querySelector('.category-title').childNodes[0].textContent.trim();
+        const catBadge = catCard.querySelector('.category-score-badge');
+        let score = catBadge ? catBadge.textContent : '0/0 (0%)';
+        let [scored, possible] = score.split('/');
+        possible = possible.split(' ')[0];
+        let percent = score.match(/\((\d+)%\)/);
+        percent = percent ? percent[1] : '0';
+        let status = 'Pending', badgeClass = 'badge bg-secondary';
+        if (possible > 0) {
+          if (percent >= 80) { status = 'Pass'; badgeClass = 'badge bg-success'; }
+          else if (percent >= 50) { status = 'Warning'; badgeClass = 'badge bg-secondary'; }
+          else { status = 'Fail'; badgeClass = 'badge bg-danger'; }
+        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="fw-semibold">${catName}</td>
+          <td>${scored}/${possible}</td>
+          <td>${percent}%</td>
+          <td><span class="${badgeClass}">${status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
-
-    const tr = document.createElement('tr');
-    tr.classList.add('summary-category-row');
-    tr.setAttribute('data-category-id', categoryId);
-    tr.style.cursor = 'pointer';
-
-    tr.innerHTML = `
-      <td><span class="clickable-category">${catName}</span></td>
-      <td>${scored}/${possible}</td>
-      <td>${percent}%</td>
-      <td><span class="${badgeClass}">${status}</span></td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  // Attach click handlers
-  document.querySelectorAll('.summary-category-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const catId = row.getAttribute('data-category-id');
-      const targetCard = document.querySelector(`.category-card[data-category-id="${catId}"]`);
-      if (targetCard) {
-        targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        // Optional highlight effect
-        targetCard.classList.add('highlight-category');
-        setTimeout(() => {
-          targetCard.classList.remove('highlight-category');
-        }, 1500);
-      }
-    });
-  });
-}
-
-
+    
     // --- Listen for radio changes ---
     document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
       radio.addEventListener('change', function() {
@@ -447,7 +373,6 @@ async function prepareAuditData() {
           formData.append('response', response);
           formData.append('comment', comment);
           formData.append('images', this.files[0]);
-          formData.append('companyId', getCompanyIdFromUrl()); 
           fetch('/api/answer', {
             method: 'POST',
             body: formData
@@ -571,10 +496,6 @@ async function prepareAuditData() {
     // Modal close logic
     // const modal = document.getElementById('imageModal');
     document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('closeImageModal').addEventListener('click', () => {
-  document.getElementById('imageOptionModal').style.display = 'none';
-});
-
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('imageModalImg');
   const modalClose = document.getElementById('closeModalBtn'); // ✅ correct ID
@@ -631,11 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchInfoPanel() {
-//   const res = await fetch('/api/info');
-// const companyId = getCompanyIdFromUrl();
-const companyId = getCompanyIdFromUrl();// gets ID from URL 
-const res = await fetch(`/api/info?companyId=${companyId}`);
-
+  const res = await fetch('/api/info');
   const data = await res.json();
   if (data.info) {
     document.querySelector('[name="company"]').textContent = data.info.company || '';
@@ -648,9 +565,7 @@ const res = await fetch(`/api/info?companyId=${companyId}`);
 }
 
 async function saveInfoPanel() {
-    const companyId = getCompanyIdFromUrl();
   const body = {
-    companyId,
     company: document.querySelector('[name="company"]').textContent.trim(),
     location: document.querySelector('[name="location"]').textContent.trim(),
     date: document.querySelector('[name="date"]').textContent.trim(),
@@ -669,58 +584,4 @@ async function saveInfoPanel() {
 }
 
 
-let currentQuestionId = null;
 
-document.querySelectorAll('.open-image-options').forEach(btn => {
-  btn.addEventListener('click', function () {
-    currentQuestionId = this.getAttribute('data-question-id'); // track which question to attach image to
-    document.getElementById('imageOptionModal').style.display = 'flex';
-  });
-});
-
-document.getElementById('uploadFileBtn').addEventListener('click', () => {
-  document.getElementById('hiddenImageInput').click();
-});
-
-document.getElementById('hiddenImageInput').addEventListener('change', function () {
-  if (this.files && this.files[0]) {
-    const questionItem = document.querySelector(`.question-item[data-question-id="${currentQuestionId}"]`);
-    const radios = questionItem.querySelectorAll('input[type="radio"]');
-    let response = '';
-    radios.forEach(r => { if (r.checked) response = r.value; });
-
-    if (!response) {
-      const naRadio = questionItem.querySelector(`input[value="na"]`);
-      if (naRadio) {
-        naRadio.checked = true;
-        response = 'na';
-      }
-    }
-
-    const comment = questionItem.querySelector('.comment-input').value;
-    const formData = new FormData();
-    formData.append('questionId', currentQuestionId);
-    formData.append('companyId', getCompanyIdFromUrl());  
-    formData.append('response', response);
-    formData.append('comment', comment);
-    formData.append('images', this.files[0]);
-
-    fetch('/api/answer', {
-      method: 'POST',
-      body: formData
-    })
-      .then(res => res.json())
-      .then(resp => {
-        if (resp.success && resp.answer && resp.answer.images) {
-          renderImagePreview(currentQuestionId, resp.answer.images);
-        } else {
-          alert('Upload failed.');
-        }
-      })
-      .catch(() => alert('Upload failed.'));
-
-    // Reset & close modal
-    this.value = '';
-    document.getElementById('imageOptionModal').style.display = 'none';
-  }
-});

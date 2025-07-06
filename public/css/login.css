@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Tahoma, Verdana, Segoe, sans-serif;
+  font-size: 14px;
+  background: #f6fffd;
+  padding: 20px;
+  text-align: center;
+}
+
+.wrapper {
+  width: 250px;
+  height: 350px;
+  margin: 60px auto;
+  perspective: 600px;
+  text-align: left;
+}
+
+.rec-prism {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(-100px);
+  transition: transform 0.5s ease-in;
+}
+
+.face {
+  position: absolute;
+  width: 250px;
+  height: 350px;
+  padding: 20px;
+  background: rgba(250, 250, 250, 0.96);
+  border: 3px solid rgb(23, 40, 50);
+  border-radius: 3px;
+}
+
+.face .content {
+  color: #444;
+}
+
+.face .content h2 {
+  font-size: 1.2em;
+  color: rgb(23, 40, 50);
+}
+
+.field-wrapper {
+  margin-top: 30px;
+  position: relative;
+}
+
+.field-wrapper label {
+  position: absolute;
+  pointer-events: none;
+  font-size: 0.85em;
+  top: 40%;
+  left: 0;
+  transform: translateY(-50%);
+  transition: all ease-in 0.25s;
+  color: #999;
+}
+
+.field-wrapper input[type="text"],
+.field-wrapper input[type="password"],
+.field-wrapper input[type="submit"] {
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  width: 100%;
+  border: none;
+  background: transparent;
+  line-height: 2em;
+  border-bottom: 1px solid rgb(23, 40, 50);
+  color: #333;
+}
+
+.field-wrapper input[type="text"]::placeholder,
+.field-wrapper input[type="password"]::placeholder {
+  opacity: 0;
+}
+
+.field-wrapper input:focus + label,
+.field-wrapper input:not(:placeholder-shown) + label {
+  top: -35%;
+  color: #42509e;
+}
+
+.field-wrapper input[type="submit"] {
+  cursor: pointer;
+  background: rgb(23, 40, 50);
+  color: #fff;
+  border: 1px solid rgb(23, 40, 50);
+  border-radius: 3px;
+  padding: 5px;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+
+.field-wrapper input[type="submit"]:hover {
+  opacity: 0.9;
+}
+
+.field-wrapper input[type="submit"]:active {
+  transform: scale(0.96);
+}
+
+/* Faces */
+.face-front {
+  transform: rotateY(0deg) translateZ(125px);
+}
+.face-right {
+  transform: rotateY(90deg) translateZ(125px);
+}
+
+/* Nav Bar */
+.nav {
+  margin: 20px 0;
+  padding: 0;
+}
+
+.nav li {
+  display: inline-block;
+  list-style-type: none;
+  font-size: 1em;
+  margin: 0 10px;
+  color: #42509e;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav li::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  border-bottom: 1px solid #42509e;
+  transition: all ease-in 0.25s;
+}
+
+.nav li:hover::after {
+  width: 100%;
+}
+

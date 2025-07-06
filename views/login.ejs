@@ -1,20 +1,129 @@
-
-
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Tahoma, sans-serif;
+      background: #f6fffd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 350px;
+      padding: 30px 25px;
+      background: rgba(250, 250, 250, 0.96);
+      border: 2px solid rgb(23, 40, 50);
+      border-radius: 6px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .login-card h2 {
+      margin-bottom: 20px;
+      color: rgb(23, 40, 50);
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .form-field {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .form-field input {
+      width: 100%;
+      padding: 10px 5px;
+      border: none;
+      border-bottom: 1px solid rgb(23, 40, 50);
+      background: transparent;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .form-field input:focus {
+      outline: none;
+      border-color: rgb(23, 40, 50);
+    }
+
+    .form-field input::placeholder {
+      color: transparent;
+    }
+
+    .form-field label {
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      color: #999;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .form-field input:focus + label,
+    .form-field input:not(:placeholder-shown) + label {
+      top: -10px;
+      font-size: 0.75rem;
+      color: rgb(23, 40, 50);
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: rgb(23, 40, 50);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      opacity: 0.9;
+    }
+
+    button[type="submit"]:active {
+      transform: scale(0.96);
+    }
+
+    p.error {
+      margin-top: 10px;
+      color: red;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+  </style>
 </head>
 <body>
-  <h2>Login</h2>
-  <form method="POST" action="/auth/login">
-    <input type="text" name="username" placeholder="Username" required />
-    <input type="password" name="password" placeholder="Password" required />
-    <button type="submit">Login</button>
-  </form>
-  <% if (error) { %>
-    <p style="color: red;"><%= error %></p>
-  <% } %>
+  <div class="login-card">
+    <h2>Sign in</h2>
+    <form method="POST" action="/auth/login">
+      <div class="form-field">
+        <input type="text" name="username" placeholder="Username" required />
+        <label>Username</label>
+      </div>
+      <div class="form-field">
+        <input type="password" name="password" placeholder="Password" required />
+        <label>Password</label>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+  </div>
 </body>
 </html>
