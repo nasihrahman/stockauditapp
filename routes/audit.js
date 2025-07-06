@@ -19,7 +19,7 @@ router.get('/admin', async (req, res) => {
   if (!companyId) return res.status(400).send('Missing company ID');
 
   const company = await Company.findById(companyId);
-  const categories = await Category.find({ company: companyId });
+  const categories = await Category.find({ company: companyId }).sort({ position: 1 });
   const questions = await Question.find({ company: companyId }).populate('category');
 
   res.render('admin', { company, categories, questions });
@@ -86,7 +86,7 @@ router.get('/audit/:companyId', async (req, res) => {
   const companyId = req.params.companyId;
 
   const company = await Company.findById(companyId);
-  const categories = await Category.find({ company: companyId });
+  const categories = await Category.find({ company: companyId }).sort({ position: 1 });
   const questions = await Question.find({ company: companyId }).populate('category');
 
   res.render('index', { company, categories, questions });
@@ -120,5 +120,17 @@ router.post('/edit-question/:id', async (req, res) => {
   res.redirect('/admin');
 });
 
+router.post('/admin/category/reorder', async (req, res) => {
+  const { order } = req.body; // Expects: [ "catId1", "catId2", ... ]
+  try {
+    for (let i = 0; i < order.length; i++) {
+      await Category.findByIdAndUpdate(order[i], { position: i });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Failed to reorder categories' });
+  }
+});
 
 module.exports = router;

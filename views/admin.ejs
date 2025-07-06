@@ -29,7 +29,18 @@
       gap: 1rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
-    
+    .edit-cat{
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: normal;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: "Raleway", sans-serif;
+    }
     .logo {
       width: 60px;
       height: 60px;
@@ -101,10 +112,20 @@
     
     .category-tabs {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;   
+      scroll-behavior: smooth;
       gap: 0.5rem;
       margin-bottom: 1rem;
     }
+    /* .category-tabs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.category-tabs::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+} */
     
     .category-tab {
       background: white;
@@ -379,9 +400,11 @@
     <div class="admin-section">
       <div class="section-header">
         <h2 class="section-title">
-          <span>📁</span>
+          <!-- <span>📁</span> -->
           Add Category
         </h2>
+          <button class="edit-cat" onclick="window.location.href='/edit-question?company=<%= company._id %>'">Edit Categories</button>
+
       </div>
       
       <form method="POST" action="/admin/category">
@@ -409,16 +432,14 @@
       <div class="category-selector">
         <h3>Select Active Category</h3>
         <% if (categories && categories.length > 0) { %>
-          <div class="category-tabs">
+          <div class="category-tabs" id="categoryTabContainer">
   <% categories.forEach(function(cat) { %>
-    <div class="category-tab-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+    <div class="category-tab-wrapper" draggable="true" data-id="<%= cat._id %>">
       <div class="category-tab" data-category-id="<%= cat._id %>" data-category-name="<%= cat.name %>">
         <span class="status-indicator status-active"></span>
         <%= cat.name %>
       </div>
-      <button class="btn-danger btn-delete-cat" data-id="<%= cat._id %>" title="Delete Category">
-        ✖
-      </button>
+      <button class="btn-danger btn-delete-cat" data-id="<%= cat._id %>">✖</button>
     </div>
   <% }); %>
 </div>
@@ -535,7 +556,57 @@
     const questionForm = document.getElementById('question-form');
     const questionTextInput = document.getElementById('question-text');
     const newCategoryInput = document.getElementById('new-category');
-    
+    const tabList = document.getElementById('categoryTabContainer');
+    let draggedTab = null;
+
+    document.querySelectorAll('.category-tab-wrapper').forEach(tab => {
+  tab.addEventListener('dragstart', e => {
+    draggedTab = tab;
+    tab.classList.add('dragging');
+    tab.style.opacity = '0.5';
+  });
+
+  tab.addEventListener('dragend', e => {
+    tab.classList.remove('dragging');
+    tab.style.opacity = '1';
+    draggedTab = null;
+
+    // Optional: send reordered list to server
+    const orderedIds = [...tabList.querySelectorAll('.category-tab-wrapper')].map(el => el.dataset.id);
+    fetch('/admin/category/reorder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order: orderedIds })
+    }).then(res => res.json())
+      .then(data => {
+        if (!data.success) alert('Failed to update category order.');
+      });
+  });
+
+  tab.addEventListener('dragover', e => {
+    e.preventDefault();
+    const afterElement = getDragAfterElement(tabList, e.clientX);
+    if (afterElement == null) {
+      tabList.appendChild(draggedTab);
+    } else {
+      tabList.insertBefore(draggedTab, afterElement);
+    }
+  });
+});
+
+function getDragAfterElement(container, x) {
+  const draggableElements = [...container.querySelectorAll('.category-tab-wrapper:not(.dragging)')];
+
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = x - (box.left + box.width / 2);
+    if (offset < 0 && offset > closest.offset) {
+      return { offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
     // Category tab click handlers
     categoryTabs.forEach(tab => {
       tab.addEventListener('click', function() {

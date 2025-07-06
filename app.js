@@ -71,6 +71,9 @@ app.get('/', isAuthenticated, async (req, res) => {
   res.render('dashboard', { companies });
 });
 
+// app.get('/dashboard', (req, res) => {
+//   res.render('dashboard'); // this renders dashboard.ejs
+// });
 
 const auditRoutes = require('./routes/audit');
 app.use(auditRoutes);

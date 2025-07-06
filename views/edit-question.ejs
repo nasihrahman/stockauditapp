@@ -42,7 +42,7 @@
     <h2>Edit Question</h2>
     <label>Question Text</label>
     <input type="text" name="text" value="<%= question.text %>" required />
-
+    <input type="hidden" name="company" value="<%= company._id %>" />
     <label>Category</label>
     <select name="category" required>
       <% categories.forEach(cat => { %>

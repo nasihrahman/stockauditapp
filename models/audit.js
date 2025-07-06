@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const CategorySchema = new mongoose.Schema({
   name: { type: String, required: true },
-  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true }
+  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
+  position: { type: Number, default: 0 }
 });
 
 CategorySchema.index({ name: 1, company: 1 }, { unique: true });
