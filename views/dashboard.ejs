@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Audit Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Audit Dashboard</h1>
+    <button onclick="logout()">Logout</button>
+  </header>
+
+  <main class="dashboard">
+    <section>
+      <h2>Companies</h2>
+      <ul id="companyList" class="company-list">
+        <% companies.forEach(company => { %>
+          <li>
+            <strong><%= company.name %></strong>
+            <button onclick="editCompany('<%= company._id %>')">Edit</button>
+            <button onclick="openAudit('<%= company._id %>')">View Audit</button>
+          </li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Add New Company</h2>
+      <form id="addCompanyForm">
+        <input type="text" name="name" id="companyName" placeholder="Company Name" required />
+        <button type="submit">Create</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+
+    document.getElementById('addCompanyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('companyName').value;
+
+    const res = await fetch('/api/companies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name })
+    });
+
+    const data = await res.json();
+    if (data.success && data.companyId) {
+      window.location.href = `/admin?company=${data.companyId}`;
+    } else {
+      alert(data.message || "Failed to create company.");
+    }
+  });
+
+  function editCompany(id) {
+    window.location.href = `/admin?company=${id}`;
+  }
+
+  function openAudit(id) {
+    window.location.href = `/audit/${id}`;
+  }
+
+  function logout() {
+    fetch('/auth/logout', { method: 'POST' }).then(() => {
+      window.location.href = '/login';
+    });
+  }
+    // document.getElementById('addCompanyForm').addEventListener('submit', async (e) => {
+    //   e.preventDefault();
+    //   const form = new FormData(e.target);
+    //   await fetch('/api/companies', {
+    //     method: 'POST',
+    //     body: JSON.stringify({ name: form.get('name') }),
+    //     headers: { 'Content-Type': 'application/json' }
+    //   });
+    //   window.location.reload(); // reload to show updated list
+    // });
+
+    // function editCompany(id) {
+    //   window.location.href = `/admin?company=${id}`;
+    // }
+
+    // function openAudit(id) {
+    //   window.location.href = `/audit/${id}`;
+    // }
+
+    // function logout() {
+    //   fetch('/auth/logout', { method: 'POST' }).then(() => {
+    //     window.location.href = '/login';
+    //   });
+    // }
+  </script>
+</body>
+</html>

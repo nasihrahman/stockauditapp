@@ -41,7 +41,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
   }
 
   try {
-    const { questionId, response, comment } = req.body;
+    const { questionId, response, comment, companyId } = req.body;
 
     
     if (!questionId || !questionId.match(/^[a-fA-F0-9]{24}$/)) {
@@ -62,6 +62,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
         answer.images = answer.images.concat(images);
       }
       // Do NOT delete the answer if comment is empty; just save it
+      if (!answer.company) answer.company = companyId;
       await answer.save();
     } else {
       answer = await Answer.create({
@@ -69,7 +70,8 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
         response,
         // Always set comment, even if empty string
         comment: typeof comment !== 'undefined' ? comment : '',
-        images
+        images,
+        company: companyId // 👈 REQUIRED!
       });
     }
     res.json({ success: true, answer });
@@ -104,24 +106,68 @@ router.post('/answer/image-remove', async (req, res) => {
   }
 });
 
+// router.get('/info', async (req, res) => {
+//   try {
+//     let info = await Info.findOne();
+//     if (!info) info = await Info.create({}); // Create default if missing
+//     res.json({ success: true, info });
+//   } catch (err) {
+//     res.status(500).json({ success: false, error: err.message });
+//   }
+// });
+
 router.get('/info', async (req, res) => {
   try {
-    let info = await Info.findOne();
-    if (!info) info = await Info.create({}); // Create default if missing
+    const { companyId } = req.query;
+    if (!companyId) return res.status(400).json({ success: false, error: 'Missing companyId' });
+
+    let info = await Info.findOne({ companyId });
+    if (!info) {
+      info = await Info.create({
+        companyId,
+        company: '',
+        location: '',
+        date: '',
+        branch: '',
+        manager: '',
+        inspector: ''
+      });
+    } // Create default
+
     res.json({ success: true, info });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
+
 // POST /api/info - update info panel values
+// router.post('/info', async (req, res) => {
+//   try {
+//     const body = req.body;
+
+//     let info = await Info.findOne();
+//     if (!info) {
+//       info = await Info.create(body);
+//     } else {
+//       Object.assign(info, body);
+//       await info.save();
+//     }
+
+//     res.json({ success: true, info });
+//   } catch (err) {
+//     res.status(500).json({ success: false, error: err.message });
+//   }
+// });
+
 router.post('/info', async (req, res) => {
   try {
-    const body = req.body;
+    const { companyId, ...body } = req.body;
+    if (!companyId) return res.status(400).json({ success: false, error: 'Missing companyId' });
 
-    let info = await Info.findOne();
+    let info = await Info.findOne({ companyId });
     if (!info) {
-      info = await Info.create(body);
+      info = await Info.create({ companyId, ...body });
     } else {
       Object.assign(info, body);
       await info.save();
@@ -132,6 +178,7 @@ router.post('/info', async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
 
 // POST /api/generate-pdf - export audit report as PDF
 router.post('/generate-pdf', async (req, res) => {
@@ -162,6 +209,38 @@ router.put('/question/:id', async (req, res) => {
     res.redirect('/admin'); // Redirect to admin panel after update
   } catch (err) {
     res.status(500).send('Failed to update question: ' + err.message);
+  }
+});
+
+// POST /api/clear-all - clears all answers from the database
+router.post('/clear-all', async (req, res) => {
+  try {
+    await Answer.deleteMany({});
+    await Info.deleteMany();
+      await Info.create({
+        company: '',
+        location: '',
+        date: '',
+        branch: '',
+        manager: '',
+        inspector: ''
+});
+    console.log('All answers cleared from the database.');
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error clearing answers:', err);
+    res.status(500).json({ success: false, message: 'Failed to clear answers' });
+  }
+});
+
+const Company = require('../models/company');
+
+router.post('/companies', async (req, res) => {
+  try {
+    const company = await Company.create({ name: req.body.name });
+    res.json({ success: true, companyId: company._id });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error creating company' });
   }
 });
 

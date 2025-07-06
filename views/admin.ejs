@@ -385,6 +385,7 @@
       </div>
       
       <form method="POST" action="/admin/category">
+        <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
         <div class="form-row">
           <div class="form-control">
             <label for="category-name">Category Name</label>
@@ -439,6 +440,7 @@
       
       <!-- Question Form -->
       <form method="POST" action="/admin/question" id="question-form">
+         <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
         <div class="form-group">
           <label for="question-text">Question Text</label>
           <input type="text" id="question-text" name="text" placeholder="Enter your question..." required />

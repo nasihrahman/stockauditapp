@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const infoSchema = new mongoose.Schema({
-  company: String,
+  companyId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Company' },
+  company: { type: String },
   location: String,
   date: String,
   branch: String,
