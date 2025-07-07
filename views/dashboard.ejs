@@ -29,8 +29,8 @@
               <strong><%= company.name %></strong>
             </div>
             <div class="action-buttons">
-              <button onclick="openAudit('<%= company._id %>')">View Audit</button>
-              <button class="edit-btn" onclick="editCompany('<%= company._id %>')">Edit</button> 
+              <button onclick="openAudit('<%= company._id %>')" class="button-8" id="audit-btn">View Audit</button>
+              <button class="button-8" onclick="editCompany('<%= company._id %>')">Edit</button> 
             </div>
           </li> 
         <% }) %> 
