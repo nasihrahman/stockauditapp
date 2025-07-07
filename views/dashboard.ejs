@@ -9,12 +9,17 @@
 </head> 
 <body> 
   <header> 
-    <div class="logo-placeholder">LOGO</div>
-    <h1>Audit Dashboard</h1> 
+    <div class="logo-placeholder">LOGO</div> 
   </header> 
- 
+ <section class="new-company"> 
+      <h2>Create New Company</h2> 
+      <form id="addCompanyForm"> 
+        <input type="text" name="name" id="companyName" placeholder="Company Name" required /> 
+        <button class="button-59" role="button" type="submit">Create Company</button> 
+      </form> 
+    </section> 
   <main class="dashboard"> 
-    <section> 
+    <section class="company-list"> 
       <h2>Companies</h2> 
       <ul id="companyList" class="company-list"> 
         <% companies.forEach(company => { %> 
@@ -32,13 +37,7 @@
       </ul> 
     </section> 
  
-    <section> 
-      <h2>Add New Company</h2> 
-      <form id="addCompanyForm"> 
-        <input type="text" name="name" id="companyName" placeholder="Company Name" required /> 
-        <button type="submit">Create Company</button> 
-      </form> 
-    </section> 
+    
   </main> 
   
   <footer>
