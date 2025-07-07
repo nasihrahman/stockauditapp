@@ -7,7 +7,7 @@
 
 body {
   font-family: Tahoma, Verdana, Segoe, sans-serif;
-  /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
   color: #2c3e50;
   display: flex;
@@ -49,13 +49,22 @@ header {
 .new-company{
   padding-top: 1.5rem;
   margin: 2rem ;
+  border: 3px solid #171e29;
+  padding: 1rem;
+  background-color: white;
 }
-
-.new-company h2 {
+.company-list-section{
+  padding-top: 1.5rem;
+  margin: 2rem ;
+  border: 3px solid #171e29;
+  background-color: white;
+  padding: 1rem;
+}
+ h2 {
   color: rgb(23, 40, 50);
   margin-bottom: 1.5rem;
-  font-size: 1.75rem;
-  font-weight: normal;
+  font-size: 2.1rem;
+  font-weight: bold;
   text-align: left;
   /* padding-left: 30px; */
   /* border-bottom: 3px solid #e8f4f8; */
@@ -70,18 +79,6 @@ section {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(23, 40, 50, 0.08); */
 }
-
-.company-list h2 {
-  color: rgb(23, 40, 50);
-  margin-bottom: 2rem;
-  font-size: 1.75rem;
-  font-weight: 700;
-  text-align: left;
-  padding-left: 30px;
-  /* border-bottom: 3px solid #e8f4f8; */
-  padding-bottom: 1rem;
-}
-
 
 
 
@@ -226,11 +223,11 @@ section {
 }
 
 #addCompanyForm input {
-  width: 50%;
+  width: 90%;
   padding: .7rem 0rem;
   /* padding-left: 2rem; */
   border: none;
-  border-bottom: 1px solid rgb(23, 40, 50);
+  border-bottom: .7px solid rgb(23, 40, 50);
 
   /* border-radius: 12px; */
   font-size: 1rem;
