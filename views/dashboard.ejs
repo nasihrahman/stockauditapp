@@ -6,6 +6,17 @@
   <link rel="stylesheet" href="/styles.css" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/dashstyle.css">
+  <style>
+    .button-8.delete-btn {
+      background: #ef4444 !important;
+      color: #fff !important;
+      /* border: none; */
+      transition: background 0.2s;
+    }
+    .button-8.delete-btn:hover {
+      background: #b91c1c !important;
+    }
+  </style>
 </head> 
 <body> 
   <header> 
@@ -29,8 +40,9 @@
               <strong><%= company.name %></strong>
             </div>
             <div class="action-buttons">
-              <button onclick="openAudit('<%= company._id %>')" class="button-8" id="audit-btn">View Audit</button>
-              <button class="button-8" onclick="editCompany('<%= company._id %>')">Edit</button> 
+              <button onclick="openAudit('<%= company._id %>')" class="button-8 col-3" id="audit-btn">View Audit</button>
+              <button class="button-8 col-3" onclick="editCompany('<%= company._id %>')">Edit</button> 
+              <button class="button-8 delete-btn col-3" onclick="deleteCompany('<%= company._id %>')">Delete</button>
             </div>
           </li> 
         <% }) %> 
@@ -76,6 +88,26 @@
         window.location.href = '/login'; 
       }); 
     } 
+ 
+    function deleteCompany(id) {
+      if (!confirm('Are you sure you want to delete this company and all its data? This action cannot be undone.')) return;
+      fetch(`/api/companies/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            // Remove the company from the list in the UI
+            const li = document.querySelector(`[onclick*="openAudit('${id}')"]`).closest('li');
+            if (li) li.remove();
+            alert('Company deleted successfully.');
+          } else {
+            alert(data.message || 'Failed to delete company.');
+          }
+        })
+        .catch(() => alert('Error deleting company.'));
+    }
   </script> 
 </body> 
 </html>

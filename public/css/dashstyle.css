@@ -289,7 +289,7 @@ footer button:hover {
 @media (max-width: 768px) {
   .dashboard {
     grid-template-columns: 1fr;
-    padding: 1rem;
+    /* padding: 1rem; */
     gap: 1.5rem;
   }
   
@@ -327,12 +327,10 @@ footer button:hover {
   
   .company-list button {
     flex: 1;
-    min-width: 120px;
+    min-width: 70px;
   }
   
-  section {
-    padding: 1.5rem;
-  }
+  
   
   section h2 {
     font-size: 1.5rem;

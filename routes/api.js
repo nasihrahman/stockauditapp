@@ -255,5 +255,21 @@ router.post('/category/edit', async (req, res) => {
   }
 });
 
+// DELETE /api/companies/:id - delete a company and all related data
+router.delete('/companies/:id', async (req, res) => {
+  try {
+    const companyId = req.params.id;
+    // Delete company
+    await Company.findByIdAndDelete(companyId);
+    // Delete related Info
+    await Info.deleteMany({ companyId });
+    // Delete related Answers (if you store companyId in Answer)
+    await Answer.deleteMany({ company: companyId });
+    // Optionally: Delete related Categories/Questions if needed
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Failed to delete company' });
+  }
+});
 
 module.exports = router;
