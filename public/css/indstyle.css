@@ -1011,7 +1011,7 @@
   color: white;
   border: none;
   border-radius: 6px;
-  padding: 0.3rem 0.6rem;
+  padding: 0.5rem 0.75rem;
   font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -1447,7 +1447,7 @@
 }
 
 .btn-danger {
-  background-color: #dc2626;
+  background-color: #dc2626 !important;
   color: white;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;

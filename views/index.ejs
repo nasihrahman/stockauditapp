@@ -17,18 +17,6 @@
       font-weight: 600;
       letter-spacing: 0.01em;
     }
-
-    .nav-btn-custom {
-      font-size: 0.75rem !important; /* Even smaller font size */
-      padding: 0.25rem 0.5rem !important; /* Smaller padding */
-    }
-
-    @media (max-width: 768px) {
-      .nav-btn-custom {
-        font-size: 0.65rem !important; /* Even smaller on mobile */
-        padding: 0.15rem 0.3rem !important; /* Smaller padding on mobile */
-      }
-    }
   </style>
   
   <!-- Bootstrap CSS -->
@@ -193,12 +181,12 @@
                                 <button type="button" class="open-image-options button-46" data-question-id="<%= q._id %>">
                                   📷 Add image
                                 </button>
-                            <span class="question-score-badge" data-question-id="<%= q._id %>">0</span>
+                        
                           </div>
                         </div>
                     </div>
                     <input type="text" class="comment-input" placeholder="Add your comments here..." name="comment" autocomplete="off">
-                    <!-- <button type="button" class="clear-comment-btn" data-question-id="<%= q._id %>">❌ Clear Comment</button> -->
+                    
 
                     <div class="image-preview" data-question-id="<%= q._id %>"></div>
                   </form>

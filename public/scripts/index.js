@@ -185,7 +185,7 @@ async function prepareAuditData() {
     // --- AJAX: Fetch and prefill answers on load ---
     function fetchAndPrefillAnswers() {
       isPrefilling = true; // ⛳️ Start prefilling
-      fetch('/api/answers')
+      fetch(`/api/answers?companyId=${getCompanyIdFromUrl()}`)
         .then(res => res.json())
         .then(data => {
           if (data.answers) {
@@ -412,7 +412,7 @@ async function prepareAuditData() {
         const comment = this.value;
         // 🚫 Prevent overwriting comment with empty string unless explicitly cleared
         if (isPrefilling) return;
-        if (comment.trim() === '') return;
+        
         timeout = setTimeout(() => {
           saveAnswer(questionId, { questionId, response: response || undefined, comment });
         }, 500);
@@ -531,7 +531,7 @@ async function prepareAuditData() {
     // --- Modal close logic ---
     document.addEventListener('DOMContentLoaded', function () {
       fetchAndPrefillAnswers();
-    const editBtn = document.getElementById('edit-all-btn');
+    const editBtn = document.getElementById('toggle-edit-btn');
     const infoValues = document.querySelectorAll('.info-panel .info-value');
     let isEditing = false;
 

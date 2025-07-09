@@ -22,7 +22,11 @@ const upload = multer({ storage });
 // GET /api/answers - get all answers
 router.get('/answers', async (req, res) => {
   try {
-    const answers = await Answer.find();
+    const { companyId } = req.query;
+    if (!companyId) {
+      return res.status(400).json({ success: false, error: 'companyId is required' });
+    }
+    const answers = await Answer.find({ company: companyId });
     res.json({ success: true, answers });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -50,10 +54,10 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
     let images = req.files ? req.files.map(f => f.path) : [];
 
     // Only proceed if at least one of response, comment, or images is present
-    if (!response && !comment && images.length === 0) {
+    if (response === undefined && comment === undefined && images.length === 0) {
       return res.status(400).json({ success: false, error: 'No answer data provided.' });
     }
-    let answer = await Answer.findOne({ question: questionId });
+    let answer = await Answer.findOne({ question: questionId, company: companyId });
     if (answer) {
       if (typeof response !== 'undefined') answer.response = response;
       // Always set comment, even if empty string
@@ -64,6 +68,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
       // Do NOT delete the answer if comment is empty; just save it
       if (!answer.company) answer.company = companyId;
       await answer.save();
+    console.log('Answer object after save:', answer);
     } else {
       answer = await Answer.create({
         question: questionId,
