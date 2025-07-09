@@ -6,6 +6,18 @@
   <title>Stock Audit</title>
   <!-- Add Raleway font -->
   <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700&display=swap" rel="stylesheet">
+  <!-- Add Poppins font -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    body, .btn, .form-control, .company-info, .info-label, .info-value, .category-title, .question-text, .summary-title, .admin-link, .score-badge, .total-score, .main-container, .panels-container, .summary-panel, .info-panel, .question-score-badge, .category-score-badge, .comment-input, .add-image-label, .no-questions, .admin-button, .header-content, .company-section, .logo, .company-info h1, .company-info p, .action-buttons, .question-controls, .radio-option, .badge, .summary-table, .image-modal-box, .image-modal-content, .image-modal-img, .image-modal-close, .question-footer, .header-btn, .score-section, .button-group, .mobile-menu-icon, .mobile-dropdown, .admin-label, .remark-box {
+      font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+  </style>
   
   <link rel="stylesheet" href="/css/indstyle.css">
   <!-- Bootstrap CSS -->
@@ -27,43 +39,46 @@
   <a href="/dashboard">Dashboard</a>
   <a href="editCompany(')">Admin</a>
 </div> --> 
- <header class="bg-dark text-white p-3">
+ <header class="bg-dark text-white p-2 py-3 sticky-top shadow-sm z-3">
   <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-dark p-0">
       <!-- Left: Logo + Title -->
       <div class="d-flex align-items-center">
-        <img src="/images/logo.png" alt="Company Logo" height="50" class="me-2" />
-        <div class="d-none d-sm-block">
+        <img src="/images/logo.png" alt="Company Logo" height="80" class="me-2" />
+        
+        <div class="d-none d-sm-block px-3">
           <h5 class="mb-0 fw-bold">Food Safety Auditing</h5>
           <small class="d-sm-block">Company Audit Portal</small>
         </div>
       </div>
-        <!-- Spacer -->
-      <div class="flex-grow-1"></div>
-      <!-- Mobile Score + Menu -->
-        <div class="d-lg-none d-flex align-items-flex-end ms-auto">
-        <div class="me-2 text-end">
-          <small>Total</small><br />
-          <span class="badge bg-success score-badge" id="totalScoreDesktop"></span>
-        </div>
-      </div>
-      <!-- Toggler for Mobile -->
-      <button class="navbar-toggler ms-auto border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
-      
-      
+      <!-- Spacer -->
+      <div class="flex-grow-1"></div>
+
+      <!-- Mobile Score + Menu (Same row) -->
+      <div class="d-lg-none d-flex align-items-center gap-2 ms-auto">
+        <!-- Horizontal compact score -->
+        <div class="text-white px-2 py-1 rounded small d-flex align-items-center" style="font-size: 0.8rem;" id="score-bb">
+          Total: <span id="totalScore" class="ms-1">2</span> (<span id="totalScorePercent">75%</span>)
+        </div>
+
+        <!-- Hamburger Button -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
 
       <!-- Collapsible Menu -->
-      <div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
-        <ul class="navbar-nav ms-auto d-flex align-items-center gap-2">
+      <div class="collapse navbar-collapse " id="navbarMenu">
+        <ul class="navbar-nav ms-auto d-flex align-items-center gap-2" id="navButtonGroup">
           <!-- Desktop Score -->
-          <li class="nav-item d-none d-lg-flex flex-column text-end me-3">
-            <strong>Total Score</strong>
-            <span class="badge bg-success" id="totalScore"></span>
-            <small id="totalScoreDetails">3 / 3 (100%)</small>
-          </li>
+          <!-- Desktop Score - Horizontal Layout -->
+            <li class="nav-item d-none d-lg-flex align-items-center  text-white px-3 py-2 rounded me-3 gap-3 small fw-semibold" id="score-bb">
+              <div>Score</div>
+              <span id="totalScoreDesktop">3</span>
+              <span id="totalScoreDetails">3 / 3 (100%)</span>
+            </li>
+
           <!-- Buttons -->
           <li class="nav-item">
             <a href="/" class="btn btn-outline-light btn-sm">Dashboard</a>
@@ -76,6 +91,7 @@
     </nav>
   </div>
 </header>
+
 
 
 

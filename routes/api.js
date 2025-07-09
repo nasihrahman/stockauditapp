@@ -203,14 +203,15 @@ router.post('/generate-pdf', async (req, res) => {
 
 // --- Update Question ---
 router.put('/question/:id', async (req, res) => {
-  const { text, category } = req.body;
+  const { text, category, companyId } = req.body;
   try {
     await Question.findByIdAndUpdate(req.params.id, { text, category });
-    res.redirect('/admin'); // Redirect to admin panel after update
+    res.redirect(`/admin?company=${companyId}`); // ✅ Redirects correctly
   } catch (err) {
     res.status(500).send('Failed to update question: ' + err.message);
   }
 });
+
 
 // POST /api/clear-all - clears all answers from the database
 router.post('/clear-all', async (req, res) => {

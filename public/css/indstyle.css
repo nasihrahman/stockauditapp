@@ -6,8 +6,8 @@
     }
     body {
       font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      background: #f8fafc;
-      color: #1e293b;
+      background: #f6fffd;
+      /* color: #1e293b; */
     }
     
     .container {
@@ -20,42 +20,43 @@
       max-width: 1400px;
       margin: 0 auto;
       padding: 32px 24px;
+      
     }
     
-    .header {
-            background: white;
-            color: white;
-           
-            /* position: relative;
-            overflow: hidden; */
-        }
-        /* .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="3" fill="rgba(255,255,255,0.08)"/><circle cx="40" cy="80" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="90" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="2" fill="rgba(255,255,255,0.08)"/><circle cx="70" cy="20" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
-            animation: float 20s ease-in-out infinite;
-        } */
+    header{
+      background: #253031!important;
+    }
+   
+    #score-bb{
+      background: #315659;
+      border: 1.5px solid #C6E0FF;
+    }
+  
+@media (max-width: 991px) {
+  #navbarMenu {
+    padding: 1rem 1.25rem;
+    border: none !important;
+  }
 
-        /* @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        } */
-    
-    .header-content {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  gap: 1rem;
-background: #1B262C    ;
-  color: white;
-      
+  #navbarMenu .btn {
+    align-items: flex-end ;
+    border: none !important;
+  }
+
+  #navButtonGroup {
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 1rem 1.25rem;
+  }
+
+  #navButtonGroup .nav-item {
+    width: auto;
+  }
 }
+
+/* 
+
+
 /* Compact score badge alignment for mobile */
 #totalScoreMobile {
   font-size: 0.85rem;
@@ -136,18 +137,7 @@ background: #1B262C    ;
         width: 20px;
         height: 20px;
     }
-    .info-panel {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(16px);
-      border: 2px solid rgba(255,255,255,0.15);
-      border-radius: 16px;
-      padding: 24px 32px;
-      margin-top: 32px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 32px;
-      align-items: center;
-    }
+   
     .info-panel,
 .summary-panel {
   flex: 1 1 48%;
@@ -193,11 +183,11 @@ background: #1B262C    ;
     
     .category-card {
       background: white;
-      border-radius: 16px;
+      border-radius: 9px;
       margin-bottom: 32px;
       overflow: hidden;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      border: 1px solid #e2e8f0;
+      border: 1.666px solid #171e29;
       transition: all 0.3s ease;
     }
     
@@ -207,7 +197,7 @@ background: #1B262C    ;
     }
     
     .category-header {
-      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      background: #f6fffd;
       padding: 24px 32px;
       border-bottom: 2px solid #e2e8f0;
       display: flex;
@@ -425,10 +415,10 @@ background: #1B262C    ;
     
     .summary-panel {
       background: #fff;
-      border: 1.5px solid #e0e7ef;
-      border-radius: 18px;
+      /* border: 1.66px solid #171e29;; */
+      border-radius: 9px;
       padding: 2.5rem 2rem 2rem 2rem;
-      margin: 2.5rem auto 2rem auto;
+      /* margin: 2.5rem auto 2rem auto; */
       box-shadow: 0 8px 32px rgba(0,0,0,0.10);
       max-width: 600px;
       text-align: center;
@@ -621,46 +611,16 @@ background: #1B262C    ;
         opacity: 0.9;
         font-weight: 300;
     }
-    .total-score {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  text-align: center;
-}
-    .total-score h2 {
-        font-size: 1.2rem;
-        /* margin-bottom: 15px; */
-        font-weight: 500;
-        opacity: 0.9;
-    }
-    .score-badge {
+   
+        .score-badge {
         font-size: 3rem;
         font-weight: 700;
         display: block;
         text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    .score-details {
-        font-size: 1rem;
-        margin-top: 8px;
-        opacity: 0.8;
-    }
+    
  
-  .admin-button {
-  background: none;
-  border: none;
-  padding: 0.4rem;
-  margin-bottom: 0.5rem;
-  align-self: flex-end;
-  /* display: inline-flex; */
-  justify-content: start;
-  align-items: center;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
+  
 
 .admin-label {
   display: none !important;
@@ -671,46 +631,23 @@ background: #1B262C    ;
   stroke: white;
 }
 
-/* .total-score {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  text-align: center;
-  width: 100%;
-} */
-.score-section {
-  display: flex;
-  flex-direction: column;
-  align-items: right;
-  gap: 1rem;
- 
-  padding-right: 20px; /* add right side gap */
-}
-@media (max-width: 768px) {
-  .score-section {
-    width: 100%;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    padding-right: 0; /* remove right side gap */
-  }
-}
+
+
+
 
     .info-panel {
         background: rgba(255,255,255,0.95);
-        border-radius: 16px;
-        padding: 24px;
+        
+        border-radius: 9px;
+              padding: 2.5rem 2rem 2rem 2rem;
+
         position: relative;
         padding-top: 40px;
-        margin-top: 20px;
+        margin: 30px auto;
         backdrop-filter: blur(20px);
-        border: 1px solid rgba(255,255,255,0.3);
+        /* border: 1.66px solid #171e29; */
         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        max-width: 48%;
+        /* max-width: 48%; */
     }
 
     .info-header {
@@ -780,8 +717,8 @@ background: #1B262C    ;
         background: white;
         margin: 30px auto;
         max-width: 48%;
-        border-radius: 16px;
-        padding: 24px;
+        border-radius: 9px;
+        /* padding: 24px; */
         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
     .summary-title {
@@ -861,12 +798,7 @@ background: #1B262C    ;
 
 
 @media (max-width: 768px) {
-  /* .total-score {
-    flex-direction: row;
-    justify-content: space-around;
-    width: 100%;
-    height: auto;
-  } */
+ 
 
 
 
@@ -882,7 +814,7 @@ background: #1B262C    ;
     flex: 1 1 100%;
     width: 100% !important;
     max-width: 100% !important;
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem!important;
     box-sizing: border-box;
   }
 
@@ -906,10 +838,7 @@ background: #1B262C    ;
     padding: 0 1rem;
   }
 }
-.header-content{
-  display: flex;
-  flex-direction: column;
-}
+
 /* .space{width: 100%;} */
     /* --- END: User custom style overrides --- */
     .image-modal {
@@ -1096,32 +1025,10 @@ background: #1B262C    ;
     flex-direction: column;
     align-items: center;
   }
-  .header-content {
-    flex-direction: column;
-    align-items: center;
-  }
 
-  .score-section {
-    display: flex;
-    flex-direction: row;
-  }
-  .button-group{
-    display: flex;
-    flex-direction: row;
-  }
-  .total-score{
-    width:fit-content;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .total-score h2 {
-    font-size: 1rem;
-    align-items: center;
-    /* display: none; */
-  }
+  
+  
+  
   .score-badge {
     font-size: 1rem;
 
@@ -1139,13 +1046,7 @@ background: #1B262C    ;
   font-size: 0.9rem;
   opacity: 0.85;
 }
-/* 
-.score-section {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-} */
+
 
 .button-group {
   display: flex;
@@ -1176,10 +1077,6 @@ background: #1B262C    ;
   color: #ffffff;
 }
 
-.score-details {
-  font-size: 1rem;
-  opacity: 0.8;
-}
 
 #scrollTopBtn {
   position: fixed;
