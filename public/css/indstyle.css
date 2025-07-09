@@ -26,8 +26,8 @@
             background: white;
             color: white;
            
-            position: relative;
-            overflow: hidden;
+            /* position: relative;
+            overflow: hidden; */
         }
         /* .header::before {
             content: '';
@@ -56,6 +56,12 @@ background: #1B262C    ;
   color: white;
       
 }
+/* Compact score badge alignment for mobile */
+#totalScoreMobile {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+}
+
     /* .admin-button {
       position: absolute;
       top: 32px;
