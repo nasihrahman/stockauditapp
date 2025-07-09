@@ -52,7 +52,7 @@
   justify-content: space-between;
   padding: 1rem;
   gap: 1rem;
-background: rgb(23, 40, 50);
+background: #1B262C    ;
   color: white;
       
 }
@@ -85,28 +85,19 @@ background: rgb(23, 40, 50);
     }
     
     
-    .total-score {
-      text-align: right;
-    }
-    
-    .total-score h2 {
-      font-size: 1.125rem;
-      margin-bottom: 8px;
-      opacity: 0.9;
-      font-weight: 600;
-    }
+  
     
     .score-badge {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(12px);
-      border: 2px solid rgba(255,255,255,0.2);
+      /* background: rgba(255,255,255,0.15); */
+      /* backdrop-filter: blur(12px); */
+      /* border: 2px solid rgba(255,255,255,0.2); */
       color: white;
       font-weight: 700;
       border-radius: 12px;
-      padding: 12px 24px;
+      /* padding: 12px 24px; */
       font-size: 1.75rem;
-      display: inline-block;
-      margin-bottom: 4px;
+      /* display: inline-block; */
+      /* margin-bottom: 4px; */
       min-width: 80px;
     }
     
@@ -557,7 +548,9 @@ background: rgb(23, 40, 50);
     
     @media (max-width: 768px) {
      
-      
+      .company-info p{
+        display: none;
+      }
       
       .question-content {
         flex-direction: column;
@@ -634,7 +627,7 @@ background: rgb(23, 40, 50);
 }
     .total-score h2 {
         font-size: 1.2rem;
-        margin-bottom: 15px;
+        /* margin-bottom: 15px; */
         font-weight: 500;
         opacity: 0.9;
     }
@@ -672,7 +665,7 @@ background: rgb(23, 40, 50);
   stroke: white;
 }
 
-.total-score {
+/* .total-score {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -682,7 +675,7 @@ background: rgb(23, 40, 50);
   border-radius: 0.75rem;
   text-align: center;
   width: 100%;
-}
+} */
 .score-section {
   display: flex;
   flex-direction: column;
@@ -862,11 +855,14 @@ background: rgb(23, 40, 50);
 
 
 @media (max-width: 768px) {
-  .total-score {
+  /* .total-score {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
-  }
+    height: auto;
+  } */
+
+
 
  
    /* .info-panel,
@@ -904,7 +900,11 @@ background: rgb(23, 40, 50);
     padding: 0 1rem;
   }
 }
-
+.header-content{
+  display: flex;
+  flex-direction: column;
+}
+/* .space{width: 100%;} */
     /* --- END: User custom style overrides --- */
     .image-modal {
       display: none;
@@ -1067,17 +1067,7 @@ background: rgb(23, 40, 50);
 }
 
 
-  .header-content {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  gap: 1rem;
-background: rgb(23, 40, 50);
-  color: white;
-      
-}
+ 
 
 .company-section {
   display: flex;
@@ -1086,7 +1076,7 @@ background: rgb(23, 40, 50);
 }
 
 .logo img {
-  height: 130px;       /* increase from 60px */
+  height: 200px;       /* increase from 60px */
   /* max-height: 100px;  optional cap */
   object-fit: contain;
 }
@@ -1094,6 +1084,41 @@ background: rgb(23, 40, 50);
 @media (max-width: 768px) {
   .logo img {
     height: 60px;
+
+  }
+  .company-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  .header-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .score-section {
+    display: flex;
+    flex-direction: row;
+  }
+  .button-group{
+    display: flex;
+    flex-direction: row;
+  }
+  .total-score{
+    width:fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .total-score h2 {
+    font-size: 1rem;
+    align-items: center;
+    /* display: none; */
+  }
+  .score-badge {
+    font-size: 1rem;
+
   }
 }
 
@@ -1108,13 +1133,13 @@ background: rgb(23, 40, 50);
   font-size: 0.9rem;
   opacity: 0.85;
 }
-
+/* 
 .score-section {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
-}
+} */
 
 .button-group {
   display: flex;
@@ -1137,16 +1162,6 @@ background: rgb(23, 40, 50);
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.total-score {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.75rem 1.5rem;
-  border-radius: 1rem;
-  text-align: center;
-  color: white;
-}
 
 .score-badge {
   font-size: 2.5rem;

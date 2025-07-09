@@ -49,18 +49,20 @@ header {
 /* } */ 
 .new-company{
   /* margin-top: 50px; */
-  padding-top: 500px;
+  /* padding-top: 500px; */
   margin: 2rem ;
-  border: 3px solid #171e29;
-  padding: 1rem;
+  border: 1.666px solid #171e29;
+  border-radius: 9px;
+  padding: 3rem;
   background-color: white;
 }
 .company-list-section{
   padding-top: 1.5rem;
   margin: 2rem ;
-  border: 3px solid #171e29;
+   border: 1.666px solid #171e29;
+  border-radius: 9px;
   background-color: white;
-  padding: 1rem;
+  padding: 3rem;
 }
  h2 {
   color: rgb(23, 40, 50);
@@ -79,7 +81,7 @@ header {
 .button-59 {
   align-items: center;
   background-color: #fff;
-  border: 2px solid #000;
+  border: 1px solid #000;
   box-sizing: border-box;
   color: #000;
   cursor: pointer;
@@ -313,6 +315,16 @@ footer button:hover {
     align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
+  }
+  .new-company,.company-list-section{
+    padding: 2rem;
+    /* align-items: center; */
+    border: 1.3px solid #171e29;
+    border-radius: 5px;
+  }
+
+  .company-list-section{
+    padding: 2rem;
   }
   
   .company-info {
