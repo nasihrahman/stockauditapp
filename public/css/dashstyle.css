@@ -20,6 +20,7 @@ header {
   color: white;
   padding: 2rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -30,6 +31,30 @@ header {
   margin-bottom: 3rem;
 }
 
+.welcome-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* background: #152b36; */
+  color: #fff;
+  padding: 1rem 1rem;
+  font-size: 0.95rem;
+  /* border-top: 1px solid rgba(255,255,255,0.05); */
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 5px;
+}
+
+.logout-btn:hover {
+  color: #ffcccc;
+}
 
 
 /* .logo-placeholder { */

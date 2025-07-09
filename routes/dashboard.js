@@ -53,7 +53,8 @@ const Company = require('../models/company');
 router.get('/dashboard', async (req, res) => {
   try {
     const companies = await Company.find();
-    res.render('dashboard', { companies, user: { username: 'TEMP_ADMIN' } });
+      const user = await User.findById(req.session.user); // fetch full user from DB if needed
+    res.render('dashboard', { companies, username: user.username || 'Guest' });
   } catch (err) {
     console.error('Error loading dashboard:', err);
     res.status(500).send('Failed to load dashboard');

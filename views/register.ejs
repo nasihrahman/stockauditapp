@@ -1,0 +1,48 @@
+<!-- register.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+  <div class="card fade-in-up">
+    <h2>Create Account</h2>
+    <form method="POST" action="/auth/register" onsubmit="return checkPasswords()">
+      <div class="form-field">
+        <input type="text" name="username" placeholder="Username" required />
+        <label>Username</label>
+      </div>
+      <div class="form-field">
+        <input type="email" name="email" placeholder="Email" required />
+        <label>Email</label>
+      </div>
+      <div class="form-field">
+        <input type="password" name="password" placeholder="Password" id="password" required />
+        <label>Password</label>
+      </div>
+      <div class="form-field">
+        <input type="password" placeholder="Confirm Password" id="confirm" required />
+        <label>Confirm Password</label>
+      </div>
+      <button type="submit">Register</button>
+    </form>
+    <% if (error) { %><p class="error"><%= error %></p><% } %>
+    <p class="switch">Already have an account? <a href="/auth/login">Login</a></p>
+  </div>
+
+  <script>
+    function checkPasswords() {
+      const p1 = document.getElementById("password").value;
+      const p2 = document.getElementById("confirm").value;
+      if (p1 !== p2) {
+        alert("Passwords do not match!");
+        return false;
+      }
+      return true;
+    }
+  </script>
+</body>
+</html>

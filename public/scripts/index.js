@@ -681,7 +681,20 @@ document.querySelectorAll('.open-image-options').forEach(btn => {
 
 document.getElementById('uploadFileBtn').addEventListener('click', () => {
   document.getElementById('hiddenImageInput').click();
+
 });
+
+document.getElementById('captureCameraBtn').addEventListener('click', () => {
+  const input = document.getElementById('hiddenImageInput');
+
+  // Force capture from camera for mobile
+  input.setAttribute('capture', 'environment');  // Use 'user' for front camera
+  input.setAttribute('accept', 'image/*');
+  
+  input.click(); // open camera directly if supported
+});
+
+
 
 document.getElementById('hiddenImageInput').addEventListener('change', function () {
   if (this.files && this.files[0]) {

@@ -11,7 +11,7 @@ const methodOverride = require('method-override');
 const authRoutes = require('./routes/auth'); // adjust if named differently
 const session = require('express-session');
 const Company = require('./models/company');
-
+const User = require('./models/User');
 // Allow method override using ?_method=PUT or hidden input in form
 app.use(methodOverride('_method'));
 dotenv.config();
@@ -63,12 +63,20 @@ function isAuthenticated(req, res, next) {
 app.get('/test-session', (req, res) => {
   res.send(req.session);
 });
-
+app.use(async (req, res, next) => {
+  if (req.session.user) {
+    const user = await User.findById(req.session.user);
+    res.locals.username = user?.username || 'User';
+  }
+  next();
+});
 // const Company = require('./models/company');
 
 app.get('/', isAuthenticated, async (req, res) => {
   const companies = await Company.find();
-  res.render('dashboard', { companies });
+  const user = await User.findById(req.session.user); // fetch full user from DB if needed
+
+  res.render('dashboard', { companies, username: user.username || 'Guest'});
 });
 
 // app.get('/dashboard', (req, res) => {

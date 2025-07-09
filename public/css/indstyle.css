@@ -1122,7 +1122,7 @@
   align-items: center;
 }
 
-.open-image-options {
+/* .open-image-options {
   flex: 1;
   background-color: white;
   color: #1e40af;
@@ -1131,7 +1131,7 @@
   font-size: 0.85rem;
   text-align: center;
   cursor: pointer;
-}
+} */
 
 
 /* CSS */
@@ -1145,7 +1145,7 @@
   cursor: pointer;
   display: flex;
   font-family: Inter, sans-serif;
-  font-size: 15px;
+  font-size: 10px;
   justify-content: center;
   line-height: 19px;
   max-width: 100%;
@@ -1170,7 +1170,9 @@
 
 @media (min-width: 768px) {
   .button-46 {
-    font-size: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
     line-height: 19px;
     min-width: 200px;
     padding: 14px 16px;
@@ -1383,6 +1385,14 @@
   transition-duration: 0.3s;
 }
 
+.nav-item a{
+  font-size: 1.25rem;
+}
+
+#btn-edit{
+  font-size: 1.25rem;
+  padding-left: 7px;
+}
 /* #scrollTopBtn {
   position: fixed;
   bottom: 20px;

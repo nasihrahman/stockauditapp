@@ -28,8 +28,13 @@
 </head> 
 <body> 
   <header> 
-    <div class="logo-placeholder">LOGO</div> 
-  </header> 
+  <div class="logo-placeholder">LOGO</div> 
+  <div class="welcome-bar">
+    <span>Welcome, <strong><%= username %></strong></span>
+    <button onclick="logout()" class="logout-btn">Logout</button>
+  </div>
+</header>
+
  <section class="new-company"> 
       <h2>Create New Audit Form</h2> 
       <form id="addCompanyForm"> 
@@ -93,7 +98,7 @@
  
     function logout() { 
       fetch('/auth/logout', { method: 'POST' }).then(() => { 
-        window.location.href = '/login'; 
+        window.location.href = '/auth/login'; 
       }); 
     } 
  
