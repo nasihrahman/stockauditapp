@@ -292,6 +292,7 @@ async function prepareAuditData() {
       });
       // Update total
       document.getElementById('totalScore').textContent = totalScore;
+      document.getElementById('totalScoreDesktop').textContent = totalScore;
       document.getElementById('totalScoreDetails').textContent = `${totalScore} / ${totalPossible} (${totalPossible ? Math.round(totalScore/totalPossible*100) : 0}%)`;
       // Update summary panel
       updateSummaryPanel();

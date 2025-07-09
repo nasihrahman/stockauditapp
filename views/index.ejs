@@ -38,19 +38,22 @@
           <small class="d-sm-block">Company Audit Portal</small>
         </div>
       </div>
-
+        <!-- Spacer -->
+      <div class="flex-grow-1"></div>
+      <!-- Mobile Score + Menu -->
+        <div class="d-lg-none d-flex align-items-flex-end ms-auto">
+        <div class="me-2 text-end">
+          <small>Total</small><br />
+          <span class="badge bg-success score-badge" id="totalScoreDesktop"></span>
+        </div>
+      </div>
       <!-- Toggler for Mobile -->
       <button class="navbar-toggler ms-auto border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Mobile Score + Menu -->
-      <div class="d-lg-none d-flex align-items-center ms-auto">
-        <div class="me-2 text-end">
-          <small>Total</small><br />
-          <span class="badge bg-success" id="totalScore">3</span>
-        </div>
-      </div>
+      
+      
 
       <!-- Collapsible Menu -->
       <div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
@@ -58,7 +61,7 @@
           <!-- Desktop Score -->
           <li class="nav-item d-none d-lg-flex flex-column text-end me-3">
             <strong>Total Score</strong>
-            <span class="badge bg-success" id="totalScoreDesktop">3</span>
+            <span class="badge bg-success" id="totalScore"></span>
             <small id="totalScoreDetails">3 / 3 (100%)</small>
           </li>
           <!-- Buttons -->
