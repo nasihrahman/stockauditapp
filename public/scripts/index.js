@@ -680,8 +680,9 @@ document.querySelectorAll('.open-image-options').forEach(btn => {
 });
 
 document.getElementById('uploadFileBtn').addEventListener('click', () => {
-  document.getElementById('hiddenImageInput').click();
-
+  const input = document.getElementById('hiddenImageInput');
+  input.removeAttribute('capture');
+  input.click();
 });
 
 document.getElementById('captureCameraBtn').addEventListener('click', () => {
