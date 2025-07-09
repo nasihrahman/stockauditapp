@@ -84,7 +84,7 @@
             <a href="/" class="btn btn-outline-light btn-sm">Dashboard</a>
           </li>
           <li class="nav-item">
-            <button onclick="editCompany('<%= company._id %>')" class="btn btn-outline-light btn-sm">Admin</button>
+            <button onclick="editCompany('<%= company._id %>')" class="btn btn-outline-light btn-sm">Edit Form</button>
           </li>
         </ul>
       </div>
@@ -174,7 +174,7 @@
                               📷 Add image
                               <input type="file" name="images" class="hidden-file-input" accept="image/*">
                             </label> -->
-                                <button type="button" class="open-image-options" data-question-id="<%= q._id %>">
+                                <button type="button" class="button-46" data-question-id="<%= q._id %>">
                                   📷 Add image
                                 </button>
                             <span class="question-score-badge" data-question-id="<%= q._id %>">0</span>
@@ -223,11 +223,16 @@
     <button id="clearAllBtn"> Clear All</button>
     <button id="exportPdfBtn"> Save & Export PDF</button>
 </div>
+<!-- <button class="button" id="scrollTopBtn">
+  <svg class="svgIcon" viewBox="0 0 384 512">
+     <path
+      d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
+    ></path> 
+  </svg>
+</button> -->
 <button id="scrollTopBtn" title="Go to top">
   ↑
 </button>
-
-
 <script src="/scripts/index.js"></script>
  <script>
   const scrollTopBtn = document.getElementById("scrollTopBtn");

@@ -532,7 +532,7 @@
       <%= cat.name %>
     </button>
   <% }) %>
-  <button class="category-filter-btn" data-category-id="all">
+  <button class="category-filter-btn" active-filter data-category-id="all">
     Show All
   </button>
 </div>
@@ -720,6 +720,7 @@ function getDragAfterElement(container, x) {
     window.addEventListener('load', function() {
       // This would typically be handled by server-side redirect
       // but can be useful for AJAX submissions
+      const selected = 'all'
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('success')) {
         questionTextInput.value = '';
