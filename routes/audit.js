@@ -53,12 +53,32 @@ router.delete('/admin/category/:id', async (req, res) => {
 router.post('/admin/question', async (req, res) => {
   let categoryId = req.body.category;
   const { companyId } = req.body;
+
+  console.log('Received req.body.text:', req.body.text); // Log the raw input
+
+  const questionTexts = req.body.text.split(',').map(text => text.trim()).filter(text => text.length > 0); // Split, trim, and filter empty strings
+
+  console.log('Processed questionTexts:', questionTexts); // Log the processed array
+
   if (req.body.newCategory && req.body.newCategory.trim()) {
     const newCat = await Category.create({ name: req.body.newCategory.trim() });
     categoryId = newCat._id;
   }
-  await Question.create({ text: req.body.text, category: categoryId,company: companyId });
-  // res.redirect('/admin');
+
+  if (questionTexts.length === 0) {
+    // Handle case where no valid questions were provided
+    return res.redirect(`/admin?company=${companyId}`);
+  }
+
+  // Create multiple questions
+  const questionsToCreate = questionTexts.map(text => ({
+    text: text,
+    category: categoryId,
+    company: companyId
+  }));
+
+  await Question.insertMany(questionsToCreate); // Use insertMany for efficiency
+
   res.redirect(`/admin?company=${companyId}`);
 });
 

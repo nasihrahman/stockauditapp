@@ -273,4 +273,27 @@ router.delete('/companies/:id', async (req, res) => {
   }
 });
 
+// PUT /api/companies/:id - update a company's name
+router.put('/companies/:id', async (req, res) => {
+  try {
+    const { name } = req.body;
+    const companyId = req.params.id;
+
+    if (!name) {
+      return res.status(400).json({ success: false, message: 'Company name is required.' });
+    }
+
+    const company = await Company.findByIdAndUpdate(companyId, { name }, { new: true });
+
+    if (!company) {
+      return res.status(404).json({ success: false, message: 'Company not found.' });
+    }
+
+    res.json({ success: true, company });
+  } catch (err) {
+    console.error('Error updating company name:', err);
+    res.status(500).json({ success: false, message: 'Failed to update company name.' });
+  }
+});
+
 module.exports = router;

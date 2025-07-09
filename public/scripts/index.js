@@ -293,7 +293,9 @@ async function prepareAuditData() {
       // Update total
       document.getElementById('totalScore').textContent = totalScore;
       document.getElementById('totalScoreDesktop').textContent = totalScore;
-      document.getElementById('totalScoreDetails').textContent = `${totalScore} / ${totalPossible} (${totalPossible ? Math.round(totalScore/totalPossible*100) : 0}%)`;
+      const percentage = totalPossible ? Math.round(totalScore / totalPossible * 100) : 0;
+      document.getElementById('totalScoreDetails').textContent = `${totalScore} / ${totalPossible} (${percentage}%)`;
+      document.getElementById('totalScorePercent').textContent = `${percentage}%`;
       // Update summary panel
       updateSummaryPanel();
     }
@@ -342,11 +344,13 @@ async function prepareAuditData() {
     let percentMatch = score.match(/\((\d+)%\)/);
     let percent = percentMatch ? percentMatch[1] : '0';
 
-    let status = 'Pending', badgeClass = 'badge bg-secondary';
+    let status = 'Pending', badgeClass = 'badge';
     if (possible > 0) {
-      if (percent >= 80) { status = 'Pass'; badgeClass = 'badge bg-success'; }
-      else if (percent >= 50) { status = 'Warning'; badgeClass = 'badge bg-secondary'; }
-      else { status = 'Fail'; badgeClass = 'badge bg-danger'; }
+      if (percent == 100) { status = 'Outstanding'; badgeClass = 'badge  badge-outstanding'; }
+      else if (percent >= 95 && percent <= 99) { status = 'Excellent'; badgeClass = 'badge  badge-excellent'; }
+      else if (percent >= 85 && percent <= 94) { status = 'Good'; badgeClass = 'badge badge-good'; }
+      else if (percent >= 75 && percent <= 84) { status = 'Average'; badgeClass = 'badge badge-average'; }
+      else { status = 'Poor'; badgeClass = 'badge badge-poor'; }
     }
 
     const tr = document.createElement('tr');

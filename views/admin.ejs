@@ -10,20 +10,20 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f8fafc;
+      background-color: #f6fffd; /* Updated background color */
       color: #1e293b;
       line-height: 1.6;
     }
-    
+
     .info-panel {
       background: #1e293b;
       color: white;
       padding: 2rem;
       margin-bottom: 2rem;
-      
+
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -51,42 +51,45 @@
       justify-content: center;
       font-size: 2rem;
     }
-    
+
     .company-info h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
       font-weight: 700;
     }
-    
+
     .company-info p {
       opacity: 0.9;
       font-size: 1.1rem;
     }
-    
+
     main {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
     }
-    
+    ul{
+      padding-left: 1rem!important;
+    }
     .admin-section {
       background: white;
-      border-radius: 16px;
+      border-radius: 9px; /* Changed from 16px to 9px */
       padding: 2rem;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Updated box-shadow */
+      border: 1.666px solid #171e29; /* Updated border */
     }
-    
+
     .section-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 1.5rem;
       padding-bottom: 1rem;
-      border-bottom: 2px solid #f1f5f9;
+      border:none;
+      /* border-bottom: 2px solid #f1f5f9; */
     }
-    
+
     .section-title {
       font-size: 1.5rem;
       font-weight: 700;
@@ -95,7 +98,7 @@
       align-items: center;
       gap: 0.5rem;
     }
-    
+
     .category-selector {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
@@ -103,53 +106,66 @@
       padding: 1.5rem;
       margin-bottom: 2rem;
     }
-    
+
     .category-selector h3 {
       margin-bottom: 1rem;
       color: #475569;
       font-size: 1.1rem;
     }
-    
+
     .category-tabs {
       display: flex;
       flex-wrap: nowrap;
-      overflow-x: auto;   
+      overflow-x: auto;
       scroll-behavior: smooth;
       gap: 0.5rem;
       margin-bottom: 1rem;
     }
-    /* .category-tabs::-webkit-scrollbar {
-  height: 6px;
-}
 
-.category-tabs::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 3px;
-} */
-    
     .category-tab {
-      background: white;
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
       font-weight: 500;
       color: #64748b;
+      /* Removed visual styling, now handled by .category-tab-wrapper */
     }
-    
+
     .category-tab:hover {
       border-color: #667eea;
       background: #f8fafc;
     }
+
     
-    .category-tab.active {
+
+    .category-tab-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px; /* Add some space between the tab and the button */
+      padding: 0.75rem 1rem; /* Match category-tab padding for consistent height */
+      border: 2px solid #e2e8f0; /* Match category-tab border */
+      border-radius: 8px; /* Match category-tab border-radius */
+      margin-right: 0.5rem; /* Match category-tabs gap */
+      background: white; /* Match category-tab background */
+      cursor: pointer; /* Indicate it's clickable */
+      transition: all 0.2s ease; /* Smooth transitions */
+    }
+
+    .category-tab-wrapper:hover {
+      border-color: #667eea;
+      background: #f8fafc;
+    }
+
+    .category-tab-wrapper.active .category-tab {
+      background: none; /* Remove background from inner tab when wrapper is active */
+      color: inherit; /* Inherit color from wrapper */
+    }
+
+    .category-tab-wrapper.active {
       background: #667eea;
       border-color: #667eea;
       color: white;
       font-weight: 600;
     }
-    
+
     .selected-category {
       background: #ecfdf5;
       border: 2px solid #22c55e;
@@ -158,11 +174,11 @@
       margin-top: 1rem;
       display: none;
     }
-    
+
     .selected-category.show {
       display: block;
     }
-    
+
     .selected-category-text {
       color: #166534;
       font-weight: 600;
@@ -170,98 +186,115 @@
       align-items: center;
       gap: 0.5rem;
     }
-    
+
     .form-group {
       margin-bottom: 1.5rem;
     }
-    
+
     .form-row {
       display: flex;
       gap: 1rem;
       align-items: end;
     }
-    
+
     .form-control {
       flex: 1;
+      border: none !important;;
+
     }
-    
+
     label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
       color: #374151;
     }
-    
-    input[type="text"], select, textarea {
+
+        input[type="text"], select, textarea {
       width: 100%;
-      padding: 0.875rem 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 8px;
+      padding: 0.875rem 1rem; /* Reverted to original padding for better visual */
+      border: 1px solid #e2e8f0; /* Subtle border */
+      border-radius: 8px; /* Rounded corners */
       font-size: 1rem;
-      transition: all 0.2s ease;
-      background: white;
+      transition: all 0.2s ease; /* Reverted to original transition */
+      font-family: inherit;
+      background: white; /* Solid background for the input field */
     }
-    
+
     input[type="text"]:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      border-color: rgb(23, 40, 50);
+      box-shadow: none; /* Remove existing box-shadow */
     }
-    
-    button {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      padding: 0.875rem 1.5rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-    
+
+
+
     .btn-danger {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: #F55D3E;
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
     }
-    
+    .button {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 10px 20px;
+  background-color: rgb(255, 99, 99);
+  border: 2px solid rgb(0, 0, 0);
+  color: White;
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all ease 0.3s;
+  border-radius: 7px;
+  /* box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset; */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reduced box-shadow */
+}
+
+.button:hover {
+  border-radius: 3px;
+  background-color: rgb(255, 68, 68);
+}
+.button::before {
+  /* content: "Delete"; */
+}
+.button:active {
+  /* content: ""; */
+  background-color: rgb(255, 38, 38);
+  box-shadow:
+    rgba(9, 30, 66, 0.25) 0px 1px 1px,
+    rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
     .btn-danger:hover {
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3); /* Red shadow */
     }
-    
+
     .questions-list {
       list-style: none;
     }
-    
+
     .question-item {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      padding: 1rem;
+      padding: 1rem; /* Reverted padding */
       margin-bottom: 0.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       transition: all 0.2s ease;
     }
-    
+
     .question-item:hover {
       background: #f1f5f9;
       border-color: #cbd5e1;
     }
-    
+
     .question-text {
       flex: 1;
       font-weight: 500;
       color: #1e293b;
     }
-    
+
     .question-category {
       background: #dbeafe;
       color: #1d4ed8;
@@ -271,29 +304,29 @@
       font-weight: 500;
       margin: 0 1rem;
     }
-    
+
     .status-indicator {
       width: 12px;
       height: 12px;
       border-radius: 50%;
       margin-right: 0.5rem;
     }
-    
+
     .status-active {
       background: #22c55e;
     }
-    
+
     .empty-state {
       text-align: center;
       padding: 3rem;
       color: #64748b;
     }
-    
+
     .empty-state h3 {
       margin-bottom: 0.5rem;
       color: #374151;
     }
-    
+
     .new-category-input {
       margin-top: 1rem;
       padding: 1rem;
@@ -301,39 +334,56 @@
       border: 2px solid #f59e0b;
       border-radius: 8px;
     }
-    
+
     .new-category-input label {
       color: #92400e;
       margin-bottom: 0.5rem;
     }
-    
+
     .new-category-input input {
       border-color: #f59e0b;
     }
-    
+
     .new-category-input input:focus {
       border-color: #d97706;
       box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
     }
     .category-filter-btn {
-  padding: 0.5rem 1rem;
-  background: #e2e8f0;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  color: #1e293b;
-  transition: background 0.3s, color 0.3s;
+      padding: 0.5rem 1rem;
+      background: #e2e8f0;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #1e293b;
+      transition: background 0.3s, color 0.3s;
+    }
+.btn-delete-cat {
+    background-color: #f44336; /* Red background, can be adjusted */
+    color: white !important; /* White 'x' */
+    border: .7px solid #253031;
+    border-radius: 5px; /* Makes it round */
+    width: 25px; /* Adjust size as needed */
+    height: 25px; /* Adjust size as needed */
+    font-size: 16px; /* Size of the 'x' */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0; /* Spacing handled by parent flex container */
+    transition: box-shadow 0.2s ease; /* Added transition */
 }
+.btn-delete-cat:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Subtle box-shadow on hover */
+}
+    .category-filter-btn:hover {
+      background: #cbd5e1;
+    }
 
-.category-filter-btn:hover {
-  background: #cbd5e1;
-}
-
-.category-filter-btn.active-filter {
-  background: #667eea;
-  color: white;
-}
+    .category-filter-btn.active-filter {
+      background: #667eea;
+      color: white;
+    }
 
     @media (max-width: 768px) {
       .form-row {
@@ -341,107 +391,248 @@
         gap: 0.5rem;
         align-items: stretch;
       }
-      
+
       .category-tabs {
         gap: 0.25rem;
       }
-      
+
       .category-tab {
         padding: 0.5rem 0.75rem;
         font-size: 0.875rem;
       }
-      
+
       .question-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
       }
-      
+
       .question-category {
         margin: 0;
       }
     }
     .header-actions {
-  margin-left: auto;
-}
+      margin-left: auto;
+    }
 
-.home-btn {
-  text-decoration: none;
-  font-size: 1.5rem;
-  background: white;
-  border-radius: 8px;
-  padding: 0.25rem 0.75rem;
-  color: #1e293b;
-  font-weight: bold;
-  border: 2px solid #e2e8f0;
-  transition: background 0.3s;
-}
+    .home-btn {
+      text-decoration: none;
+      font-size: 1.5rem;
+      background: white;
+      border-radius: 8px;
+      padding: 0.25rem 0.75rem;
+      color: #1e293b;
+      font-weight: bold;
+      border: 2px solid #e2e8f0;
+      transition: background 0.3s;
+    }
 
-.home-btn:hover {
-  background: #e2e8f0;
-}
-.view-audit-btn {
-  background: #10b981;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  text-decoration: none;
-}
-.header-btn {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  border: 1px solid rgba(255,255,255,0.2);
+    .home-btn:hover {
+      background: #e2e8f0;
+    }
+    .view-audit-btn {
+      background: #10b981;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .header-btn {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .header-btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+/* CSS for button-8 from dashstyle.css */
+.button-8 {
+  background-color: #e1ecf4;
+  border-radius: 3px;
+  border: 1px solid #7aa7c7;
+  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #39739d;
   cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.15385;
+  margin: 0;
+  outline: none;
+  padding: 8px .8em;
+  position: relative;
+  text-align: center;
   text-decoration: none;
-  transition: background 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
 }
 
-.header-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.button-8:hover,
+.button-8:focus {
+  background-color: #b3d3ea;
+  color: #2c5777;
 }
 
+.button-8:focus {
+  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+}
+
+.button-8:active {
+  background-color: #a0c7e4;
+  box-shadow: none;
+  color: #2c5777;
+}
+
+  .button-59 {
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #000;
+  box-sizing: border-box;
+  color: #000;
+  cursor: pointer;
+  display: inline-flex;
+  fill: #000;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  height: 48px;
+  justify-content: center;
+  letter-spacing: -.8px;
+  line-height: 24px;
+  min-width: 140px;
+  outline: 0;
+  padding: 0 17px;
+  text-align: center;
+  text-decoration: none;
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-59:focus {
+  color: #171e29;
+}
+
+.button-59:hover {
+  border-color: #06f;
+  color: #06f;
+  fill: #06f;
+}
+
+.button-59:active {
+  border-color: #06f;
+  color: #06f;
+  fill: #06f;
+}
+
+@media (min-width: 768px) {
+  .button-59 {
+    min-width: 170px;
+  }
+}
+.btn-edit-qsn{
+  background-color: #38bdf8 !important;
+  text-decoration: none;
+  font-weight: 500;
+}
+header{
+  background-color: #253031;
+  margin-bottom: 2rem;
+}
   </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-  <header class="info-panel">
-    <div class="logo">⚙️</div>
-    <div class="company-info">
-      <h1>Admin Panel</h1>
-      <p>Manage Categories & Questions</p>
-    </div>
-     <div class="header-actions" style="display: flex; gap: 1rem; align-items: center;">
-  <!-- <span style="font-weight: bold; font-size: 1rem;">Dashboard</span> -->
-   <a href="/" class="header-btn" title="Dashboard">Dashboard</a>
-  <a href="/audit/<%= company._id %>" class="header-btn" title="View Audit">
-    View Audit
-  </a>
-</div>
+  <header class=" text-white p-2 py-3 sticky-top shadow-sm z-3">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-dark p-0">
+      <!-- Left: Title -->
+      <div class="d-flex align-items-center">
+        <div class="d-sm-block px-3">
+          <h5 class="mb-0 fw-bold">Edit Forms</h5>
+        </div>
+      </div>
 
-  </header>
+      <!-- Spacer -->
+      <div class="flex-grow-1"></div>
+
+      <!-- Mobile Menu -->
+      <div class="d-lg-none d-flex align-items-center gap-2 ms-auto">
+        <!-- Hamburger Button -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+
+      <!-- Collapsible Menu -->
+      <div class="collapse navbar-collapse " id="navbarMenu">
+        <ul class="navbar-nav ms-auto d-flex align-items-center gap-2" id="navButtonGroup">
+          <!-- Buttons -->
+          <li class="nav-item">
+            <a href="/" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="/audit/<%= company._id %>" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">View Audit</a>
+          </li>
+          <li class="nav-item">
+            <a href="/logout" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
   
   <main>
-    <!-- Add Category Section -->
+    <!-- Edit Company Name Section -->
     <div class="admin-section">
+      <div class="section-header ">
+        <h2 class="section-title">
+          Edit Outlet Name
+        </h2>
+      </div>
+      <div class="form-row">
+        <!-- <div class="form-control"> -->
+          <input type="text" id="companyAdminNameEdit" value="<%= company.name %>" />
+        <!-- </div> -->
+        <button type="button" id="saveCompanyAdminName" class="button-59">Save</button>
+      </div>
+    </div>
+
+    <!-- Add Category Section -->
+    <div class="admin-section mt-10">
       <div class="section-header">
         <h2 class="section-title">
           <!-- <span>📁</span> -->
           Add Category
         </h2>
-          <!-- <button class="edit-cat" onclick="window.location.href='/edit-question/>' ">Edit Categories</button> -->
+        <button class="button-8" onclick="window.location.href='/edit-category'">Edit Categories</button>
 
       </div>
       
       <form method="POST" action="/admin/category">
         <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
         <div class="form-row">
-          <div class="form-control">
-            <label for="category-name">Category Name</label>
+          <!-- <div class="form-control"> -->
+            <!-- <label for="category-name">Category Name</label> -->
             <input type="text" id="category-name" name="name" placeholder="Enter category name..." required />
-          </div>
-          <button type="submit">Add Category</button>
+          <!-- </div> -->
+          <button type="submit" class="button-59">Add Category</button>
         </div>
       </form>
     </div>
@@ -466,10 +657,10 @@
         <span class="status-indicator status-active"></span>
         <%= cat.name %>
       </div>
-      <button class="btn-danger btn-delete-cat" data-id="<%= cat._id %>">✖</button>
+      <button class="btn-danger btn-delete-cat" data-id="<%= cat._id %>">X</button>
     </div>
   <% }); %>
-</div>
+</div>  
 
         <% } else { %>
           <div class="empty-state">
@@ -491,7 +682,7 @@
          <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
         <div class="form-group">
           <label for="question-text">Question Text</label>
-          <input type="text" id="question-text" name="text" placeholder="Enter your question..." required />
+          <textarea id="question-text" name="text" placeholder="Enter your questions, separated by commas..." required rows="3"></textarea>
         </div>
         
         <div class="form-group">
@@ -511,7 +702,7 @@
           <input type="text" id="new-category" name="newCategory" placeholder="Enter new category name..." />
         </div>
         
-        <button type="submit" id="add-question-btn">
+        <button type="submit" id="add-question-btn" class="button-59">
           Add Question
         </button>
       </form>
@@ -552,12 +743,10 @@
 </span>
 
 <div style="display:flex; gap: 0.5rem;">
-  <a href="/edit-question/<%= q._id %>"  class="btn-edit" style="background: #38bdf8; padding: 0.5rem 0.75rem; border-radius: 6px; color: white; font-size: 0.875rem; text-decoration: none;">Edit</a>
+  <a href="/edit-question/<%= q._id %>" class="button btn-edit-qsn">Edit</a>
 
   <form method="POST" action="/admin/question/delete/<%= q._id %>">
-    <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this question?')">
-      Delete
-    </button>
+    <button type="submit" class="btn-danger button btn-delete-qsn" onclick="return confirm('Are you sure you want to delete this question?')">Delete</button>
   </form>
 </div>
 
@@ -641,8 +830,8 @@ function getDragAfterElement(container, x) {
         const categoryName = this.dataset.categoryName;
         
         // Update visual selection
-        categoryTabs.forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
+        document.querySelectorAll('.category-tab-wrapper').forEach(wrapper => wrapper.classList.remove('active')); // Remove from all wrappers
+        this.closest('.category-tab-wrapper').classList.add('active'); // Add to the clicked wrapper
         
         // Update form
         categorySelect.value = categoryId;
@@ -822,6 +1011,44 @@ document.querySelectorAll('.question-item').forEach(item => {
 });
 
 
+    const companyAdminNameEdit = document.getElementById('companyAdminNameEdit');
+    const saveCompanyAdminNameBtn = document.getElementById('saveCompanyAdminName');
+
+    if (saveCompanyAdminNameBtn) {
+      saveCompanyAdminNameBtn.addEventListener('click', async () => {
+        const newName = companyAdminNameEdit.value.trim();
+        const companyId = '<%= company._id %>'; // Get company ID from EJS variable
+
+        if (!newName) {
+          alert('Company name cannot be empty.');
+          return;
+        }
+
+        try {
+          const res = await fetch(`/api/companies/${companyId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: newName })
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            alert('Company name updated successfully!');
+            // Optionally, update any other displayed company names on the page
+            // For example, if there's a header with the company name
+            // document.getElementById('someHeaderId').textContent = newName;
+          } else {
+            alert(data.message || 'Failed to update company name.');
+          }
+        } catch (error) {
+          console.error('Error updating company name:', error);
+          alert('An error occurred while updating company name.');
+        }
+      });
+    }
   </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
