@@ -1,16 +1,15 @@
-<!-- register.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register</title>
+  <title>Add User</title>
   <link rel="stylesheet" href="/css/auth.css" />
 </head>
 <body>
   <div class="card fade-in-up">
-    <h2>Create Account</h2>
-    <form method="POST" action="/auth/register" onsubmit="return checkPasswords()">
+    <h2>Add New User</h2>
+    <form method="POST" action="/admin/add-user" onsubmit="return checkPasswords()">
       <div class="form-field">
         <input type="text" name="username" placeholder="Username" required />
         <label>Username</label>
@@ -27,10 +26,17 @@
         <input type="password" placeholder="Confirm Password" id="confirm" required />
         <label>Confirm Password</label>
       </div>
-      <button type="submit">Register</button>
+      <div class="form-field">
+        <label for="role">Role:</label>
+        <select id="role" name="role">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button type="submit">Add User</button>
     </form>
     <% if (error) { %><p class="error"><%= error %></p><% } %>
-    <p class="switch">Already have an account? <a href="/auth/login">Login</a></p>
+    <p class="switch"><a href="/">Back to Admin Panel</a></p>
   </div>
 
   <script>

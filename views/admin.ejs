@@ -254,9 +254,7 @@
   border-radius: 3px;
   background-color: rgb(255, 68, 68);
 }
-.button::before {
-  /* content: "Delete"; */
-}
+
 .button:active {
   /* content: ""; */
   background-color: rgb(255, 38, 38);
@@ -589,8 +587,13 @@ header{
           <li class="nav-item">
             <a href="/audit/<%= company._id %>" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">View Audit</a>
           </li>
+          <% if (role === 'admin') { %>
           <li class="nav-item">
-            <a href="/logout" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Logout</a>
+            <a href="/admin/add-user" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Add User</a>
+          </li>
+          <% } %>
+          <li class="nav-item">
+            <a href="/auth/logout" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Logout</a>
           </li>
         </ul>
       </div>
@@ -598,12 +601,13 @@ header{
   </div>
 </header>
   
+  <% if (role === 'admin') { %>
   <main>
     <!-- Edit Company Name Section -->
     <div class="admin-section">
       <div class="section-header ">
         <h2 class="section-title">
-          Edit Outlet Name
+          Edit Form Name
         </h2>
       </div>
       <div class="form-row">
@@ -761,6 +765,11 @@ header{
       <% } %>
     </div>
   </main>
+  <% } else { %>
+  <div style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+  <p>Access Denied: You do not have permission to view this page.</p>
+</div>
+  <% } %>
 
   <script>
     // Category selection functionality

@@ -1111,13 +1111,13 @@
   bottom: 30px;
   right: 20px;
   z-index: 999;
-  background-color: #4f46e5;
+  background-color: #38bdf8;
   color: white;
-  border: none;
+  border: .6px solid black;
   outline: none;
   width: 45px;
   height: 45px;
-  border-radius: 50%;
+  border-radius: 6px;
   font-size: 1.5rem;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -1460,3 +1460,4 @@
 .btn-danger:hover {
   background-color: #b91c1c;
 }
+

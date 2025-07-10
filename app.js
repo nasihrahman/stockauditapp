@@ -45,6 +45,14 @@ app.set('views', path.join(__dirname, 'views'));
  // <-- Add this line to support JSON body parsing
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware to prevent caching after logout
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  res.set('Expires', '0');
+  res.set('Pragma', 'no-cache');
+  next();
+});
+
 // Routes
 // app.get('/', async (req, res) => {
 //   const { Category, Question } = require('./models/audit');
@@ -84,11 +92,14 @@ app.get('/', isAuthenticated, async (req, res) => {
 // });
 
 const auditRoutes = require('./routes/audit');
-app.use(auditRoutes);
+app.use(isAuthenticated, auditRoutes);
 
 // API routes for AJAX answer save/retrieve
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
+
+const adminRoutes = require('./routes/admin');
+app.use('/admin', isAuthenticated, adminRoutes);
 
 app.get('/ping', (req, res) => {
   res.status(200).send('OK');

@@ -22,7 +22,7 @@ router.get('/admin', async (req, res) => {
   const categories = await Category.find({ company: companyId }).sort({ position: 1 });
   const questions = await Question.find({ company: companyId }).populate('category');
 
-  res.render('admin', { company, categories, questions });
+  res.render('admin', { company, categories, questions, role: req.session.role });
 });
 
 
@@ -127,21 +127,7 @@ router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, 
   res.redirect(`/audit/${question.company}`);
 });
 
-// routes/edit.js or wherever you handle views
-router.get('/edit-question/:id', async (req, res) => {
-  const question = await Question.findById(req.params.id).populate('category');
-  if (!question) return res.status(404).send('Question not found');
 
-  const companyId = question.company; 
-  const categories = await Category.find({company: companyId});
-  res.render('edit-question', { question, categories, company: companyId});
-});
-
-router.post('/edit-question/:id', async (req, res) => {
-  const { text, category } = req.body;
-  await Question.findByIdAndUpdate(req.params.id, { text, category });
-  res.redirect('/admin');
-});
 
 router.post('/admin/category/reorder', async (req, res) => {
   const { order } = req.body; // Expects: [ "catId1", "catId2", ... ]

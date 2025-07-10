@@ -41,6 +41,10 @@ header {
   font-size: 0.95rem;
   /* border-top: 1px solid rgba(255,255,255,0.05); */
 }
+.logo-placeholder img {
+      width: 350px;
+      height: auto;
+    }
 
 .logout-btn {
   background: none;
@@ -150,6 +154,8 @@ header {
   .button-59 {
     min-width: 170px;
   }
+
+  
 }
 
 /* Company list styling */
@@ -312,6 +318,7 @@ footer button:hover {
   transform: translateY(-1px);
 }
 
+
 /* Mobile responsive design */
 @media (max-width: 768px) {
   .dashboard {
@@ -322,17 +329,17 @@ footer button:hover {
   
   header {
     padding: 1.5rem 1rem;
-    min-height: 100px;
+    /* min-height: 100px; */
   }
   
   header h1 {
     font-size: 2rem;
   }
   
-  .logo-placeholder {
-    left: 1rem;
-    width: 50px;
-    height: 50px;
+  .logo-placeholder img{
+    /* left: 1rem; */
+    width: 250px;
+    height: auto;
   }
   
   .company-list li {
@@ -375,6 +382,17 @@ footer button:hover {
   }
 }
 
+
+@media(max-widht: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .logo-placeholder img{
+    width: 200px;
+    height: auto;
+  }
+}
 /* Loading and animation effects */
 .company-list li {
   animation: fadeInUp 0.6s ease-out;

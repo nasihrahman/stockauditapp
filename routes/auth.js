@@ -20,12 +20,24 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  console.log('Attempting login for username:', username);
+
   const user = await User.findOne({ username });
-  if (!user || !(await user.comparePassword(password))) {
+  if (!user) {
+    console.log('User not found for username:', username);
     return res.render('login', { error: 'Invalid credentials' });
   }
 
+  console.log('User found. Comparing passwords...');
+  const isMatch = await user.comparePassword(password);
+  if (!isMatch) {
+    console.log('Password comparison failed for username:', username);
+    return res.render('login', { error: 'Invalid credentials' });
+  }
+
+  console.log('Login successful for username:', username);
   req.session.user = user._id;
+  req.session.role = user.role; // Store user's role in session
   res.redirect('/');
 });
 
@@ -35,24 +47,5 @@ router.post('/logout', (req, res) => {
     res.redirect('/auth/login');
   });
 });
-
-router.get('/register', (req, res) => {
-  res.render('register', { error: null });
-});
-
-router.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    const existing = await User.findOne({ $or: [{ username }, { email }] });
-    if (existing) return res.render('register', { error: 'Username or Email already exists' });
-
-    const newUser = new User({ username, email, password });
-    await newUser.save();
-    res.redirect('/auth/login');
-  } catch (err) {
-    res.render('register', { error: err.message });
-  }
-});
-
 
 module.exports = router;
