@@ -383,16 +383,7 @@ footer button:hover {
 }
 
 
-@media(max-widht: 480px) {
-  body {
-    font-size: 14px;
-  }
 
-  .logo-placeholder img{
-    width: 200px;
-    height: auto;
-  }
-}
 /* Loading and animation effects */
 .company-list li {
   animation: fadeInUp 0.6s ease-out;
@@ -434,7 +425,7 @@ footer button:hover {
   cursor: pointer;
   display: inline-block;
   font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 1.15385;
   margin: 0;
@@ -464,6 +455,20 @@ footer button:hover {
   background-color: #a0c7e4;
   box-shadow: none;
   color: #2c5777;
+}
+@media(max-widht: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .button-8{
+    font-size: 12px;
+  }
+
+  .logo-placeholder img{
+    width: 200px;
+    height: auto;
+  }
 }
 
 #audit-btn{
