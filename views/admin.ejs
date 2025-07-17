@@ -788,6 +788,7 @@ header{
     const categorySelect = document.getElementById('category-select');
     const addQuestionBtn = document.getElementById('add-question-btn');
     const questionForm = document.getElementById('question-form');
+    const singleQuestionTextInput = document.getElementById('single-question-text');
     const questionTextInput = document.getElementById('question-text');
     const newCategoryInput = document.getElementById('new-category');
     const tabList = document.getElementById('categoryTabContainer');
@@ -921,6 +922,15 @@ function getDragAfterElement(container, x) {
       if (e.key === 'Enter' && e.ctrlKey) {
         questionForm.submit();
       }
+    });
+
+    // Clear other input when one is typed into
+    singleQuestionTextInput.addEventListener('input', function() {
+      questionTextInput.value = '';
+    });
+
+    questionTextInput.addEventListener('input', function() {
+      singleQuestionTextInput.value = '';
     });
     
     // Auto-clear form after successful submission (if page doesn't redirect)

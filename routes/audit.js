@@ -14,19 +14,6 @@ const upload = multer({ storage });
 
 const Company = require('../models/company');
 
-router.get('/admin', async (req, res) => {
-  const companyId = req.query.company;
-  if (!companyId) return res.status(400).send('Missing company ID');
-
-  const company = await Company.findById(companyId);
-  const categories = await Category.find({ company: companyId }).sort({ position: 1 });
-  const questions = await Question.find({ company: companyId }).populate('category');
-
-  res.render('admin', { company, categories, questions, role: req.session.role });
-});
-
-
-
 // router.post('/admin/category', async (req, res) => {
 //   await Category.create({ name: req.body.name });
 //   res.redirect('/admin');
@@ -54,11 +41,11 @@ router.post('/admin/question', async (req, res) => {
   let categoryId = req.body.category;
   const { companyId } = req.body;
 
-  console.log('Received req.body.text:', req.body.text); // Log the raw input
+  // console.log('Received req.body.text:', req.body.text); // Log the raw input
 
   const questionTexts = req.body.text.split(',').map(text => text.trim()).filter(text => text.length > 0); // Split, trim, and filter empty strings
 
-  console.log('Processed questionTexts:', questionTexts); // Log the processed array
+  // console.log('Processed questionTexts:', questionTexts); // Log the processed array
 
   if (req.body.newCategory && req.body.newCategory.trim()) {
     const newCat = await Category.create({ name: req.body.newCategory.trim() });
@@ -71,11 +58,19 @@ router.post('/admin/question', async (req, res) => {
   }
 
   // Create multiple questions
-  const questionsToCreate = questionTexts.map(text => ({
-    text: text,
-    category: categoryId,
-    company: companyId
-  }));
+  const questionsToCreate = [];
+  let maxOrder = await Question.findOne({ category: categoryId }).sort({ order: -1 }).select('order');
+  maxOrder = maxOrder ? maxOrder.order : -1; // Start from -1 so the first question is 0
+
+  for (const text of questionTexts) {
+    maxOrder++;
+    questionsToCreate.push({
+      text: text,
+      category: categoryId,
+      company: companyId,
+      order: maxOrder
+    });
+  }
 
   await Question.insertMany(questionsToCreate); // Use insertMany for efficiency
 
@@ -107,7 +102,7 @@ router.get('/audit/:companyId', async (req, res) => {
 
   const company = await Company.findById(companyId);
   const categories = await Category.find({ company: companyId }).sort({ position: 1 });
-  const questions = await Question.find({ company: companyId }).populate('category');
+  const questions = await Question.find({ company: companyId }).populate('category').sort({ order: 1 });
 
   res.render('index', { company, categories, questions });
 });

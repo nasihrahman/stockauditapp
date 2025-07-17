@@ -152,7 +152,7 @@
               </div>
             </div>
             <ul class="questions-list">
-              <% questions.filter(q => q.category && q.category._id.toString() === cat._id.toString()).forEach(function(q, idx) { %>
+              <% questions.filter(q => q.category && q.category._id.toString() === cat._id.toString()).sort((a, b) => a.order - b.order).forEach(function(q, idx) { %>
                 <li class="question-item" data-category-id="<%= cat._id %>" data-question-id="<%= q._id %>">
                   <form method="POST" action="/audit/answer/<%= q._id %>" enctype="multipart/form-data" class="question-form">
                     <div class="question-content">

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const User = require('../models/User');
 const Company = require('../models/company');
 const { Category, Question } = require('../models/audit');
@@ -23,6 +24,7 @@ router.get('/', isAdmin, async (req, res) => {
     const company = await Company.findById(companyId);
     const categories = await Category.find({ company: companyId });
     const questions = await Question.find({ company: companyId }).sort({ order: 1 }).populate('category');
+    // console.log('Questions fetched for admin page (before render):', questions.map(q => ({ id: q._id, text: q.text, order: q.order })));
     res.render('admin', { company, categories, questions, role: req.session.role });
   } catch (err) {
     console.error('Error loading admin page:', err);
@@ -58,21 +60,26 @@ router.post('/add-user', isAdmin, async (req, res) => {
 
 // POST route for adding a question
 router.post('/question', isAdmin, async (req, res) => {
+  console.log('Received question submission:', req.body);
+  const { companyId, category, text, single_text } = req.body;
+  console.log('single_text:', single_text, 'text:', text);
   try {
     const { companyId, category, text, single_text } = req.body;
     const lastQuestion = await Question.findOne({ company: companyId }).sort({ order: -1 });
-    let order = lastQuestion ? lastQuestion.order + 1 : 0;
+    let currentOrder = lastQuestion ? lastQuestion.order + 1 : 0;
 
-    if (single_text) {
-      questions.push({ text: single_text, category, company: companyId, order });
-      order++;
-    }
+    let questions = [];
 
-    if (text) {
+    if (single_text && single_text.trim()) {
+      // Add single question, even if it contains commas
+      questions.push({ text: single_text.trim(), category, company: companyId, order: currentOrder });
+      currentOrder++; // Increment order for the single question
+    } else if (text && text.trim()) {
+      // Add multiple questions, splitting by commas
       const questionTexts = text.split(',').map(q => q.trim()).filter(q => q);
       for (const qText of questionTexts) {
-        questions.push({ text: qText, category, company: companyId, order });
-        order++;
+        questions.push({ text: qText, category, company: companyId, order: currentOrder });
+        currentOrder++; // Increment order for each question in the multiple questions field
       }
     }
 
@@ -147,8 +154,14 @@ router.post('/edit-category/:id', isAdmin, async (req, res) => {
 router.post('/question/reorder', isAdmin, async (req, res) => {
   try {
     const { order } = req.body;
+    // console.log('Received reorder request. Order array:', order);
     for (let i = 0; i < order.length; i++) {
-      await Question.findByIdAndUpdate(order[i], { order: i });
+      try {
+        const updatedQuestion = await Question.findByIdAndUpdate(order[i], { order: i }, { new: true });
+        // console.log(`Updated question ${order[i]} with order ${i}. Result:`, updatedQuestion);
+      } catch (updateErr) {
+        console.error(`Error updating question ${order[i]}:`, updateErr);
+      }
     }
     res.json({ success: true });
   } catch (err) {
@@ -156,5 +169,29 @@ router.post('/question/reorder', isAdmin, async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to reorder questions' });
   }
 });
+
+
+
+// // GET route to fix question order (run once)
+// router.get('/fix-question-order', isAdmin, async (req, res) => {
+//   try {
+//     const companyId = req.query.company;
+//     if (!companyId) {
+//       return res.status(400).send('Company ID is required');
+//     }
+
+//     const questions = await Question.find({ company: companyId }).sort({ _id: 1 }); // Get questions in creation order
+
+//     for (let i = 0; i < questions.length; i++) {
+//       await Question.findByIdAndUpdate(questions[i]._id, { order: i });
+//     }
+
+//     res.send('Question order has been fixed. You can now go back to the admin page.');
+
+//   } catch (err) {
+//     console.error('Error fixing question order:', err);
+//     res.status(500).send('Failed to fix question order');
+//   }
+// });
 
 module.exports = router;

@@ -65,6 +65,7 @@ app.use((req, res, next) => {
 //   });
 // });
 function isAuthenticated(req, res, next) {
+  // console.log('isAuthenticated middleware hit. req.session.user:', req.session.user);
   if (req.session.user) return next();
   return res.redirect('/auth/login');
 }
