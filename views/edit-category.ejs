@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Question - Stock Audit</title>
+  <title>Edit Categories - Stock Audit</title>
   <style>
     * {
       margin: 0;
@@ -137,7 +137,7 @@
       <!-- Left: Title -->
       <div class="d-flex align-items-center">
         <div class="d-sm-block px-3">
-          <h5 class="mb-0 fw-bold">Edit Question</h5>
+          <h5 class="mb-0 fw-bold">Edit Categories</h5>
         </div>
       </div>
 
@@ -160,7 +160,7 @@
             <a href="/" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Dashboard</a>
           </li>
           <li class="nav-item">
-            <a href="/admin?company=<%= question.company %>" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Back to Admin</a>
+            <a href="/admin?company=<%= companyId %>" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent">Back to Admin</a>
           </li>
           <% if (role === 'admin') { %>
           <li class="nav-item">
@@ -179,25 +179,43 @@
 <main>
   <div class="admin-section">
     <div class="section-header">
-      <h2 class="section-title">Edit Question</h2>
+      <h2 class="section-title">Edit Categories</h2>
     </div>
-    <form action="/admin/edit-question/<%= question._id %>" method="POST">
+    <form id="edit-category-form" method="POST" class="form-group">
       <div class="form-group">
-        <label for="question-text">Question Text</label>
-        <textarea id="question-text" name="text" required rows="3"><%= question.text %></textarea>
-      </div>
-      <div class="form-group">
-        <label for="category-select">Category</label>
+        <label for="category-select">Select Category</label>
         <select id="category-select" name="category" required>
+          <option value="">Choose a category...</option>
           <% categories.forEach(function(cat) { %>
-            <option value="<%= cat._id %>" <%= question.category._id.toString() === cat._id.toString() ? 'selected' : '' %>><%= cat.name %></option>
+            <option value="<%= cat._id %>" data-name="<%= cat.name %>"><%= cat.name %></option>
           <% }); %>
         </select>
+      </div>
+      <div class="form-group">
+        <label for="category-name">Category Name</label>
+        <input type="text" id="category-name" name="name" placeholder="Select a category to edit" required>
       </div>
       <button type="submit" class="button-59">Save Changes</button>
     </form>
   </div>
 </main>
+
+<script>
+  const categorySelect = document.getElementById('category-select');
+  const categoryNameInput = document.getElementById('category-name');
+  const editCategoryForm = document.getElementById('edit-category-form');
+
+  categorySelect.addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    if (selectedOption.value) {
+      categoryNameInput.value = selectedOption.dataset.name;
+      editCategoryForm.action = `/admin/edit-category/${selectedOption.value}`;
+    } else {
+      categoryNameInput.value = 'Select a category to edit';
+      editCategoryForm.action = '';
+    }
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

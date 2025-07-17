@@ -266,6 +266,11 @@
       box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3); /* Red shadow */
     }
 
+    .question-item.dragging {
+      opacity: 0.5;
+      background: #c8ebf8;
+    }
+
     .questions-list {
       list-style: none;
     }
@@ -625,7 +630,7 @@ header{
           <!-- <span>📁</span> -->
           Add Category
         </h2>
-        <button class="button-8" onclick="window.location.href='/edit-category'">Edit Categories</button>
+        <button class="button-8" onclick="window.location.href='/admin/edit-category?company=<%= company._id %>'">Edit Categories</button>
 
       </div>
       
@@ -685,8 +690,12 @@ header{
       <form method="POST" action="/admin/question" id="question-form">
          <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
         <div class="form-group">
-          <label for="question-text">Question Text</label>
-          <textarea id="question-text" name="text" placeholder="Enter your questions, separated by commas..." required rows="3"></textarea>
+          <label for="single-question-text">Add Single Question</label>
+          <textarea id="single-question-text" name="single_text" placeholder="Enter your question..." rows="1"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="question-text">Add Multiple Questions (Comma Separated)</label>
+          <textarea id="question-text" name="text" placeholder="Enter your questions, separated by commas..." rows="3"></textarea>
         </div>
         
         <div class="form-group">
@@ -747,7 +756,7 @@ header{
 </span>
 
 <div style="display:flex; gap: 0.5rem;">
-  <a href="/edit-question/<%= q._id %>" class="button btn-edit-qsn">Edit</a>
+  <a href="/admin/edit-question/<%= q._id %>" class="button btn-edit-qsn">Edit</a>
 
   <form method="POST" action="/admin/question/delete/<%= q._id %>">
     <button type="submit" class="btn-danger button btn-delete-qsn" onclick="return confirm('Are you sure you want to delete this question?')">Delete</button>
@@ -994,31 +1003,52 @@ document.querySelectorAll('.category-filter-btn').forEach(btn => {
 });
 
 
-let draggedItem = null;
+const questionsList = document.querySelector('.questions-list');
 
-document.querySelectorAll('.question-item').forEach(item => {
-  item.addEventListener('dragstart', function () {
-    draggedItem = this;
-    this.style.opacity = '0.5';
-  });
+    questionsList.addEventListener('dragstart', e => {
+      const dragged = e.target;
+      dragged.classList.add('dragging');
+    });
 
-  item.addEventListener('dragend', function () {
-    this.style.opacity = '1';
-    draggedItem = null;
-  });
+    questionsList.addEventListener('dragend', e => {
+      const dragged = e.target;
+      dragged.classList.remove('dragging');
 
-  item.addEventListener('dragover', function (e) {
-    e.preventDefault();
-  });
+      const orderedIds = [...questionsList.querySelectorAll('.question-item')].map(el => el.dataset.questionId);
+      fetch('/admin/question/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order: orderedIds })
+      }).then(res => res.json())
+        .then(data => {
+          if (!data.success) alert('Failed to update question order.');
+        });
+    });
 
-  item.addEventListener('drop', function (e) {
-    e.preventDefault();
-    if (draggedItem && draggedItem !== this) {
-      this.parentNode.insertBefore(draggedItem, this);
+    questionsList.addEventListener('dragover', e => {
+      e.preventDefault();
+      const afterElement = getDragAfterElement(questionsList, e.clientY);
+      const dragged = document.querySelector('.dragging');
+      if (afterElement == null) {
+        questionsList.appendChild(dragged);
+      } else {
+        questionsList.insertBefore(dragged, afterElement);
+      }
+    });
+
+    function getDragAfterElement(container, y) {
+      const draggableElements = [...container.querySelectorAll('.question-item:not(.dragging)')];
+
+      return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
-  });
-});
-
 
     const companyAdminNameEdit = document.getElementById('companyAdminNameEdit');
     const saveCompanyAdminNameBtn = document.getElementById('saveCompanyAdminName');

@@ -11,7 +11,8 @@ CategorySchema.index({ name: 1, company: 1 }, { unique: true });
 const QuestionSchema = new mongoose.Schema({
   text: { type: String, required: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
-  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true }
+  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
+  order: { type: Number, default: 0 }
 });
 
 
