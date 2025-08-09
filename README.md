@@ -53,8 +53,6 @@ A modern, mobile-friendly stock auditing system for companies, built with Node.j
 - `views/` - EJS templates
 - `public/` - Static files (CSS, JS, images)
 
-## License
-MIT
 
 ---
 
