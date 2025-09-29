@@ -188,9 +188,10 @@ function generatePdfMakeDocDefinition(data) {
 
 
       // AUDIT SUMMARY PAGE
-      { text: 'Audit Summary', style: 'sectionTitle' },
+      { text: 'Audit Summary', style: 'sectionTitle', alignment: 'center' },
       {
         columns: [
+          { width: '*', text: '' },
           {
             width: 'auto',
             alignment: 'center',
@@ -220,14 +221,15 @@ function generatePdfMakeDocDefinition(data) {
               paddingBottom: function() { return 8; }
             },
             margin: [0, 10, 0, 30]
-          }
+          },
+          { width: '*', text: '' }
         ],
         columnGap: 0
       },
       { text: '', pageBreak: 'after' },
 
       // CATEGORY PERFORMANCE SUMMARY PAGE
-      { text: 'Category Performance Summary', style: 'sectionTitle' },
+      { text: 'Category Performance Summary', style: 'sectionTitle', alignment: 'center' },
       {
         columns: [
           {

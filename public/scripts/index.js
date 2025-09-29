@@ -34,14 +34,14 @@ function clearAllResponses() {
         preview.innerHTML = '';
     });
     // Clear info panel fields
-    document.querySelectorAll('.info-value').forEach(field => {
-        field.textContent = '';
-    });
+    // document.querySelectorAll('.info-value').forEach(field => {
+    //     field.textContent = '';
+    // });
     // Update scores
     updateScores();
     
     // Send clear request to backend
-    fetch('/api/clear-all', {
+    fetch('/api/clear-all/' + getCompanyIdFromUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
     })
@@ -63,12 +63,27 @@ document.getElementById('exportPdfBtn').addEventListener('click', function() {
     this.disabled = true;
     
     generatePDF().then(() => {
-        this.textContent = ' Save & Export PDF';
+        this.textContent = ' Save PDF';
         this.disabled = false;
     }).catch(err => {
         console.error('PDF Generation Error:', err);
         alert('Error generating PDF. Please try again.');
-        this.textContent = ' Save & Export PDF';
+        this.textContent = ' Save PDF';
+        this.disabled = false;
+    });
+});
+
+document.getElementById('exportPdfBtnBottom').addEventListener('click', function() {
+    this.textContent = ' Generating PDF...';
+    this.disabled = true;
+    
+    generatePDF().then(() => {
+        this.textContent = ' Save PDF';
+        this.disabled = false;
+    }).catch(err => {
+        console.error('PDF Generation Error:', err);
+        alert('Error generating PDF. Please try again.');
+        this.textContent = ' Save PDF';
         this.disabled = false;
     });
 });

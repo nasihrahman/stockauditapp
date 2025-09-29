@@ -219,18 +219,10 @@ router.put('/question/:id', async (req, res) => {
 
 
 // POST /api/clear-all - clears all answers from the database
-router.post('/clear-all', async (req, res) => {
+router.post('/clear-all/:companyId', async (req, res) => {
   try {
-    await Answer.deleteMany({});
-    await Info.deleteMany();
-      await Info.create({
-        company: '',
-        location: '',
-        date: '',
-        branch: '',
-        manager: '',
-        inspector: ''
-});
+    const { companyId } = req.params;
+    await Answer.deleteMany({ company: companyId });
     console.log('All answers cleared from the database.');
     res.json({ success: true });
   } catch (err) {
