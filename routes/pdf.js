@@ -1,12 +1,5 @@
-const PDFDocument = require('pdfkit');
-const https = require('https');
-// const https = require('https');
-const http = require('http');
-const { URL } = require('url');
 
-
-
-
+// Helper functions (same logic as before)
 function getAnswerColor(answer) {
   switch (answer?.toLowerCase()) {
     case 'yes': return '#10b981';
@@ -35,293 +28,277 @@ function getGrade(scoreText) {
   return 'NEEDS IMPROVEMENT';
 }
 
-function downloadImageToBuffer(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, res => {
-      const chunks = [];
-      res.on('data', chunk => chunks.push(chunk));
-      res.on('end', () => resolve(Buffer.concat(chunks)));
-      res.on('error', reject);
-    });
-  });
-}
-
 function forceJpgFormat(url) {
   if (!url.includes('/upload/')) return url;
   return url.replace('/upload/', '/upload/f_jpg/');
 }
 
-
-async function generatePDFContent(doc, data) {
+// Main pdfmake doc definition generator
+function generatePdfMakeDocDefinition(data) {
   const totalScoreText = data.totalScoreDetails;
   const grade = getGrade(totalScoreText);
   const percent = totalScoreText.match(/\((\d+)%\)/)?.[1] || "0";
 
-  // === COVER PAGE - NO LOGO, CLEAN DESIGN ===
-  // Main title - centered and professional
-  doc.fontSize(42).fillColor('#1e293b').font('Helvetica-Bold')
-    .text('AUDIT REPORT', 0, 150, { align: 'center' });
-  
-  // doc.fontSize(32).fillColor('#3b82f6')
-  //   .text('AUDIT REPORT', 0, 200, { align: 'center' });
-
-  // Score display with background
-  doc.moveDown(4);
-  const centerX = doc.page.width / 2;
-  const scoreY = 300;
-  
-  // Score background rectangle
-  doc.rect(centerX - 100, scoreY - 40, 200, 80)
-    .fill('#f8fafc').stroke('#e2e8f0', 2);
-  
-  // Score percentage
-  doc.fontSize(48).fillColor('#22c55e').font('Helvetica-Bold')
-    .text(`${percent}%`, centerX - 70, scoreY - 20, { align: 'left' });
-
-  // Grade display with color
-  doc.fontSize(16).fillColor('#374151').font('Helvetica')
-    .text('PERFORMANCE GRADE', 0, scoreY + 80, { align: 'center' });
-  
-  doc.fontSize(28).fillColor(getGradeColor(grade)).font('Helvetica-Bold')
-    .text(grade, 0, scoreY + 105, { align: 'center' });
-
-  // Company info at bottom - clean layout
-  doc.fontSize(16).fillColor('#6b7280').font('Helvetica')
-    // .text(`${data.info.company || 'Company Name'}`, 0, 500, { align: 'center' })
-    // .text(`Location: ${data.info.location || 'Location'} - ${data.info.branch || 'Branch'}`, 0, 525, { align: 'center' })
-    .text(`Company Name: ${data.info.company || 'N/A'}`, 0, 500, { align: 'center' })
-
-    .text(`Location: ${data.info.location || 'N/A'}`, 0, 525, { align: 'center' })
-    .text(`Audit Date: ${data.info.date || 'N/A'}`, 0, 550, { align: 'center' })
-    .text(`Inspector: ${data.info.inspector || 'N/A'}`, 0, 575, { align: 'center' });
-
-  doc.addPage();
-
-  // === AUDIT SUMMARY PAGE - COMPLETE INFO ===
-  // Page header
-  doc.fontSize(24).fillColor('#1e293b').font('Helvetica-Bold')
-    .text('Audit Summary', 50, 50);
-  
-  // Decorative line
-  doc.moveTo(50, 85).lineTo(550, 85).stroke('#3b82f6', 3);
-  
-  // Complete audit information in organized layout
-  let currentY = 110;
-  doc.fontSize(14).fillColor('#374151').font('Helvetica');
-  
-  const auditInfo = [
-    { label: 'Company Name', value: data.info.company },
-    { label: 'Location', value: data.info.location },
-    { label: 'Branch', value: data.info.branch },
-    { label: 'Audit Date', value: data.info.date },
-    { label: 'Inspector Name', value: data.info.inspector },
-    { label: 'Total Score', value: data.totalScore },
-    { label: 'Score Details', value: data.totalScoreDetails },
-    { label: 'Performance Grade', value: grade },
-    { label: 'Report Generated', value: new Date().toLocaleDateString() }
+  // Category summary table
+  const categorySummaryTable = [
+    [
+      { text: 'Category Name', style: 'tableHeader' },
+      { text: 'Score', style: 'tableHeader' },
+      { text: 'Percentage', style: 'tableHeader' }
+    ],
+    ...data.categorySummaries.map(cat => {
+      const match = cat.score.match(/\((\d+)%\)/);
+      const percentage = match ? match[1] + '%' : '-';
+      const scoreValue = cat.score.split('(')[0].trim();
+      return [
+        { text: cat.name, style: 'tableCell' },
+        { text: scoreValue, style: 'tableCell' },
+        { text: percentage, style: 'tableCell' }
+      ];
+    })
   ];
 
-  // Draw info in a structured format
-  auditInfo.forEach((item, index) => {
-    // Background for each row
-    const bgColor = index % 2 === 0 ? '#f8fafc' : '#ffffff';
-    doc.rect(50, currentY, 500, 25).fill(bgColor).stroke('#e5e7eb', 0.5);
-    
-    // Label and value
-    doc.fillColor('#1e293b').font('Helvetica-Bold')
-      .text(item.label + ':', 60, currentY + 7, { width: 150 });
-    
-    doc.fillColor('#374151').font('Helvetica')
-      .text(item.value || 'N/A', 220, currentY + 7, { width: 320 });
-    
-    currentY += 25;
-  });
-
-  // === ENHANCED CATEGORY SUMMARY TABLE ===
-  currentY += 30;
-  doc.fontSize(20).fillColor('#1e293b').font('Helvetica-Bold')
-    .text('Category Performance Summary', 50, currentY);
-  
-  // Decorative line
-  doc.moveTo(50, currentY + 30).lineTo(550, currentY + 30).stroke('#3b82f6', 3);
-  currentY += 50;
-
-  const tableX = 50;
-  const colWidths = [300, 100, 100]; // Adjusted widths
-  const rowHeight = 35;
-
-  // Table header
-  doc.rect(tableX, currentY, colWidths.reduce((a, b) => a + b), rowHeight)
-    .fill('#1e293b');
-  
-  doc.fillColor('white').fontSize(14).font('Helvetica-Bold')
-    .text('Category Name', tableX + 15, currentY + 12)
-    .text('Score', tableX + colWidths[0] + 15, currentY + 12)
-    .text('Percentage', tableX + colWidths[0] + colWidths[1] + 15, currentY + 12);
-  
-  currentY += rowHeight;
-
-  // Table rows
-  data.categorySummaries.forEach((cat, index) => {
-    const match = cat.score.match(/\((\d+)%\)/);
-    const percentage = match ? match[1] + '%' : '-';
-    const scoreValue = cat.score.split('(')[0].trim();
-    
-    const bgColor = index % 2 === 0 ? '#f8fafc' : '#ffffff';
-    doc.rect(tableX, currentY, colWidths.reduce((a, b) => a + b), rowHeight)
-      .fill(bgColor).stroke('#e2e8f0', 1);
-
-    doc.fillColor('#374151').fontSize(12).font('Helvetica')
-      .text(cat.name, tableX + 15, currentY + 12, { width: colWidths[0] - 20 })
-      .text(scoreValue, tableX + colWidths[0] + 15, currentY + 12)
-      .text(percentage, tableX + colWidths[0] + colWidths[1] + 15, currentY + 12);
-    
-    currentY += rowHeight;
-  });
-
-  // === QUESTIONS BY CATEGORY - FIXED LAYOUT ===
+  // Questions by category as tables
+  let questionsByCategory = [];
   let currentCategory = '';
+  let questionRows = [];
   let questionNumber = 1;
-
-  for (const q of data.questions) {
-          const score = data.categorySummaries.find(c => c.name === currentCategory)?.score || '0/0 (0%)';
-
-    if (q.category !== currentCategory) {
-      doc.addPage();
-      currentCategory = q.category;
-
-      // Category header
-      
-      doc.rect(30, 40, 540, 50).fill('#1e293b');
-      doc.fillColor('white').fontSize(18).font('Helvetica-Bold')
-        .text(currentCategory, 50, 55)
-        .fontSize(14).font('Helvetica')
-        .text(`Category Score: ${score}`, 50, 75);
-    }
-
-    // Calculate space needed for this question - updated for table format
-    let spaceNeeded = 50; // Base space for table row (reduced from 150)
-    if (q.comment) spaceNeeded += 25; // Reduced from 30
-    if (q.images?.length > 0) spaceNeeded += q.images.length * 110; // Reduced from 130
-    
-    // Check if we need a new page
-    if (doc.y + spaceNeeded > doc.page.height - 80) {
-      doc.addPage();
-      
-      // Repeat category header on new page
-      doc.rect(30, 40, 540, 50).fill('#1e293b');
-      doc.fillColor('white').fontSize(18).font('Helvetica-Bold')
-        .text(currentCategory + ' (continued)', 50, 55)
-        .fontSize(14).font('Helvetica')
-        .text(`Category Score: ${score}`, 50, 75);
-      
-      doc.y = 110; // Reset Y position after header
-    }
-
-    // Ensure we start at correct Y position
-    if (doc.y < 110) doc.y = 110;
-
-    // Question container - Table format with question left, answer right
-    const startY = doc.y;
-    
-    // Calculate question text height for proper row sizing
-    const questionText = `Q${questionNumber}. ${q.question}`;
-    const questionHeight = doc.heightOfString(questionText, { 
-      width: 320, // Left column width minus padding
-      fontSize: 11 
+  const pushCategoryTable = () => {
+    if (!currentCategory || questionRows.length === 0) return;
+    questionsByCategory.push({
+      table: {
+        widths: ['70%', '30%'],
+        body: [
+          [
+            {
+              colSpan: 2,
+              text: `${currentCategory}  |  Category Score: ${data.categorySummaries.find(c => c.name === currentCategory)?.score || '0/0 (0%)'}`,
+              style: 'categoryHeaderTable',
+              alignment: 'left',
+              margin: [0, 0, 0, 0]
+            },
+            {}
+          ],
+          ...questionRows
+        ]
+      },
+      layout: {
+        fillColor: function (rowIndex, node, columnIndex) {
+          if (rowIndex === 0) return '#1e293b';
+          return rowIndex % 2 === 0 ? '#f8fafc' : '#fff';
+        },
+        paddingLeft: function() { return 12; },
+        paddingRight: function() { return 12; },
+        paddingTop: function() { return 8; },
+        paddingBottom: function() { return 8; },
+        hLineWidth: function(i, node) { return i === 1 ? 2 : 0.5; },
+        vLineWidth: function() { return 0.5; },
+        hLineColor: function(i, node) { return i === 1 ? '#1e293b' : '#e5e7eb'; },
+        vLineColor: function() { return '#e5e7eb'; }
+      },
+      margin: [0, 20, 0, 20]
     });
-    
-    // Minimum row height for short questions
-    const rowHeight = Math.max(questionHeight + 16, 40);
-    
-    // Draw table row background
-    doc.rect(50, startY, 500, rowHeight).fill('#f8fafc').stroke('#d1d5db', 1);
-    
-    // Left column - Question (70% of width)
-    doc.fillColor('#1e293b').fontSize(11).font('Helvetica-Bold')
-      .text(`Q${questionNumber}.`, 60, startY + 8, { width: 25 });
-    
-    doc.fillColor('#374151').font('Helvetica')
-      .text(q.question, 85, startY + 8, { 
-        width: 280,  // Question column width
-        lineGap: 1
-      });
-    
-    // Vertical divider line
-    doc.moveTo(370, startY).lineTo(370, startY + rowHeight).stroke('#d1d5db', 1);
-    
-    // Right column - Answer (30% of width)
-    doc.fillColor(getAnswerColor(q.answer)).fontSize(12).font('Helvetica-Bold')
-      .text(q.answer || 'Not Answered', 385, startY + 8, { 
-        width: 150,
-        align: 'center',
-        valign: 'center'
-      });
-    
-    // Move Y position past the row
-    doc.y = startY + rowHeight;
+    questionRows = [];
+  };
 
-    // Comment section (if exists) - full width below the table row
-    if (q.comment) {
-      doc.rect(50, doc.y, 500, 25).fill('#ffffff').stroke('#d1d5db', 1);
-      doc.fillColor('#6b7280').fontSize(10).font('Helvetica-Oblique')
-        .text('Comment:', 60, doc.y + 6, { continued: true })
-        .font('Helvetica')
-        .text(` ${q.comment}`, { width: 430 });
-      
-      doc.y += 25;
+  data.questions.forEach((q, idx) => {
+    if (q.category !== currentCategory) {
+      pushCategoryTable();
+      currentCategory = q.category;
+      questionNumber = 1;
     }
-
-    // Images section (if any) - reduced spacing
-    // if (q.images?.length > 0) {
-    //   doc.y += 5; // Reduced from 10
-    //   for (const imageUrl of q.images) {
-    //     try {
-    //       const img = await downloadImageToBuffer(imageUrl);
-    //       doc.image(img, 60, doc.y, { fit: [480, 100] }); // Reduced height from 120
-    //       doc.y += 110; // Reduced from 130
-    //     } catch (err) {
-    //       doc.fillColor('#ef4444').fontSize(10)
-    //         .text('[Image could not be loaded]', 60, doc.y);
-    //       doc.y += 15; // Reduced from 20
-    //     }
-    //   }
-    // }
-
+    // Question row
+    let questionCell = {
+      stack: [
+        { text: ` ${q.question}`, style: 'questionText', alignment: 'left' },
+        ...(q.comment ? [{ text: `Comment: ${q.comment}`, style: 'commentText', margin: [0, 4, 0, 0] }] : [])
+      ]
+    };
+    let answerCell = { text: q.answer || 'Not Answered', style: 'answerText', color: getAnswerColor(q.answer), alignment: 'center' };
+    questionRows.push([questionCell, answerCell]);
+    // Images (as extra row)
     if (q.images?.length > 0) {
-  doc.y += 5; // Reduced spacing before image
-
-  for (let imageUrl of q.images) {
-    try {
-      // Convert to .jpg to avoid .webp issue
-      imageUrl = forceJpgFormat(imageUrl);
-
-      const img = await downloadImageToBuffer(imageUrl);
-
-      doc.image(img, 60, doc.y, { fit: [480, 100] }); // render image
-      doc.y += 110; // move below image
-    } catch (err) {
-      console.error('Failed to load image:', imageUrl, err.message);
-
-      doc.fillColor('#ef4444').fontSize(10)
-        .text('[Image could not be loaded]', 60, doc.y);
-      doc.y += 15;
+      questionRows.push([
+        {
+          colSpan: 2,
+          stack: q.images.map(imgUrl => ({ image: forceJpgFormat(imgUrl), width: 150, margin: [0, 4, 0, 8] })),
+          margin: [0, 4, 0, 8]
+        },
+        {}
+      ]);
     }
-  }
-}
-
-    
-
-    // Reduced spacing between questions
-    doc.y += 10; // Reduced from 25
     questionNumber++;
-  }
+  });
+  pushCategoryTable();
 
-  // === FOOTER - SIMPLIFIED APPROACH ===
-  // Add footer to current page only (you can add to each page individually if needed)
-  doc.fontSize(9).fillColor('#6b7280').font('Helvetica')
-    .text(`Report Generated: ${new Date().toLocaleString()}`, 
-          50, doc.page.height - 30, { align: 'center', width: 500 });
+  // Main doc definition
+  const docDefinition = {
+    content: [
+      // COVER PAGE
+      {
+        text: 'AUDIT REPORT',
+        style: 'coverTitle',
+        margin: [0, 100, 0, 40]
+      },
+      {
+        columns: [
+          { width: '*', text: '' },
+          {
+            width: 200,
+            stack: [
+              {
+                canvas: [
+                  { type: 'rect', x: 0, y: 0, w: 200, h: 80, r: 8, color: '#f8fafc', lineColor: '#e2e8f0', lineWidth: 2 }
+                ]
+              },
+              {
+                text: `${percent}%`,
+                style: 'coverScore',
+                absolutePosition: { x: 70, y: 20 }
+              }
+            ],
+            margin: [0, 0, 0, 0]
+          },
+          { width: '*', text: '' }
+        ],
+        margin: [0, 0, 0, 20]
+      },
+      {
+        text: 'PERFORMANCE GRADE',
+        style: 'coverSubtitle',
+        margin: [0, 20, 0, 0]
+      },
+      {
+        text: grade,
+        style: 'coverGrade',
+        color: getGradeColor(grade),
+        margin: [0, 8, 0, 40]
+      },
+      {
+        stack: [
+          { text: `Company Name: ${data.info.company || 'N/A'}` },
+          { text: `Location: ${data.info.location || 'N/A'}` },
+          { text: `Audit Date: ${data.info.date || 'N/A'}` },
+          { text: `Inspector: ${data.info.inspector || 'N/A'}` }
+        ],
+        style: 'coverInfo',
+        margin: [0, 40, 0, 0]
+      },
+      { text: '', pageBreak: 'after' },
+
+
+      // AUDIT SUMMARY PAGE
+      { text: 'Audit Summary', style: 'sectionTitle' },
+      {
+        columns: [
+          {
+            width: 'auto',
+            alignment: 'center',
+            table: {
+              widths: [150, '*'],
+              body: [
+                ['Company Name', data.info.company],
+                ['Location', data.info.location],
+                ['Branch', data.info.branch],
+                ['Audit Date', data.info.date],
+                ['Manager',data.info.manager],
+                ['Inspector Name', data.info.inspector],
+                ['Total Score', data.totalScore],
+                ['Score Details', data.totalScoreDetails],
+                ['Performance Grade', grade],
+                ['Report Generated', new Date().toLocaleDateString()]
+              ]
+            },
+            layout: {
+              hLineWidth: function() { return 0.5; },
+              vLineWidth: function() { return 0.5; },
+              hLineColor: function() { return '#e5e7eb'; },
+              vLineColor: function() { return '#e5e7eb'; },
+              paddingLeft: function() { return 12; },
+              paddingRight: function() { return 12; },
+              paddingTop: function() { return 8; },
+              paddingBottom: function() { return 8; }
+            },
+            margin: [0, 10, 0, 30]
+          }
+        ],
+        columnGap: 0
+      },
+      { text: '', pageBreak: 'after' },
+
+      // CATEGORY PERFORMANCE SUMMARY PAGE
+      { text: 'Category Performance Summary', style: 'sectionTitle' },
+      {
+        columns: [
+          {
+            width: 'auto',
+            alignment: 'center',
+            table: {
+              widths: [250, 100, 100],
+              body: categorySummaryTable
+            },
+            layout: {
+              hLineWidth: function() { return 0.5; },
+              vLineWidth: function() { return 0.5; },
+              hLineColor: function() { return '#e5e7eb'; },
+              vLineColor: function() { return '#e5e7eb'; },
+              paddingLeft: function() { return 12; },
+              paddingRight: function() { return 12; },
+              paddingTop: function() { return 8; },
+              paddingBottom: function() { return 8; }
+            },
+            margin: [0, 10, 0, 30]
+          }
+        ],
+        columnGap: 0
+      },
+      { text: '', pageBreak: 'after' },
+
+      // QUESTIONS BY CATEGORY
+      ...questionsByCategory
+    ],
+    styles: {
+      coverTitle: { fontSize: 38, bold: true, alignment: 'center', color: '#1e293b' },
+      coverScore: { fontSize: 48, bold: true, color: '#22c55e', alignment: 'center' },
+      coverSubtitle: { fontSize: 16, color: '#374151', alignment: 'center' },
+      coverGrade: { fontSize: 28, bold: true, alignment: 'center' },
+      coverInfo: { fontSize: 14, color: '#6b7280', alignment: 'center' },
+      sectionTitle: { fontSize: 24, bold: true, color: '#1e293b', margin: [0, 0, 0, 10] },
+      tableHeader: { fillColor: '#1e293b', color: 'white', bold: true, fontSize: 14, alignment: 'center' },
+      tableCell: { fontSize: 12, color: '#374151', alignment: 'center' },
+      categoryHeader: { fontSize: 18, bold: true, color: 'black', lineHeight: 1.3 },
+      categoryHeaderBg: {
+        fillColor: '#1e293b',
+        color: '#1e293b',
+        margin: [0, 10, 0, 10],
+        alignment: 'left',
+        fontSize: 18,
+        bold: true,
+        lineHeight: 1.3,
+        padding: 10
+      },
+      categoryHeaderTable: { fontSize: 16, bold: true, color: 'white', fillColor: '#1e293b', margin: [0, 0, 0, 0], alignment: 'left', lineHeight: 1.3, padding: 10 },
+      categoryScore: { fontSize: 14, color: 'black', margin: [0, 0, 0, 0] },
+      questionText: { fontSize: 11, color: '#374151', margin: [0, 0, 0, 2] },
+      questionComment: { fontSize: 10, italics: true, color: '#6b7280', margin: [0, 2, 0, 0] },
+      answerText: { fontSize: 12, bold: true, alignment: 'center' },
+      commentText: { fontSize: 10, italics: true, color: '#6b7280' }
+    },
+    footer: function(currentPage, pageCount) {
+      return {
+        text: `Report Generated: ${new Date().toLocaleString()} | Page ${currentPage} of ${pageCount}`,
+        alignment: 'center',
+        fontSize: 9,
+        color: '#6b7280',
+        margin: [0, 0, 0, 10]
+      };
+    },
+    defaultStyle: {
+      font: 'Helvetica'
+    }
+  };
+
+  return docDefinition;
 }
 
-module.exports = { generatePDFContent };
+module.exports = { generatePdfMakeDocDefinition };

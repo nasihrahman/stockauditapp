@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { Category, Question, Answer } = require('../models/audit');
-const { storage } = require('../cloudinary');
+const { cloudinary } = require('../cloudinary');
 const multer = require('multer');
-const upload = multer({ storage });
+const sharp = require('sharp');
+const upload = multer({ storage: multer.memoryStorage() });
 
 // --- Admin Routes ---
 // router.get('/admin', async (req, res) => {
@@ -111,14 +112,39 @@ router.get('/audit/:companyId', async (req, res) => {
 // --- Handle Answers + Image Uploads (Cloudinary) ---
 router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, res) => {
   const question = await Question.findById(req.params.questionId);
-  const images = req.files ? req.files.map(f => f.path) : [];
+  let images = [];
+  if (req.files && req.files.length > 0) {
+    for (const file of req.files) {
+      try {
+        // Compress/resize with sharp
+        const compressedBuffer = await sharp(file.buffer)
+          .resize({ width: 1000 }) // adjust width as needed
+          .jpeg({ quality: 70 }) // adjust quality as needed
+          .toBuffer();
+        // Upload to Cloudinary
+        const uploadResult = await cloudinary.uploader.upload_stream(
+          { folder: 'audits', resource_type: 'image' },
+          (error, result) => {
+            if (error) {
+              console.error('Cloudinary upload error:', error);
+            } else if (result && result.secure_url) {
+              images.push(result.secure_url);
+            }
+          }
+        );
+        // cloudinary.uploader.upload_stream returns a writable stream
+        uploadResult.end(compressedBuffer);
+      } catch (err) {
+        console.error('Image compression/upload error:', err);
+      }
+    }
+  }
   await Answer.create({
     question: req.params.questionId,
     response: req.body.response,
     comment: req.body.comment,
     images
   });
-  // res.redirect('/audit');
   res.redirect(`/audit/${question.company}`);
 });
 
