@@ -79,17 +79,23 @@
               <span id="totalScoreDetails">3 / 3 (100%)</span>
             </li>
 
+          <!-- Generate PDF Button -->
+          <li class="nav-item">
+            <button class="btn btn-primary fw-semibold px-3 py-1 me-2" target="_blank" id="exportPdfBtn">
+               Save PDF
+            </button>
+          </li>
+
           <!-- Buttons -->
           <li class="nav-item">
-  <a href="/" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent nav-btn-custom">Dashboard</a>
-</li>
-<li class="nav-item">
-  <button onclick="editCompany('<%= company._id %>')" class="text-white text-decoration-underline bg-transparent border-0 small fw-semibold nav-btn-custom"id="btn-edit">Edit Form</button>
-</li>
-<li class="nav-item">
-  <a href="/auth/login" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent nav-btn-custom">Logout</a>
-</li>
-
+            <a href="/" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent nav-btn-custom">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <button onclick="editCompany('<%= company._id %>')" class="text-white text-decoration-underline bg-transparent border-0 small fw-semibold nav-btn-custom" id="btn-edit">Edit Form</button>
+          </li>
+          <li class="nav-item">
+            <a href="/auth/login" class="text-white text-decoration-underline small fw-semibold border-0 bg-transparent nav-btn-custom">Logout</a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -101,45 +107,46 @@
 
 
 
-  <div class="panels-container">
-    
-      
-  <div class="info-panel">
-  <div class="info-grid">
-    <div class="info-item"><span class="info-label">Company:</span> <span class="info-value" name="company" ></span></div>
-    <div class="info-item"><span class="info-label">Location:</span> <span class="info-value" name="location" ></span></div>
-    <div class="info-item"><span class="info-label">Date:</span> <span class="info-value" name="date"></span></div>
-    <div class="info-item"><span class="info-label">Branch:</span> <span class="info-value" name="branch"></span></div>
-    <div class="info-item"><span class="info-label">Manager:</span> <span class="info-value" name="manager"></span></div>
-    <div class="info-item"><span class="info-label">Inspector:</span> <span class="info-value" name="inspector"></span></div>
-  </div>
-  <button id="toggle-edit-btn"  style="margin-top:20px;">Edit info</button>
-</div>
-      
-
-  
- <div class="summary-panel">
-      <h4 class="summary-title">
-        <i class="fas fa-chart-bar me-2"></i>
-        Quick Summary
-      </h4>
-      <div class="table-responsive">
-        <table class="table table-hover summary-table" id="summaryTable">
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Score</th>
-              <th>Percentage</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="summaryTableBody">
-            <!-- Dynamic rows will be inserted here -->
-          </tbody>
-        </table>
+  <div class="container-fluid px-2 px-md-4 mt-4">
+    <div class="row g-4">
+      <div class="col-12">
+        <div class="info-panel w-100">
+          <div class="info-grid">
+            <div class="info-item"><span class="info-label">Company:</span> <span class="info-value" name="company" ></span></div>
+            <div class="info-item"><span class="info-label">Location:</span> <span class="info-value" name="location" ></span></div>
+            <div class="info-item"><span class="info-label">Date:</span> <span class="info-value" name="date"></span></div>
+            <div class="info-item"><span class="info-label">Branch:</span> <span class="info-value" name="branch"></span></div>
+            <div class="info-item"><span class="info-label">Manager:</span> <span class="info-value" name="manager"></span></div>
+            <div class="info-item"><span class="info-label">Inspector:</span> <span class="info-value" name="inspector"></span></div>
+          </div>
+          <button id="toggle-edit-btn"  style="margin-top:20px;">Edit info</button>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="summary-panel w-100">
+          <h4 class="summary-title">
+            <i class="fas fa-chart-bar me-2"></i>
+            Quick Summary
+          </h4>
+          <div class="table-responsive">
+            <table class="table table-hover summary-table" id="summaryTable">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="summaryTableBody">
+                <!-- Dynamic rows will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-</div>
+  </div>
   <div class="main-container">
     <main>
       <% if (categories && categories.length) { %>
