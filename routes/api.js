@@ -36,13 +36,13 @@ router.get('/answers', async (req, res) => {
 // POST /api/answer - upsert answer for a question
 router.post('/answer', upload.array('images', 5), async (req, res) => {
   // Debug logging for troubleshooting
-  console.log('--- Incoming /api/answer request ---');
-  console.log('Body:', req.body);
-  if (req.files && req.files.length) {
-    console.log('Files:', req.files.map(f => f.originalname));
-  } else {
-    console.log('Files: none');
-  }
+  // console.log('--- Incoming /api/answer request ---');
+  // console.log('Body:', req.body);
+  // if (req.files && req.files.length) {
+  //   console.log('Files:', req.files.map(f => f.originalname));
+  // } else {
+  //   console.log('Files: none');
+  // }
 
   try {
     const { questionId, response, comment, companyId } = req.body;
@@ -68,7 +68,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
       // Do NOT delete the answer if comment is empty; just save it
       if (!answer.company) answer.company = companyId;
       await answer.save();
-    console.log('Answer object after save:', answer);
+    // console.log('Answer object after save:', answer);
     } else {
       answer = await Answer.create({
         question: questionId,
