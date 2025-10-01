@@ -198,12 +198,12 @@ function generatePdfMakeDocDefinition(data) {
             table: {
               widths: [150, '*'],
               body: [
-                ['Company Name', data.info.company],
+                ['Outlet Name', data.info.company],
                 ['Location', data.info.location],
                 ['Branch', data.info.branch],
                 ['Audit Date', data.info.date],
-                ['Manager',data.info.manager],
-                ['Inspector Name', data.info.inspector],
+                ['Manager On Duty',data.info.manager],
+                ['Auditor Name', data.info.inspector],
                 ['Total Score', data.totalScore],
                 ['Score Details', data.totalScoreDetails],
                 ['Performance Grade', grade],
