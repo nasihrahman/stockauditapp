@@ -10,7 +10,7 @@ function openAudit(id) {
     window.location.href = `/admin?company=${id}`;
   }
 
-// Placeholder for admin and API routes
+
 
    document.getElementById('clearAllBtn').addEventListener('click', function() {
     if (confirm('Are you sure you want to clear all responses? This action cannot be undone.')) {
@@ -432,13 +432,27 @@ async function prepareAuditData() {
           saveAnswer(questionId, { questionId, response: response || undefined, comment });
         }, 500);
       });
-      // Replace Add Comment button with Clear Comment button
+      // Replace Add Comment button with Clear Comment button logic
+      // Create wrapper and icon button
+      const wrapper = document.createElement('div');
+      wrapper.className = 'comment-input-wrapper';
+      
+      // Insert wrapper before input
+      input.parentNode.insertBefore(wrapper, input);
+      
+      // Move input into wrapper
+      wrapper.appendChild(input);
+      
+      // Create X button
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.textContent = 'Clear Comment';
-      btn.className = 'clear-comment-btn';
-      btn.style.marginLeft = '8px';
-      input.parentNode.insertBefore(btn, input.nextSibling);
+      btn.innerHTML = '&times;';
+      btn.className = 'clear-comment-icon-btn';
+      btn.title = 'Clear comment';
+      
+      // Add button to wrapper
+      wrapper.appendChild(btn);
+
       btn.addEventListener('click', function() {
         if (isPrefilling) return;
         input.value = '';
