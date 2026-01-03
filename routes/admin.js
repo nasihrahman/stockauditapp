@@ -22,7 +22,7 @@ router.get('/', isAdmin, async (req, res) => {
       return res.status(400).send('Company ID is required');
     }
     const company = await Company.findById(companyId);
-    const categories = await Category.find({ company: companyId });
+    const categories = await Category.find({ company: companyId }).sort({ position: 1 });
     const questions = await Question.find({ company: companyId }).sort({ order: 1 }).populate('category');
     // console.log('Questions fetched for admin page (before render):', questions.map(q => ({ id: q._id, text: q.text, order: q.order })));
     res.render('admin', { company, categories, questions, role: req.session.role });
@@ -64,15 +64,15 @@ router.post('/question', isAdmin, async (req, res) => {
   const { companyId, category, text, single_text } = req.body;
   console.log('single_text:', single_text, 'text:', text);
   try {
-    const { companyId, category, text, single_text } = req.body;
+    // req.body already destructured above; avoid redeclaring variables here
     const lastQuestion = await Question.findOne({ company: companyId }).sort({ order: -1 });
     let currentOrder = lastQuestion ? lastQuestion.order + 1 : 0;
 
     let questions = [];
 
-    if (single_text && single_text.trim()) {
+    if (single_text) {
       // Add single question, even if it contains commas
-      questions.push({ text: single_text.trim(), category, company: companyId, order: currentOrder });
+      questions.push({ text: single_text, category, company: companyId, order: currentOrder });
       currentOrder++; // Increment order for the single question
     } else if (text && text.trim()) {
       // Add multiple questions, splitting by commas

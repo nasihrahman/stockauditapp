@@ -72,7 +72,7 @@ function generatePdfMakeDocDefinition(data) {
           [
             {
               colSpan: 2,
-              text: `${currentCategory}  |  Category Score: ${data.categorySummaries.find(c => c.name === currentCategory)?.score || '0/0 (0%)'}`,
+              text: `${currentCategory}     Score: ${data.categorySummaries.find(c => c.name === currentCategory)?.score || '0/0 (0%)'}`,
               style: 'categoryHeaderTable',
               alignment: 'left',
               margin: [0, 0, 0, 0]
@@ -136,50 +136,38 @@ function generatePdfMakeDocDefinition(data) {
     content: [
       // COVER PAGE
       {
-        text: 'AUDIT REPORT',
-        style: 'coverTitle',
-        margin: [0, 100, 0, 40]
+        image: 'images/logo.png',
+        width: 170,
+        alignment: 'center',
+        margin: [0, 50, 0, 30]
       },
       {
-        columns: [
-          { width: '*', text: '' },
-          {
-            width: 200,
-            stack: [
-              {
-                canvas: [
-                  { type: 'rect', x: 0, y: 0, w: 200, h: 80, r: 8, color: '#f8fafc', lineColor: '#e2e8f0', lineWidth: 2 }
-                ]
-              },
-              {
-                text: `${percent}%`,
-                style: 'coverScore',
-                absolutePosition: { x: 70, y: 20 }
-              }
-            ],
-            margin: [0, 0, 0, 0]
-          },
-          { width: '*', text: '' }
-        ],
-        margin: [0, 0, 0, 20]
+        text: 'AUDIT REPORT',
+        style: 'coverTitle',
+        margin: [20, 20, 20, 20]
+      },
+      {
+        text: `${percent}%`,
+        style: 'coverScore',
+        margin: [0, 0, 0, 10]
       },
       {
         text: 'PERFORMANCE GRADE',
         style: 'coverSubtitle',
-        margin: [0, 20, 0, 0]
+        margin: [0, 20, 0, 10]
       },
       {
         text: grade,
         style: 'coverGrade',
         color: getGradeColor(grade),
-        margin: [0, 8, 0, 40]
+        margin: [0, 0, 0, 40]
       },
       {
         stack: [
-          { text: `Company Name: ${data.info.company || 'N/A'}` },
+          { text: `Outlet Name: ${data.info.company || 'N/A'}` },
           { text: `Location: ${data.info.location || 'N/A'}` },
           { text: `Audit Date: ${data.info.date || 'N/A'}` },
-          { text: `Inspector: ${data.info.inspector || 'N/A'}` }
+          { text: `Auditor: ${data.info.inspector || 'N/A'}` }
         ],
         style: 'coverInfo',
         margin: [0, 40, 0, 0]

@@ -63,10 +63,15 @@
       font-size: 1.1rem;
     }
 
-    main {
+    .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 1rem;
+      }
     }
     ul{
       padding-left: 1rem!important;
@@ -379,6 +384,24 @@
 .btn-delete-cat:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Subtle box-shadow on hover */
 }
+.btn-move-cat {
+  background: #e2e8f0;
+  border: none;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1;
+}
+.btn-move-cat:hover {
+  background: #cbd5e1;
+  color: #1e293b;
+}
     .category-filter-btn:hover {
       background: #cbd5e1;
     }
@@ -389,29 +412,13 @@
     }
 
     @media (max-width: 768px) {
-      .form-row {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: stretch;
-      }
-
-      .category-tabs {
-        gap: 0.25rem;
-      }
-
-      .category-tab {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.875rem;
-      }
-
-      .question-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-      }
-
       .question-category {
         margin: 0;
+      }
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
       }
     }
     .header-actions {
@@ -607,7 +614,7 @@ header{
 </header>
   
   <% if (role === 'admin') { %>
-  <main>
+  <main class="container">
     <!-- Edit Company Name Section -->
     <div class="admin-section">
       <div class="section-header ">
@@ -615,110 +622,78 @@ header{
           Edit Form Name
         </h2>
       </div>
-      <div class="form-row">
-        <!-- <div class="form-control"> -->
+
           <input type="text" id="companyAdminNameEdit" value="<%= company.name %>" />
         <!-- </div> -->
         <button type="button" id="saveCompanyAdminName" class="button-59">Save</button>
       </div>
     </div>
 
-    <!-- Add Category Section -->
-    <div class="admin-section mt-10">
-      <div class="section-header">
-        <h2 class="section-title">
-          <!-- <span>📁</span> -->
-          Add Category
-        </h2>
-        <button class="button-8" onclick="window.location.href='/admin/edit-category?company=<%= company._id %>'">Edit Categories</button>
+    <div class="row">
+      <div class="col-md-6">
+        <!-- Add Category Section -->
+        <div class="admin-section mt-10">
+          <div class="section-header">
+            <h2 class="section-title">
+              <!-- <span>📁</span> -->
+              Add Category
+            </h2>
+            <button class="button-8" onclick="window.location.href='/admin/edit-category?company=<%= company._id %>'">Edit Categories</button>
 
-      </div>
-      
-      <form method="POST" action="/admin/category">
-        <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
-        <div class="form-row">
-          <!-- <div class="form-control"> -->
-            <!-- <label for="category-name">Category Name</label> -->
-            <input type="text" id="category-name" name="name" placeholder="Enter category name..." required />
-          <!-- </div> -->
-          <button type="submit" class="button-59">Add Category</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Category Selection & Add Question Section -->
-    <div class="admin-section">
-      <div class="section-header">
-        <h2 class="section-title">
-          <!-- <span>❓</span> -->
-          Add Questions
-        </h2>
-      </div>
-      
-      <!-- Category Selector -->
-      <div class="category-selector">
-        <h3>Select Active Category</h3>
-        <% if (categories && categories.length > 0) { %>
-          <div class="category-tabs" id="categoryTabContainer">
-  <% categories.forEach(function(cat) { %>
-    <div class="category-tab-wrapper" draggable="true" data-id="<%= cat._id %>">
-      <div class="category-tab" data-category-id="<%= cat._id %>" data-category-name="<%= cat.name %>">
-        <span class="status-indicator status-active"></span>
-        <%= cat.name %>
-      </div>
-      <button class="btn-danger btn-delete-cat" data-id="<%= cat._id %>">X</button>
-    </div>
-  <% }); %>
-</div>  
-
-        <% } else { %>
-          <div class="empty-state">
-            <h3>No Categories Available</h3>
-            <p>Please add a category first before creating questions.</p>
           </div>
-        <% } %>
-        
-        <div class="selected-category" id="selected-category">
-          <div class="selected-category-text">
-            <span>✅</span>
-            <span>Adding questions to: <strong id="selected-category-name"></strong></span>
-          </div>
+          
+          <form method="POST" action="/admin/category">
+            <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
+            <div class="form-row">
+
+                <!-- <label for="category-name">Category Name</label> -->
+                <input type="text" id="category-name" name="name" placeholder="Enter category name..." required />
+              <!-- </div> -->
+              <button type="submit" class="button-59">Add Category</button>
+            </div>
+          </form>
         </div>
       </div>
-      
-      <!-- Question Form -->
-      <form method="POST" action="/admin/question" id="question-form">
-         <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
-        <div class="form-group">
-          <label for="single-question-text">Add Single Question</label>
-          <textarea id="single-question-text" name="single_text" placeholder="Enter your question..." rows="1"></textarea>
+      <div class="col-md-6">
+        <!-- Category Selection & Add Question Section -->
+        <div class="admin-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <!-- <span>❓</span> -->
+              Add Questions
+            </h2>
+          </div>
+          
+          <!-- Question Form -->
+          <form method="POST" action="/admin/question" id="question-form">
+             <input type="hidden" name="companyId" value="<%= company._id %>" />  <!-- ✅ Add this -->
+            <div class="form-group">
+              <label for="single-question-text">Add Single Question</label>
+              <textarea id="single-question-text" name="single_text" placeholder="Enter your question..." rows="1"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="question-text">Add Multiple Questions (Comma Separated)</label>
+              <textarea id="question-text" name="text" placeholder="Enter your questions, separated by commas..." rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="category-select">Select Category</label>
+              <select id="category-select" name="category" required>
+                <option value="">Choose a category...</option>
+                <% if (categories && categories.length > 0) { %>
+                  <% categories.forEach(function(cat) { %>
+                    <option value="<%= cat._id %>"><%= cat.name %></option>
+                  <% }); %>
+                <% } %>
+              </select>
+            </div>
+            
+            <button type="submit" id="add-question-btn" class="button-59">
+              Add Question
+            </button>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="question-text">Add Multiple Questions (Comma Separated)</label>
-          <textarea id="question-text" name="text" placeholder="Enter your questions, separated by commas..." rows="3"></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label for="category-select">Select Category</label>
-          <select id="category-select" name="category" required>
-            <option value="">Choose a category...</option>
-            <% if (categories && categories.length > 0) { %>
-              <% categories.forEach(function(cat) { %>
-                <option value="<%= cat._id %>"><%= cat.name %></option>
-              <% }); %>
-            <% } %>
-          </select>
-        </div>
-        
-        <div class="new-category-input" style = "display:none">
-          <label for="new-category">Or Add New Category</label>
-          <input type="text" id="new-category" name="newCategory" placeholder="Enter new category name..." />
-        </div>
-        
-        <button type="submit" id="add-question-btn" class="button-59">
-          Add Question
-        </button>
-      </form>
+      </div>
     </div>
 
     <!-- Questions List -->
@@ -730,15 +705,13 @@ header{
   </h2>
 </div>
 
-<div style="margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
-  <% categories.forEach(function(cat) { %>
-    <button class="category-filter-btn" data-category-id="<%= cat._id %>">
-      <%= cat.name %>
-    </button>
-  <% }) %>
-  <button class="category-filter-btn" active-filter data-category-id="all">
-    Show All
-  </button>
+<div style="margin-bottom: 1rem;">
+  <select id="category-filter-select" class="form-select" style="width: auto; display: inline-block;">
+    <option value="all">Show All</option>
+    <% categories.forEach(function(cat) { %>
+      <option value="<%= cat._id %>"><%= cat.name %></option>
+    <% }) %>
+  </select>
 </div>
 
       
@@ -755,7 +728,7 @@ header{
   <%= q.category ? q.category.name : 'No Category' %>
 </span>
 
-<div style="display:flex; gap: 0.5rem;">
+<div style="display:flex; gap: 0.5rem; justify-content: space-between;">
   <a href="/admin/edit-question/<%= q._id %>" class="button btn-edit-qsn">Edit</a>
 
   <form method="POST" action="/admin/question/delete/<%= q._id %>">
@@ -782,137 +755,18 @@ header{
 
   <script>
     // Category selection functionality
-    const categoryTabs = document.querySelectorAll('.category-tab');
-    const selectedCategoryDiv = document.getElementById('selected-category');
-    const selectedCategoryNameSpan = document.getElementById('selected-category-name');
     const categorySelect = document.getElementById('category-select');
     const addQuestionBtn = document.getElementById('add-question-btn');
     const questionForm = document.getElementById('question-form');
     const singleQuestionTextInput = document.getElementById('single-question-text');
     const questionTextInput = document.getElementById('question-text');
-    const newCategoryInput = document.getElementById('new-category');
-    const tabList = document.getElementById('categoryTabContainer');
-    let draggedTab = null;
-
-    document.querySelectorAll('.category-tab-wrapper').forEach(tab => {
-  tab.addEventListener('dragstart', e => {
-    draggedTab = tab;
-    tab.classList.add('dragging');
-    tab.style.opacity = '0.5';
-  });
-
-  tab.addEventListener('dragend', e => {
-    tab.classList.remove('dragging');
-    tab.style.opacity = '1';
-    draggedTab = null;
-
-    // Optional: send reordered list to server
-    const orderedIds = [...tabList.querySelectorAll('.category-tab-wrapper')].map(el => el.dataset.id);
-    fetch('/admin/category/reorder', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ order: orderedIds })
-    }).then(res => res.json())
-      .then(data => {
-        if (!data.success) alert('Failed to update category order.');
-      });
-  });
-
-  tab.addEventListener('dragover', e => {
-    e.preventDefault();
-    const afterElement = getDragAfterElement(tabList, e.clientX);
-    if (afterElement == null) {
-      tabList.appendChild(draggedTab);
-    } else {
-      tabList.insertBefore(draggedTab, afterElement);
-    }
-  });
-});
-
-function getDragAfterElement(container, x) {
-  const draggableElements = [...container.querySelectorAll('.category-tab-wrapper:not(.dragging)')];
-
-  return draggableElements.reduce((closest, child) => {
-    const box = child.getBoundingClientRect();
-    const offset = x - (box.left + box.width / 2);
-    if (offset < 0 && offset > closest.offset) {
-      return { offset, element: child };
-    } else {
-      return closest;
-    }
-  }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-    // Category tab click handlers
-    categoryTabs.forEach(tab => {
-      tab.addEventListener('click', function() {
-        const categoryId = this.dataset.categoryId;
-        const categoryName = this.dataset.categoryName;
-        
-        // Update visual selection
-        document.querySelectorAll('.category-tab-wrapper').forEach(wrapper => wrapper.classList.remove('active')); // Remove from all wrappers
-        this.closest('.category-tab-wrapper').classList.add('active'); // Add to the clicked wrapper
-        
-        // Update form
-        categorySelect.value = categoryId;
-        selectedCategoryDiv.classList.add('show');
-        selectedCategoryNameSpan.textContent = categoryName;
-        
-        // Focus on question input
-        setTimeout(() => {
-          questionTextInput.focus();
-        }, 200);
-      });
-    });
-    
-    // Category select dropdown handler
-    categorySelect.addEventListener('change', function() {
-      const selectedOption = this.options[this.selectedIndex];
-      if (selectedOption.value) {
-        const categoryName = selectedOption.text;
-        selectedCategoryDiv.classList.add('show');
-        selectedCategoryNameSpan.textContent = categoryName;
-        
-        // Highlight corresponding tab
-        categoryTabs.forEach(tab => {
-          tab.classList.remove('active');
-          if (tab.dataset.categoryId === selectedOption.value) {
-            tab.classList.add('active');
-          }
-        });
-      } else {
-        selectedCategoryDiv.classList.remove('show');
-        categoryTabs.forEach(t => t.classList.remove('active'));
-      }
-    });
-    
-    // New category input handler
-    newCategoryInput.addEventListener('input', function() {
-      const hasValue = !!this.value.trim();
-      categorySelect.disabled = hasValue;
-      
-      if (hasValue) {
-        // Clear category selection when typing new category
-        categorySelect.value = '';
-        selectedCategoryDiv.classList.remove('show');
-        categoryTabs.forEach(t => t.classList.remove('active'));
-      }
-    });
-    
-    // Re-enable category select when new category is cleared
-    newCategoryInput.addEventListener('blur', function() {
-      if (!this.value.trim()) {
-        categorySelect.disabled = false;
-      }
-    });
-    
     // Form submission handler
     questionForm.addEventListener('submit', function(e) {
       const hasSelectedCategory = categorySelect.value;
-      const hasNewCategory = newCategoryInput.value.trim();
       
-      if (!hasSelectedCategory && !hasNewCategory) {
+      if (!hasSelectedCategory) {
         e.preventDefault();
-        alert('Please select a category or enter a new category name!');
+        alert('Please select a category!');
         return;
       }
     });
@@ -941,11 +795,8 @@ function getDragAfterElement(container, x) {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('success')) {
         questionTextInput.value = '';
-        newCategoryInput.value = '';
         categorySelect.value = '';
         categorySelect.disabled = false;
-        selectedCategoryDiv.classList.remove('show');
-        categoryTabs.forEach(t => t.classList.remove('active'));
       }
     });
    
@@ -976,39 +827,18 @@ function getDragAfterElement(container, x) {
       }
     });
   });
-// Filter questions by category
-// document.querySelectorAll('.category-filter-btn').forEach(btn => {
-//   btn.addEventListener('click', () => {
-//     const selected = btn.getAttribute('data-category-id');
-//     document.querySelectorAll('.question-item').forEach(item => {
-//       const itemCat = item.getAttribute('data-category-id');
-//       if (selected === 'all' || selected === itemCat) {
-//         item.style.display = 'flex';
-//       } else {
-//         item.style.display = 'none';
-//       }
-//     });
-//   });
-// });
-document.querySelectorAll('.category-filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const selected = btn.getAttribute('data-category-id');
+// Filter questions by category dropdown
+document.getElementById('category-filter-select').addEventListener('change', function() {
+  const selected = this.value;
 
-    // Apply filtering
-    document.querySelectorAll('.question-item').forEach(item => {
-      const itemCat = item.getAttribute('data-category-id');
-      if (selected === 'all' || selected === itemCat) {
-        item.style.display = 'flex';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-
-    // Update active styles
-    document.querySelectorAll('.category-filter-btn').forEach(b => {
-      b.classList.remove('active-filter');
-    });
-    btn.classList.add('active-filter');
+  // Apply filtering
+  document.querySelectorAll('.question-item').forEach(item => {
+    const itemCat = item.getAttribute('data-category-id');
+    if (selected === 'all' || selected === itemCat) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
   });
 });
 

@@ -214,6 +214,7 @@
     }
     
     .category-score-badge {
+      margin-left: auto;
       background: #dbeafe;
       color: #1d4ed8;
       font-weight: 700;

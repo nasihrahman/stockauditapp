@@ -22,8 +22,16 @@ const Company = require('../models/company');
 
 router.post('/admin/category', async (req, res) => {
   const { name, companyId } = req.body;
-  await Category.create({ name, company: companyId });
-  res.redirect(`/admin?company=${companyId}`);
+  try {
+    await Category.create({ name, company: companyId });
+    res.redirect(`/admin?company=${companyId}`);
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.send(`<script>alert("Category '${name}' already exists!"); window.location.href = "/admin?company=${companyId}";</script>`);
+    }
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 
