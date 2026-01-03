@@ -161,9 +161,17 @@ router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, 
 router.post('/admin/category/reorder', async (req, res) => {
   const { order } = req.body; // Expects: [ "catId1", "catId2", ... ]
   try {
-    for (let i = 0; i < order.length; i++) {
-      await Category.findByIdAndUpdate(order[i], { position: i });
+    const bulkOps = order.map((id, index) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $set: { position: index } }
+      }
+    }));
+
+    if (bulkOps.length > 0) {
+      await Category.bulkWrite(bulkOps);
     }
+
     res.json({ success: true });
   } catch (err) {
     console.error(err);

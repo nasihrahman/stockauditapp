@@ -154,15 +154,18 @@ router.post('/edit-category/:id', isAdmin, async (req, res) => {
 router.post('/question/reorder', isAdmin, async (req, res) => {
   try {
     const { order } = req.body;
-    // console.log('Received reorder request. Order array:', order);
-    for (let i = 0; i < order.length; i++) {
-      try {
-        const updatedQuestion = await Question.findByIdAndUpdate(order[i], { order: i }, { new: true });
-        // console.log(`Updated question ${order[i]} with order ${i}. Result:`, updatedQuestion);
-      } catch (updateErr) {
-        console.error(`Error updating question ${order[i]}:`, updateErr);
+    // Use bulkWrite for better performance
+    const bulkOps = order.map((id, index) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $set: { order: index } }
       }
+    }));
+
+    if (bulkOps.length > 0) {
+      await Question.bulkWrite(bulkOps);
     }
+    
     res.json({ success: true });
   } catch (err) {
     console.error('Error reordering questions:', err);
