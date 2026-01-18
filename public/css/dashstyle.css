@@ -377,12 +377,17 @@ footer button:hover {
   
   .action-buttons {
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
   }
   
   .company-list button {
     flex: 1;
-    min-width: 70px;
+    min-width: 0;
+    padding: 6px 4px;
+    white-space: nowrap;
+    font-size: 0.75rem;
   }
   
   
