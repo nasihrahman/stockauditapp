@@ -164,8 +164,8 @@ function generatePdfMakeDocDefinition(data) {
       },
       {
         stack: [
-          { text: `Outlet Name: ${data.info.company || 'N/A'}` },
-          { text: `Location: ${data.info.location || 'N/A'}` },
+          { text: `Company Name: ${data.info.company || 'N/A'}` },
+          { text: `Outlet: ${data.info.location || 'N/A'}` },
           { text: `Audit Date: ${data.info.date || 'N/A'}` },
           { text: `Auditor: ${data.info.inspector || 'N/A'}` }
         ],
@@ -186,8 +186,8 @@ function generatePdfMakeDocDefinition(data) {
             table: {
               widths: [150, '*'],
               body: [
-                ['Outlet Name', data.info.company],
-                
+                ['Company Name', data.info.company],
+                ['Outlet', data.info.location],
                 ['Branch', data.info.branch],
                 ['Audit Date', data.info.date],
                 ['Manager On Duty',data.info.manager],
