@@ -187,7 +187,7 @@ function generatePdfMakeDocDefinition(data) {
               widths: [150, '*'],
               body: [
                 ['Outlet Name', data.info.company],
-                ['Location', data.info.location],
+                
                 ['Branch', data.info.branch],
                 ['Audit Date', data.info.date],
                 ['Manager On Duty',data.info.manager],
