@@ -15,6 +15,14 @@ body {
 }
 
 /* Header styles */
+.navbar {
+  display: none;
+}
+
+.bg-dark-custom {
+  background: rgb(23, 40, 50);
+}
+
 header {
   background: rgb(23, 40, 50);
   color: white;
@@ -321,25 +329,28 @@ footer button:hover {
 
 /* Mobile responsive design */
 @media (max-width: 768px) {
+  .navbar {
+    display: block;
+  }
+  
+  header {
+    display: none !important;
+  }
+
   .dashboard {
     grid-template-columns: 1fr;
     /* padding: 1rem; */
     gap: 1.5rem;
   }
   
-  header {
-    padding: 1.5rem 1rem;
-    /* min-height: 100px; */
-  }
-  
-  header h1 {
-    font-size: 2rem;
-  }
-  
   .logo-placeholder img{
     /* left: 1rem; */
-    width: 250px;
+    width: 140px;
     height: auto;
+  }
+  
+  .company-list {
+    padding: 0;
   }
   
   .company-list li {
