@@ -1,3 +1,4 @@
+const { font } = require("pdfkit");
 
 // Helper functions (same logic as before)
 function getAnswerColor(answer) {
@@ -38,6 +39,162 @@ function generatePdfMakeDocDefinition(data) {
   const totalScoreText = data.totalScoreDetails;
   const grade = getGrade(totalScoreText);
   const percent = totalScoreText.match(/\((\d+)%\)/)?.[1] || "0";
+
+  // --- START GRAPH LOGIC ---
+  const graphWidth = 450;
+  const barHeight = 22; // Slightly taller to fit text
+  
+  // 1. Response Analysis (Yes vs No)
+  const responseGraphContent = [
+    { text: 'Response Analysis (Yes vs No)', style: 'sectionTitle', alignment: 'center', margin: [0, 15, 0, 10] }
+  ];
+
+  // 2. Severity Analysis (Major vs Minor)
+  const severityGraphContent = [
+    { text: 'Non-Compliance Severity Analysis (Major vs Minor)', style: 'sectionTitle', alignment: 'center', margin: [0, 30, 0, 10],  }
+  ];
+
+  const categories = [...new Set(data.questions.map(q => q.category))];
+
+  categories.forEach(catName => {
+    const catQuestions = data.questions.filter(q => q.category === catName);
+    const applicableQuestions = catQuestions.filter(q => q.answer !== 'NA' && q.answer !== 'NOT ANSWERED');
+    
+    // Response Counts
+    const yesCount = applicableQuestions.filter(q => q.answer === 'YES').length;
+    const noCount = applicableQuestions.filter(q => q.answer === 'NO').length;
+    const totalResp = yesCount + noCount;
+
+    // Severity Counts
+    const majorCount = catQuestions.filter(q => q.severity === 'major').length;
+    const minorCount = catQuestions.filter(q => q.severity === 'minor').length;
+    const totalSeverity = majorCount + minorCount;
+
+    // Response Graph Row
+    if (totalResp > 0) {
+      const yesWidth = (yesCount / totalResp) * graphWidth;
+      const noWidth = (noCount / totalResp) * graphWidth;
+      
+      const widths = [];
+      const bodyCells = [];
+      
+      if (yesCount > 0) {
+        widths.push(yesWidth);
+        bodyCells.push({ 
+          text: `${yesCount} (${Math.round(yesCount/totalResp*100)}%)`, 
+          fillColor: '#22c55e', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
+        });
+      }
+      
+      if (noCount > 0) {
+        widths.push(noWidth);
+        bodyCells.push({ 
+          text: `${noCount} (${Math.round(noCount/totalResp*100)}%)`, 
+          fillColor: '#ef4444', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
+        });
+      }
+
+      responseGraphContent.push({
+        stack: [
+          { text: catName, fontSize: 9, bold: true, margin: [0, 5, 0, 2], font: 'Helvetica' },
+          {
+            table: {
+              widths: widths,
+              body: [bodyCells]
+            },
+            layout: 'noBorders'
+          }
+        ],
+        margin: [45, 0, 45, 2]
+      });
+    }
+
+    // Severity Graph Row
+    if (totalSeverity > 0) {
+      const majorWidth = (majorCount / totalSeverity) * graphWidth;
+      const minorWidth = (minorCount / totalSeverity) * graphWidth;
+      
+      const widths = [];
+      const bodyCells = [];
+
+      if (majorCount > 0) {
+        widths.push(majorWidth);
+        bodyCells.push({ 
+          text: `Major: ${majorCount}`, 
+          fillColor: '#b91c1c', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
+        });
+      }
+
+      if (minorCount > 0) {
+        widths.push(minorWidth);
+        bodyCells.push({ 
+          text: `Minor: ${minorCount}`, 
+          fillColor: '#fbbf24', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
+        });
+      }
+
+      severityGraphContent.push({
+        stack: [
+          { text: catName, fontSize: 9, bold: true, margin: [0, 5, 0, 2], font: 'Helvetica' },
+          {
+            table: {
+              widths: widths,
+              body: [bodyCells]
+            },
+            layout: 'noBorders'
+          }
+        ],
+        margin: [45, 0, 45, 2]
+      });
+    } else if (noCount > 0) {
+        severityGraphContent.push({
+            stack: [
+              { text: catName, fontSize: 9, bold: true, margin: [0, 5, 0, 2] },
+              { text: 'Non-compliance detected but severity not specified.', fontSize: 8, italics: true, color: '#6b7280', margin: [0, 0, 0, 5] }
+            ],
+            margin: [45, 0, 45, 0]
+        });
+    } else if (totalResp > 0) {
+        severityGraphContent.push({
+            stack: [
+              { text: catName, fontSize: 9, bold: true, margin: [0, 5, 0, 2] },
+              { text: 'No non-compliance issues recorded.', fontSize: 8, color: '#10b981', margin: [0, 0, 0, 5] }
+            ],
+            margin: [45, 0, 45, 0]
+        });
+    }
+  });
+
+  // Legend Styling Fix
+  const legendResponse = {
+    columns: [
+      { width: '*', text: '' },
+      { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#22c55e' }] },
+      { width: 'auto', text: 'Yes', fontSize: 8, margin: [5, 5, 15, 0] },
+      { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#ef4444' }] },
+      { width: 'auto', text: 'No', fontSize: 8, margin: [5, 5, 0, 0] },
+      { width: '*', text: '' }
+    ],
+    margin: [0, 8, 0, 0]
+  };
+
+  const legendSeverity = {
+    columns: [
+      { width: '*', text: '' },
+      { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#b91c1c' }] },
+      { width: 'auto', text: 'Major', fontSize: 8, margin: [5, 5, 15, 0] },
+      { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#fbbf24' }] },
+      { width: 'auto', text: 'Minor', fontSize: 8, margin: [ 5, 5, 0, 0] },
+      { width: '*', text: '' }
+    ],
+    margin: [0, 8, 0, 0]
+  };
+
+  responseGraphContent.push(legendResponse);
+  severityGraphContent.push(legendSeverity);
+
+  const allGraphsContent = [...responseGraphContent, ...severityGraphContent];
+  // --- END GRAPH LOGIC ---
 
   // Category summary table
   const categorySummaryTable = [
@@ -242,6 +399,7 @@ function generatePdfMakeDocDefinition(data) {
         ],
         columnGap: 0
       },
+      ...allGraphsContent,
       { text: '', pageBreak: 'after' },
 
       // QUESTIONS BY CATEGORY
@@ -253,22 +411,22 @@ function generatePdfMakeDocDefinition(data) {
       coverSubtitle: { fontSize: 16, color: '#374151', alignment: 'center' },
       coverGrade: { fontSize: 28, bold: true, alignment: 'center' },
       coverInfo: { fontSize: 14, color: '#6b7280', alignment: 'center' },
-      sectionTitle: { fontSize: 24, bold: true, color: '#1e293b', margin: [0, 0, 0, 10] },
+      sectionTitle: { fontSize: 16, bold: true, color: '#1e293b', margin: [0, 0, 0, 5] },
       tableHeader: { fillColor: '#1e293b', color: 'white', bold: true, fontSize: 14, alignment: 'center' },
       tableCell: { fontSize: 12, color: '#374151', alignment: 'center' },
-      categoryHeader: { fontSize: 18, bold: true, color: 'black', lineHeight: 1.3 },
+      categoryHeader: { fontSize: 14, bold: true, color: 'black', lineHeight: 1.3 },
       categoryHeaderBg: {
         fillColor: '#1e293b',
         color: '#1e293b',
         margin: [0, 10, 0, 10],
         alignment: 'left',
-        fontSize: 18,
+        fontSize: 14,
         bold: true,
         lineHeight: 1.3,
         padding: 10
       },
-      categoryHeaderTable: { fontSize: 16, bold: true, color: 'white', fillColor: '#1e293b', margin: [0, 0, 0, 0], alignment: 'left', lineHeight: 1.3, padding: 10 },
-      categoryScore: { fontSize: 14, color: 'black', margin: [0, 0, 0, 0] },
+      categoryHeaderTable: { fontSize: 14, bold: true, color: 'white', fillColor: '#1e293b', margin: [0, 0, 0, 0], alignment: 'left', lineHeight: 1.3, padding: 10 },
+      categoryScore: { fontSize: 12, color: 'black', margin: [0, 0, 0, 0] },
       questionText: { fontSize: 11, color: '#374151', margin: [0, 0, 0, 2] },
       questionComment: { fontSize: 10, italics: true, color: '#6b7280', margin: [0, 2, 0, 0] },
       answerText: { fontSize: 12, bold: true, alignment: 'center' },

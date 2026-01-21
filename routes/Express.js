@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const PdfPrinter = require('pdfmake');
 const { generatePdfMakeDocDefinition } = require('./pdf');
 
@@ -64,6 +65,18 @@ router.post('/generate-pdf', async (req, res) => {
 
     // Set up fonts for pdfmake
     const fonts = {
+      // Poppins: {
+      //   normal: path.join(__dirname, '../public/fonts/Poppins-Regular.ttf'),
+      //   bold: path.join(__dirname, '../public/fonts/Poppins-Bold.ttf'),
+      //   italics: path.join(__dirname, '../public/fonts/Poppins-Regular.ttf'), // Use regular if italics not available
+      //   bolditalics: path.join(__dirname, '../public/fonts/Poppins-Bold.ttf')
+      // },
+      Poppins: {
+        normal: 'Poppins',
+        bold: 'Poppins-Bold',
+        italics: 'Poppins-Italic',
+        extrabold: 'Poppins-ExtraBold',
+      },
       Helvetica: {
         normal: 'Helvetica',
         bold: 'Helvetica-Bold',

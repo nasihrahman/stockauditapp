@@ -181,6 +181,18 @@
                             <label for="<%= q._id %>-na">N/A</label>
                           </div>
                         </div>
+                        <div class="no-options" id="no-options-<%= q._id %>" style="display: none; margin-top: 10px; padding-left: 20px;">
+                          <div class="radio-group" style="gap: 1.5rem;">
+                            <div class="radio-option">
+                              <input type="radio" name="severity-<%= q._id %>" value="major" id="<%= q._id %>-major">
+                              <label for="<%= q._id %>-major" style="color: #dc3545; font-weight: bold;">Major</label>
+                            </div>
+                            <div class="radio-option">
+                              <input type="radio" name="severity-<%= q._id %>" value="minor" id="<%= q._id %>-minor">
+                              <label for="<%= q._id %>-minor" style="color: #ffc107; font-weight: bold;">Minor</label>
+                            </div>
+                          </div>
+                        </div>
                         <!-- New wrapper for Add Image + Score Badge -->
                           <div class="question-footer">
                             <!-- <label class="add-image-label">

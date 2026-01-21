@@ -157,12 +157,17 @@ async function prepareAuditData() {
         const categoryCard = item.closest('.category-card');
         const categoryName = categoryCard.querySelector('.category-title').childNodes[0].textContent.trim();
         
-        // Get selected answer
+        // Get selected answer and severity
         let selectedAnswer = 'Not Answered';
+        let severity = null;
         const radios = item.querySelectorAll('input[type="radio"]');
         radios.forEach(radio => {
             if (radio.checked) {
-                selectedAnswer = radio.value.toUpperCase();
+                if (radio.name.startsWith('response-')) {
+                    selectedAnswer = radio.value.toUpperCase();
+                } else if (radio.name.startsWith('severity-')) {
+                    severity = radio.value;
+                }
             }
         });
         
@@ -181,6 +186,7 @@ async function prepareAuditData() {
             category: categoryName,
             question: questionText,
             answer: selectedAnswer,
+            severity: severity,
             comment: comment,
             images: images
         });
@@ -210,9 +216,21 @@ async function prepareAuditData() {
                 const radio = document.querySelector(`input[type="radio"][name='response-${ans.question}'][value='${ans.response}']`);
                 if (radio) {
                   radio.checked = true;
+                  
+                  // Show no-options if prefilled value is 'no'
+                  if (ans.response === 'no') {
+                    const noOptions = document.getElementById(`no-options-${ans.question}`);
+                    if (noOptions) noOptions.style.display = 'block';
+                  }
+
                   // Trigger change event to update score UI
                   radio.dispatchEvent(new Event('change', { bubbles: true }));
                 }
+              }
+              // Set severity
+              if (ans.severity) {
+                const sevRadio = document.querySelector(`input[type="radio"][name='severity-${ans.question}'][value='${ans.severity}']`);
+                if (sevRadio) sevRadio.checked = true;
               }
               // Set comment
               const comment = document.querySelector(`.question-item[data-question-id='${ans.question}'] .comment-input`);
@@ -405,12 +423,30 @@ async function prepareAuditData() {
     document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
       radio.addEventListener('change', function() {
         if (isPrefilling) return;
-        updateScores();
+        
         const questionItem = this.closest('.question-item');
         const questionId = questionItem.getAttribute('data-question-id');
-        const response = this.value;
+        const noOptions = document.getElementById(`no-options-${questionId}`);
+        
+        // Handle showing/hiding Major/Minor options
+        if (this.name === `response-${questionId}`) {
+          if (this.value === 'no') {
+            if (noOptions) noOptions.style.display = 'block';
+          } else {
+            if (noOptions) {
+              noOptions.style.display = 'none';
+              // Uncheck major/minor if switched away from 'No'
+              noOptions.querySelectorAll('input').forEach(r => r.checked = false);
+            }
+          }
+        }
+
+        updateScores();
+        const response = questionItem.querySelector(`input[name="response-${questionId}"]:checked`)?.value;
+        const severity = questionItem.querySelector(`input[name="severity-${questionId}"]:checked`)?.value;
         const comment = questionItem.querySelector('.comment-input').value;
-        saveAnswer(questionId, { questionId, response, comment });
+        
+        saveAnswer(questionId, { questionId, response, severity, comment });
       });
     });
 

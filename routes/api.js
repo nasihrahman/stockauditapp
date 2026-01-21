@@ -45,7 +45,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
   // }
 
   try {
-    const { questionId, response, comment, companyId } = req.body;
+    const { questionId, response, severity, comment, companyId } = req.body;
 
     
     if (!questionId || !questionId.match(/^[a-fA-F0-9]{24}$/)) {
@@ -60,6 +60,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
     let answer = await Answer.findOne({ question: questionId, company: companyId });
     if (answer) {
       if (typeof response !== 'undefined') answer.response = response;
+      if (typeof severity !== 'undefined') answer.severity = severity;
       // Always set comment, even if empty string
       if (typeof comment !== 'undefined') answer.comment = comment;
       if (images.length > 0) {
@@ -73,6 +74,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
       answer = await Answer.create({
         question: questionId,
         response,
+        severity,
         // Always set comment, even if empty string
         comment: typeof comment !== 'undefined' ? comment : '',
         images,

@@ -31,6 +31,7 @@ const AnswerSchema = new mongoose.Schema({
   company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
   question: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
   response: { type: String, enum: ['yes', 'no', 'na'] },
+  severity: { type: String, enum: ['major', 'minor', null] },
   comment: String,
   images: [String],
   createdAt: { type: Date, default: Date.now }
