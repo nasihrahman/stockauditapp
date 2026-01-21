@@ -51,7 +51,7 @@ function generatePdfMakeDocDefinition(data) {
 
   // 2. Severity Analysis (Major vs Minor)
   const severityGraphContent = [
-    { text: 'Non-Compliance Severity Analysis (Major vs Minor)', style: 'sectionTitle', alignment: 'center', margin: [0, 30, 0, 10],  }
+    { text: 'Non-Compliance Severity Analysis (Major vs Minor)', style: 'sectionTitle', alignment: 'center', margin: [0, 30, 0, 10] }
   ];
 
   const categories = [...new Set(data.questions.map(q => q.category))];

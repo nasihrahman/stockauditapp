@@ -71,12 +71,12 @@ router.post('/generate-pdf', async (req, res) => {
       //   italics: path.join(__dirname, '../public/fonts/Poppins-Regular.ttf'), // Use regular if italics not available
       //   bolditalics: path.join(__dirname, '../public/fonts/Poppins-Bold.ttf')
       // },
-      Poppins: {
-        normal: 'Poppins',
-        bold: 'Poppins-Bold',
-        italics: 'Poppins-Italic',
-        extrabold: 'Poppins-ExtraBold',
-      },
+      // // Poppins: {
+      // //   normal: 'Poppins',
+      // //   bold: 'Poppins-Bold',
+      // //   italics: 'Poppins-Italic',
+      // //   extrabold: 'Poppins-ExtraBold',
+      // // },
       Helvetica: {
         normal: 'Helvetica',
         bold: 'Helvetica-Bold',
