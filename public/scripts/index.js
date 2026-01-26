@@ -1,5 +1,5 @@
 function getCompanyIdFromUrl() {
-  return window.location.pathname.split('/').pop(); // gets last segment from /audit/:companyId
+  return document.body.dataset.companyId || window.location.pathname.split('/').pop(); // gets last segment from /audit/:companyId
 }
 
 function openAudit(id) {
@@ -457,15 +457,16 @@ async function prepareAuditData() {
         clearTimeout(timeout);
         const questionItem = this.closest('.question-item');
         const questionId = questionItem.getAttribute('data-question-id');
-        const radios = questionItem.querySelectorAll('input[type="radio"]');
-        let response = '';
-        radios.forEach(r => { if (r.checked) response = r.value; });
+        
+        const response = questionItem.querySelector(`input[name="response-${questionId}"]:checked`)?.value;
+        const severity = questionItem.querySelector(`input[name="severity-${questionId}"]:checked`)?.value;
+        
         const comment = this.value;
         // 🚫 Prevent overwriting comment with empty string unless explicitly cleared
         if (isPrefilling) return;
         
         timeout = setTimeout(() => {
-          saveAnswer(questionId, { questionId, response: response || undefined, comment });
+          saveAnswer(questionId, { questionId, response: response || undefined, severity, comment });
         }, 500);
       });
       // Replace Add Comment button with Clear Comment button logic
@@ -494,11 +495,12 @@ async function prepareAuditData() {
         input.value = '';
         const questionItem = input.closest('.question-item');
         const questionId = questionItem.getAttribute('data-question-id');
-        const radios = questionItem.querySelectorAll('input[type="radio"]');
-        let response = '';
-        radios.forEach(r => { if (r.checked) response = r.value; });
+        
+        const response = questionItem.querySelector(`input[name="response-${questionId}"]:checked`)?.value;
+        const severity = questionItem.querySelector(`input[name="severity-${questionId}"]:checked`)?.value;
+        
         // Explicitly clear comment in backend
-        saveAnswer(questionId, { questionId, response: response || undefined, comment: '' });
+        saveAnswer(questionId, { questionId, response: response || undefined, severity, comment: '' });
       });
     });
 
@@ -507,14 +509,16 @@ async function prepareAuditData() {
       input.addEventListener('change', function() {
         const questionItem = this.closest('.question-item');
         const questionId = questionItem.getAttribute('data-question-id');
-        const radios = questionItem.querySelectorAll('input[type="radio"]');
-        let response = '';
-        radios.forEach(r => { if (r.checked) response = r.value; });
+        
+        const response = questionItem.querySelector(`input[name="response-${questionId}"]:checked`)?.value;
+        const severity = questionItem.querySelector(`input[name="severity-${questionId}"]:checked`)?.value;
+
         const comment = questionItem.querySelector('.comment-input').value;
         if (this.files && this.files.length) {
           const formData = new FormData();
           formData.append('questionId', questionId);
           formData.append('response', response);
+          formData.append('severity', severity);
           formData.append('comment', comment);
           formData.append('images', this.files[0]);
           formData.append('companyId', getCompanyIdFromUrl()); 

@@ -56,7 +56,7 @@ router.post('/answer', upload.array('images', 5), async (req, res) => {
     if (!questionId || !questionId.match(/^[a-fA-F0-9]{24}$/)) {
       return res.status(400).json({ success: false, error: 'Invalid questionId' });
     }
-
+    //  let images = req.files ? req.files.map(f => f.path) : [];
     let images = [];
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
