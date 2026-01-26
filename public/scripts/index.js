@@ -769,9 +769,10 @@ document.getElementById('captureCameraBtn').addEventListener('click', () => {
 document.getElementById('hiddenImageInput').addEventListener('change', function () {
   if (this.files && this.files[0]) {
     const questionItem = document.querySelector(`.question-item[data-question-id="${currentQuestionId}"]`);
-    const radios = questionItem.querySelectorAll('input[type="radio"]');
-    let response = '';
-    radios.forEach(r => { if (r.checked) response = r.value; });
+    
+    // Fix: Select specifically the response radio group
+    const responseRadio = questionItem.querySelector(`input[name="response-${currentQuestionId}"]:checked`);
+    let response = responseRadio ? responseRadio.value : '';
 
     if (!response) {
       const naRadio = questionItem.querySelector(`input[value="na"]`);
@@ -780,12 +781,17 @@ document.getElementById('hiddenImageInput').addEventListener('change', function 
         response = 'na';
       }
     }
+    
+    // Capture severity if it exists
+    const severityRadio = questionItem.querySelector(`input[name="severity-${currentQuestionId}"]:checked`);
+    const severity = severityRadio ? severityRadio.value : '';
 
     const comment = questionItem.querySelector('.comment-input').value;
     const formData = new FormData();
     formData.append('questionId', currentQuestionId);
     formData.append('companyId', getCompanyIdFromUrl());  
     formData.append('response', response);
+    formData.append('severity', severity); // Add severity to formData
     formData.append('comment', comment);
     formData.append('images', this.files[0]);
 
@@ -798,10 +804,13 @@ document.getElementById('hiddenImageInput').addEventListener('change', function 
         if (resp.success && resp.answer && resp.answer.images) {
           renderImagePreview(currentQuestionId, resp.answer.images);
         } else {
-          alert('Upload failed.');
+          alert('Upload failed: ' + (resp.error || 'Unknown error'));
         }
       })
-      .catch(() => alert('Upload failed.'));
+      .catch((err) => {
+          console.error(err);
+          alert('Upload failed.');
+      });
 
     // Reset & close modal
     this.value = '';

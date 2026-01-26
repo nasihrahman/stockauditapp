@@ -17,7 +17,22 @@ const { generatePDFContent } = require('./pdf'); // Adjust path if different
 //     cb(null, Date.now() + '-' + file.originalname);
 //   }
 // });
-const upload = multer({ storage });
+const sharp = require('sharp');
+const upload = multer({ storage: multer.memoryStorage() });
+
+// Helper to upload stream to Cloudinary
+const streamUpload = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: 'audits', resource_type: 'image' },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    stream.end(buffer);
+  });
+};
 
 // GET /api/answers - get all answers
 router.get('/answers', async (req, res) => {
@@ -35,54 +50,61 @@ router.get('/answers', async (req, res) => {
 
 // POST /api/answer - upsert answer for a question
 router.post('/answer', upload.array('images', 5), async (req, res) => {
-  // Debug logging for troubleshooting
-  // console.log('--- Incoming /api/answer request ---');
-  // console.log('Body:', req.body);
-  // if (req.files && req.files.length) {
-  //   console.log('Files:', req.files.map(f => f.originalname));
-  // } else {
-  //   console.log('Files: none');
-  // }
-
   try {
     const { questionId, response, severity, comment, companyId } = req.body;
 
-    
     if (!questionId || !questionId.match(/^[a-fA-F0-9]{24}$/)) {
       return res.status(400).json({ success: false, error: 'Invalid questionId' });
     }
-    let images = req.files ? req.files.map(f => f.path) : [];
+
+    let images = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        try {
+          // Compress/resize with sharp
+          const compressedBuffer = await sharp(file.buffer)
+            .resize({ width: 800, withoutEnlargement: true }) // reasonable width for mobile
+            .jpeg({ quality: 60 }) // Good balance between quality and size
+            .toBuffer();
+          
+          const result = await streamUpload(compressedBuffer);
+          if (result && result.secure_url) {
+            images.push(result.secure_url);
+          }
+        } catch (err) {
+          console.error('Sharp/Cloudinary error:', err);
+        }
+      }
+    }
 
     // Only proceed if at least one of response, comment, or images is present
     if (response === undefined && comment === undefined && images.length === 0) {
       return res.status(400).json({ success: false, error: 'No answer data provided.' });
     }
+
     let answer = await Answer.findOne({ question: questionId, company: companyId });
     if (answer) {
       if (typeof response !== 'undefined') answer.response = response;
-      if (typeof severity !== 'undefined') answer.severity = severity;
-      // Always set comment, even if empty string
+      if (typeof severity !== 'undefined') answer.severity = severity || null;
       if (typeof comment !== 'undefined') answer.comment = comment;
       if (images.length > 0) {
         answer.images = answer.images.concat(images);
       }
-      // Do NOT delete the answer if comment is empty; just save it
       if (!answer.company) answer.company = companyId;
       await answer.save();
-    // console.log('Answer object after save:', answer);
     } else {
       answer = await Answer.create({
         question: questionId,
-        response,
-        severity,
-        // Always set comment, even if empty string
+        response: response || 'na', // Default to 'na' if not provided but image/comment is
+        severity: severity || null,
         comment: typeof comment !== 'undefined' ? comment : '',
         images,
-        company: companyId // 👈 REQUIRED!
+        company: companyId
       });
     }
     res.json({ success: true, answer });
   } catch (err) {
+    console.error('Upsert answer error:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

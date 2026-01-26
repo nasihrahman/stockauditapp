@@ -126,12 +126,14 @@ router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, 
       try {
         // Compress/resize with sharp
         const compressedBuffer = await sharp(file.buffer)
-          .resize({ width: 1000 }) // adjust width as needed
-          .jpeg({ quality: 70 }) // adjust quality as needed
+          .resize({ width: 480 }) // adjust width as needed
+          .jpeg({ quality: 40 }) // adjust quality as needed
           .toBuffer();
         // Upload to Cloudinary
+        console.log("uploading to cloudinary")
         const uploadResult = await cloudinary.uploader.upload_stream(
           { folder: 'audits', resource_type: 'image' },
+          
           (error, result) => {
             if (error) {
               console.error('Cloudinary upload error:', error);
@@ -150,6 +152,7 @@ router.post('/audit/answer/:questionId', upload.array('images', 5), async (req, 
   await Answer.create({
     question: req.params.questionId,
     response: req.body.response,
+    severity: req.body.severity,
     comment: req.body.comment,
     images
   });
