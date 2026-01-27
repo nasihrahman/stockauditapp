@@ -271,7 +271,13 @@ function generatePdfMakeDocDefinition(data) {
         ...(q.comment ? [{ text: `Comment: ${q.comment}`, style: 'commentText', margin: [0, 4, 0, 0] }] : [])
       ]
     };
-    let answerCell = { text: q.answer || 'Not Answered', style: 'answerText', color: getAnswerColor(q.answer), alignment: 'center' };
+
+    let displayAnswer = q.answer || 'Not Answered';
+    if (q.answer?.toLowerCase() === 'no' && q.severity) {
+      displayAnswer += ` (${q.severity.toUpperCase()})`;
+    }
+
+    let answerCell = { text: displayAnswer, style: 'answerText', color: getAnswerColor(q.answer), alignment: 'center' };
     questionRows.push([questionCell, answerCell]);
     // Images (as extra row)
     if (q.images?.length > 0) {

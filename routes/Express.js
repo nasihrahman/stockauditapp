@@ -18,11 +18,11 @@ async function fetchImageAsDataURL(url) {
       res.on('end', async () => {
         try {
           const buffer = Buffer.concat(data);
-          // Resize and compress image using sharp
-          // You can adjust width/height/quality as needed
+          // Use sharp to rotate (fix orientation), resize and compress
           const output = await sharp(buffer)
-            .resize({ width: 400 }) // Resize to max width 400px (adjust as needed)
-            .jpeg({ quality: 60 }) // Compress JPEG to 60% quality
+            .rotate() // This auto-rotates based on EXIF data (fixes portrait/landscape issues)
+            .resize({ width: 800, withoutEnlargement: true })
+            .jpeg({ quality: 90 })
             .toBuffer();
           resolve(`data:image/jpeg;base64,${output.toString('base64')}`);
         } catch (err) {
