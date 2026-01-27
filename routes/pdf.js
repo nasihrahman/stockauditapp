@@ -45,9 +45,9 @@ function generatePdfMakeDocDefinition(data) {
   const barHeight = 22; // Slightly taller to fit text
   
   // 1. Response Analysis (Yes vs No)
-  const responseGraphContent = [
-    { text: 'Response Analysis (Yes vs No)', style: 'sectionTitle', alignment: 'center', margin: [0, 15, 0, 10] }
-  ];
+  // const responseGraphContent = [
+  //   { text: 'Response Analysis (Yes vs No)', style: 'sectionTitle', alignment: 'center', margin: [0, 15, 0, 10] }
+  // ];
 
   // 2. Severity Analysis (Major vs Minor)
   const severityGraphContent = [
@@ -78,35 +78,35 @@ function generatePdfMakeDocDefinition(data) {
       const widths = [];
       const bodyCells = [];
       
-      if (yesCount > 0) {
-        widths.push(yesWidth);
-        bodyCells.push({ 
-          text: `${yesCount} (${Math.round(yesCount/totalResp*100)}%)`, 
-          fillColor: '#22c55e', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
-        });
-      }
+      // if (yesCount > 0) {
+      //   widths.push(yesWidth);
+      //   bodyCells.push({ 
+      //     text: `${yesCount} (${Math.round(yesCount/totalResp*100)}%)`, 
+      //     fillColor: '#22c55e', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
+      //   });
+      // }
       
-      if (noCount > 0) {
-        widths.push(noWidth);
-        bodyCells.push({ 
-          text: `${noCount} (${Math.round(noCount/totalResp*100)}%)`, 
-          fillColor: '#ef4444', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
-        });
-      }
+      // if (noCount > 0) {
+      //   widths.push(noWidth);
+      //   bodyCells.push({ 
+      //     text: `${noCount} (${Math.round(noCount/totalResp*100)}%)`, 
+      //     fillColor: '#ef4444', color: 'white', fontSize: 8, bold: true, alignment: 'center', margin: [0, 4, 0, 4] 
+      //   });
+      // }
 
-      responseGraphContent.push({
-        stack: [
-          { text: catName, fontSize: 9, bold: true, margin: [0, 5, 0, 2], font: 'Helvetica' },
-          {
-            table: {
-              widths: widths,
-              body: [bodyCells]
-            },
-            layout: 'noBorders'
-          }
-        ],
-        margin: [45, 0, 45, 2]
-      });
+      // responseGraphContent.push({
+      //   stack: [
+      //     { text: catName, fontSize: 9, bold: true, margin: [0, 5, 0, 2], font: 'Helvetica' },
+      //     {
+      //       table: {
+      //         widths: widths,
+      //         body: [bodyCells]
+      //       },
+      //       layout: 'noBorders'
+      //     }
+      //   ],
+      //   margin: [45, 0, 45, 2]
+      // });
     }
 
     // Severity Graph Row
@@ -166,17 +166,17 @@ function generatePdfMakeDocDefinition(data) {
   });
 
   // Legend Styling Fix
-  const legendResponse = {
-    columns: [
-      { width: '*', text: '' },
-      { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#22c55e' }] },
-      { width: 'auto', text: 'Yes', fontSize: 8, margin: [5, 5, 15, 0] },
-      { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#ef4444' }] },
-      { width: 'auto', text: 'No', fontSize: 8, margin: [5, 5, 0, 0] },
-      { width: '*', text: '' }
-    ],
-    margin: [0, 8, 0, 0]
-  };
+  // const legendResponse = {
+  //   columns: [
+  //     { width: '*', text: '' },
+  //     { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#22c55e' }] },
+  //     { width: 'auto', text: 'Yes', fontSize: 8, margin: [5, 5, 15, 0] },
+  //     { width: 'auto', canvas: [{ type: 'rect', x: 0, y: 3, w: 10, h: 10, color: '#ef4444' }] },
+  //     { width: 'auto', text: 'No', fontSize: 8, margin: [5, 5, 0, 0] },
+  //     { width: '*', text: '' }
+  //   ],
+  //   margin: [0, 8, 0, 0]
+  // };
 
   const legendSeverity = {
     columns: [
@@ -190,10 +190,10 @@ function generatePdfMakeDocDefinition(data) {
     margin: [0, 8, 0, 0]
   };
 
-  responseGraphContent.push(legendResponse);
+  // responseGraphContent.push(legendResponse);
   severityGraphContent.push(legendSeverity);
 
-  const allGraphsContent = [...responseGraphContent, ...severityGraphContent];
+  const allGraphsContent = [ ...severityGraphContent];
   // --- END GRAPH LOGIC ---
 
   // Category summary table
