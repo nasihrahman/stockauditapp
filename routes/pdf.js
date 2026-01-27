@@ -273,11 +273,18 @@ function generatePdfMakeDocDefinition(data) {
     };
 
     let displayAnswer = q.answer || 'Not Answered';
+    let answerColor = getAnswerColor(q.answer);
+
     if (q.answer?.toLowerCase() === 'no' && q.severity) {
       displayAnswer += ` (${q.severity.toUpperCase()})`;
+      if (q.severity.toLowerCase() === 'major') {
+        answerColor = '#b91c1c';
+      } else if (q.severity.toLowerCase() === 'minor') {
+        answerColor = '#fbbf24';
+      }
     }
 
-    let answerCell = { text: displayAnswer, style: 'answerText', color: getAnswerColor(q.answer), alignment: 'center' };
+    let answerCell = { text: displayAnswer, style: 'answerText', color: answerColor, alignment: 'center' };
     questionRows.push([questionCell, answerCell]);
     // Images (as extra row)
     if (q.images?.length > 0) {
