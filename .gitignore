@@ -1,3 +1,4 @@
 .env
 uploads/
 .env.example
+internal_docs/
