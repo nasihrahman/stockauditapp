@@ -154,6 +154,7 @@ async function prepareAuditData() {
     document.querySelectorAll('.question-item').forEach(item => {
         const questionId = item.getAttribute('data-question-id');
         const questionText = item.querySelector('.question-text').textContent.trim();
+        const weightage = parseInt(item.getAttribute('data-weightage')) || 1;
         const categoryCard = item.closest('.category-card');
         const categoryName = categoryCard.querySelector('.category-title').childNodes[0].textContent.trim();
         
@@ -185,6 +186,7 @@ async function prepareAuditData() {
             id: questionId,
             category: categoryName,
             question: questionText,
+            weightage: weightage,
             answer: selectedAnswer,
             severity: severity,
             comment: comment,
@@ -277,20 +279,21 @@ async function prepareAuditData() {
         });
     }
 
-    // --- Scoring logic: update per-question, per-category, and total scores ---
+    // --- Scoring logic: update per-question, per-category, and total scores (WEIGHTED) ---
     function updateScores() {
       // Per-question score badge
       document.querySelectorAll('.question-item').forEach(function(item) {
         const radios = item.querySelectorAll('input[type="radio"]');
+        const weightage = parseInt(item.getAttribute('data-weightage')) || 1;
         let score = 0;
         radios.forEach(r => {
-          if (r.checked && r.value === 'yes') score = 1;
+          if (r.checked && r.value === 'yes') score = weightage;
         });
         const badge = item.querySelector('.question-score-badge');
         if (badge) badge.textContent = score;
       });
 
-      // Per-category and total
+      // Per-category and total (with weighted scoring)
       let totalScore = 0, totalPossible = 0;
       document.querySelectorAll('.category-card').forEach(function(catCard) {
         const catId = catCard.getAttribute('data-category-id');
@@ -298,22 +301,32 @@ async function prepareAuditData() {
         let catScore = 0, catPossible = 0;
         questions.forEach(function(item) {
           const radios = item.querySelectorAll('input[type="radio"]');
+          const weightage = parseInt(item.getAttribute('data-weightage')) || 1;
           let answered = false;
+          let isYes = false;
+          let isNA = false;
+          
           radios.forEach(r => {
             if (r.checked) {
               answered = true;
-              if (r.value === 'yes') catScore += 1;
+              if (r.value === 'yes') {
+                isYes = true;
+              } else if (r.value === 'na') {
+                isNA = true;
+              }
             }
           });
-          // Only count as possible if not N/A
-          if (answered && radios[2] && !radios[2].checked) catPossible += 1;
-          // If N/A is selected, do not count as possible
-          if (answered && radios[2] && radios[2].checked) {
-            // N/A selected, do not increment possible
-          } else if (answered) {
-            // Yes/No selected, increment possible
-            // Already handled above
+          
+          // If YES: add weightage to score and possible
+          if (isYes) {
+            catScore += weightage;
+            catPossible += weightage;
+          } 
+          // If NO: add 0 to score but add weightage to possible
+          else if (answered && !isNA) {
+            catPossible += weightage;
           }
+          // If N/A: don't add to either score or possible (exclude from calculation)
         });
         totalScore += catScore;
         totalPossible += catPossible;

@@ -17,6 +17,22 @@
       font-weight: 600;
       letter-spacing: 0.01em;
     }
+    /* Weightage badge styles */
+    .weightage-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 6px;
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.08);
+    }
+    .weightage-badge--high { background: #7c3aed; }
+    .weightage-badge--default { background: #6b7280; }
   </style>
   
   <!-- Bootstrap CSS -->
@@ -162,10 +178,17 @@
             </div>
             <ul class="questions-list">
               <% questions.filter(q => q.category && q.category._id.toString() === cat._id.toString()).sort((a, b) => a.order - b.order).forEach(function(q, idx) { %>
-                <li class="question-item" data-category-id="<%= cat._id %>" data-question-id="<%= q._id %>">
+                <li class="question-item" data-category-id="<%= cat._id %>" data-question-id="<%= q._id %>" data-weightage="<%= q.weightage || 1 %>">
                   <form method="POST" action="/audit/answer/<%= q._id %>" enctype="multipart/form-data" class="question-form">
                     <div class="question-content">
-                      <div class="question-text"><%= idx + 1 %>. <%= q.text %></div>
+                        <div class="question-text-wrapper" style="display: flex; align-items: center; gap: 0.75rem; justify-content: space-between; width: 100%;">
+                        <div style="display:flex; align-items:center; gap:0.75rem; min-width:0;">
+                          <div class="question-text" style="white-space:normal; overflow-wrap:break-word;"> <%= idx + 1 %>. <%= q.text %></div>
+                        </div>
+                        <div style="flex: 0 0 auto; margin-left: 12px;">
+                          <span class="weightage-badge <%= (q.weightage && q.weightage > 1) ? 'weightage-badge--high' : 'weightage-badge--default' %>" title="Weight"><%= q.weightage || 1 %></span>
+                        </div>
+                      </div>
                       <div class="question-controls">
                         <div class="radio-group">
                           <div class="radio-option">

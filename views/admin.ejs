@@ -687,6 +687,12 @@ header{
                 <% } %>
               </select>
             </div>
+
+            <div class="form-group">
+              <label for="weightage-input">Question Weightage</label>
+              <input type="number" id="weightage-input" name="weightage" placeholder="1" value="1" min="1" required />
+              <small style="color: #6b7280; display: block; margin-top: 0.25rem;">Default: 1 (no decimals allowed)</small>
+            </div>
             
             <button type="submit" id="add-question-btn" class="button-59">
               Add Question
@@ -728,6 +734,10 @@ header{
   <%= q.category ? q.category.name : 'No Category' %>
 </span>
 
+<% if (q.weightage && q.weightage > 1) { %>
+  <span class="weightage-badge" style="display: inline-flex; align-items: center; justify-content: center; min-width: 3rem; height: 1.75rem; background-color: #667eea; color: white; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">W: <%= q.weightage %></span>
+<% } %>
+
 <div style="display:flex; gap: 0.5rem; justify-content: space-between;">
   <a href="/admin/edit-question/<%= q._id %>" class="button btn-edit-qsn">Edit</a>
 
@@ -763,6 +773,13 @@ header{
     // Form submission handler
     questionForm.addEventListener('submit', function(e) {
       const hasSelectedCategory = categorySelect.value;
+      // Debug log: weightage value from input
+      try {
+        const weightVal = document.getElementById('weightage-input') && document.getElementById('weightage-input').value;
+        console.log('Submitting question form, weightage input value:', weightVal);
+      } catch (err) {
+        console.warn('Could not read weightage input value', err);
+      }
       
       if (!hasSelectedCategory) {
         e.preventDefault();

@@ -194,6 +194,11 @@
           <% }); %>
         </select>
       </div>
+      <div class="form-group">
+        <label for="weightage-input">Question Weightage</label>
+        <input type="number" id="weightage-input" name="weightage" value="<%= question.weightage || 1 %>" min="1" required />
+        <small style="color: #6b7280; display: block; margin-top: 0.25rem;">Default: 1 (no decimals allowed)</small>
+      </div>
       <button type="submit" class="button-59">Save Changes</button>
     </form>
   </div>

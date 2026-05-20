@@ -224,16 +224,17 @@ function generatePdfMakeDocDefinition(data) {
     if (!currentCategory || questionRows.length === 0) return;
     questionsByCategory.push({
       table: {
-        widths: ['70%', '30%'],
+        widths: ['60%', '15%', '25%'],
         body: [
           [
             {
-              colSpan: 2,
+              colSpan: 3,
               text: `${currentCategory}     Score: ${data.categorySummaries.find(c => c.name === currentCategory)?.score || '0/0 (0%)'}`,
               style: 'categoryHeaderTable',
               alignment: 'left',
               margin: [0, 0, 0, 0]
             },
+            {},
             {}
           ],
           ...questionRows
@@ -264,13 +265,15 @@ function generatePdfMakeDocDefinition(data) {
       currentCategory = q.category;
       questionNumber = 1;
     }
-    // Question row
+    // Question row with weightage
     let questionCell = {
       stack: [
         { text: ` ${q.question}`, style: 'questionText', alignment: 'left' },
         ...(q.comment ? [{ text: `Comment: ${q.comment}`, style: 'commentText', margin: [0, 4, 0, 0] }] : [])
       ]
     };
+
+    let weightCell = { text: String(q.weightage ?? 1), style: 'tableCell', alignment: 'center' };
 
     let displayAnswer = q.answer || 'Not Answered';
     let answerColor = getAnswerColor(q.answer);
@@ -285,15 +288,16 @@ function generatePdfMakeDocDefinition(data) {
     }
 
     let answerCell = { text: displayAnswer, style: 'answerText', color: answerColor, alignment: 'center' };
-    questionRows.push([questionCell, answerCell]);
+    questionRows.push([questionCell, weightCell, answerCell]);
     // Images (as extra row)
     if (q.images?.length > 0) {
       questionRows.push([
         {
-          colSpan: 2,
+          colSpan: 3,
           stack: q.images.map(imgUrl => ({ image: forceJpgFormat(imgUrl), width: 150, margin: [0, 4, 0, 8] })),
           margin: [0, 4, 0, 8]
         },
+        {},
         {}
       ]);
     }

@@ -46,57 +46,15 @@ router.delete('/admin/category/:id', async (req, res) => {
   }
 });
 
-router.post('/admin/question', async (req, res) => {
-  let categoryId = req.body.category;
-  const { companyId } = req.body;
-
-  // console.log('Received req.body.text:', req.body.text); // Log the raw input
-
-  const questionTexts = req.body.text.split(',').map(text => text.trim()).filter(text => text.length > 0); // Split, trim, and filter empty strings
-
-  // console.log('Processed questionTexts:', questionTexts); // Log the processed array
-
-  if (req.body.newCategory && req.body.newCategory.trim()) {
-    const newCat = await Category.create({ name: req.body.newCategory.trim() });
-    categoryId = newCat._id;
-  }
-
-  if (questionTexts.length === 0) {
-    // Handle case where no valid questions were provided
-    return res.redirect(`/admin?company=${companyId}`);
-  }
-
-  // Create multiple questions
-  const questionsToCreate = [];
-  let maxOrder = await Question.findOne({ category: categoryId }).sort({ order: -1 }).select('order');
-  maxOrder = maxOrder ? maxOrder.order : -1; // Start from -1 so the first question is 0
-
-  for (const text of questionTexts) {
-    maxOrder++;
-    questionsToCreate.push({
-      text: text,
-      category: categoryId,
-      company: companyId,
-      order: maxOrder
-    });
-  }
-
-  await Question.insertMany(questionsToCreate); // Use insertMany for efficiency
-
-  res.redirect(`/admin?company=${companyId}`);
-});
+// NOTE: Admin question creation is handled by routes/admin.js. Removed duplicate handler here
+// to avoid route conflict so that `/admin/question` is handled by the dedicated admin router.
 
 // router.post('/admin/question/delete/:id', async (req, res) => {
 //   await Question.findByIdAndDelete(req.params.id);
 //   res.redirect('/admin');
 // });
 
-router.post('/admin/question/delete/:id', async (req, res) => {
-  const q = await Question.findById(req.params.id);
-  const companyId = q.company;
-  await Question.findByIdAndDelete(req.params.id);
-  res.redirect(`/admin?company=${companyId}`);
-});
+// NOTE: Question delete is handled in routes/admin.js to avoid duplication.
 
 
 // --- Main Audit Route ---

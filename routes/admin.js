@@ -61,9 +61,16 @@ router.post('/add-user', isAdmin, async (req, res) => {
 // POST route for adding a question
 router.post('/question', isAdmin, async (req, res) => {
   console.log('Received question submission:', req.body);
-  const { companyId, category, text, single_text } = req.body;
-  console.log('single_text:', single_text, 'text:', text);
+  const { companyId, category, text, single_text, weightage } = req.body;
+  console.log('single_text:', single_text, 'text:', text, 'raw weightage:', weightage);
   try {
+    // Parse and validate weightage robustly
+    let parsedWeightage = parseInt(weightage, 10);
+    if (isNaN(parsedWeightage) || parsedWeightage < 1) {
+      parsedWeightage = 1;
+    }
+    console.log('parsedWeightage to use for new questions:', parsedWeightage);
+
     // req.body already destructured above; avoid redeclaring variables here
     const lastQuestion = await Question.findOne({ company: companyId }).sort({ order: -1 });
     let currentOrder = lastQuestion ? lastQuestion.order + 1 : 0;
@@ -72,19 +79,23 @@ router.post('/question', isAdmin, async (req, res) => {
 
     if (single_text) {
       // Add single question, even if it contains commas
-      questions.push({ text: single_text, category, company: companyId, order: currentOrder });
+      questions.push({ text: single_text, category, company: companyId, order: currentOrder, weightage: parsedWeightage });
       currentOrder++; // Increment order for the single question
     } else if (text && text.trim()) {
       // Add multiple questions, splitting by commas
       const questionTexts = text.split(',').map(q => q.trim()).filter(q => q);
       for (const qText of questionTexts) {
-        questions.push({ text: qText, category, company: companyId, order: currentOrder });
+        questions.push({ text: qText, category, company: companyId, order: currentOrder, weightage: parsedWeightage });
         currentOrder++; // Increment order for each question in the multiple questions field
       }
     }
 
     if (questions.length > 0) {
-      await Question.insertMany(questions);
+      console.log('Questions payload to insert:', JSON.stringify(questions, null, 2));
+      const inserted = await Question.insertMany(questions);
+      console.log('Inserted questions count:', inserted.length);
+      // Log inserted docs' weightage to verify
+      inserted.forEach(doc => console.log('Inserted doc:', { id: doc._id.toString(), weightage: doc.weightage }));
     }
 
     res.redirect(`/admin?company=${companyId}`);
@@ -94,10 +105,25 @@ router.post('/question', isAdmin, async (req, res) => {
   }
 });
 
+// POST route to migrate existing questions missing weightage to default=1
+router.post('/migrate-weightage', isAdmin, async (req, res) => {
+  try {
+    const { companyId } = req.body;
+    if (!companyId) return res.status(400).json({ success: false, message: 'companyId required' });
+
+    const result = await Question.updateMany({ company: companyId, $or: [{ weightage: { $exists: false } }, { weightage: null }] }, { $set: { weightage: 1 } });
+    console.log('Migration result for company', companyId, result);
+    res.json({ success: true, modifiedCount: result.modifiedCount || result.nModified || 0 });
+  } catch (err) {
+    console.error('Error migrating weightage:', err);
+    res.status(500).json({ success: false, message: 'Migration failed' });
+  }
+});
+
 // GET route for editing a question
 router.get('/edit-question/:id', isAdmin, async (req, res) => {
   try {
-    const question = await Question.findById(req.params.id).populate('category');
+  const question = await Question.findById(req.params.id).populate('category');
     const categories = await Category.find({ company: question.company });
     if (!question) {
       return res.status.send('Question not found');
@@ -113,8 +139,19 @@ router.get('/edit-question/:id', isAdmin, async (req, res) => {
 // POST route for updating a question
 router.post('/edit-question/:id', isAdmin, async (req, res) => {
   try {
-    const { text, category } = req.body;
-    await Question.findByIdAndUpdate(req.params.id, { text, category });
+    const { text, category, weightage } = req.body;
+    console.log('Edit question payload:', { text, category, weightage });
+    
+    // Parse and validate weightage robustly
+    let parsedWeightage = parseInt(weightage, 10);
+    if (isNaN(parsedWeightage) || parsedWeightage < 1) parsedWeightage = 1;
+    console.log('parsedWeightage to use for edit:', parsedWeightage);
+    
+    await Question.findByIdAndUpdate(req.params.id, {
+      text,
+      category,
+      weightage: parsedWeightage
+    });
     const question = await Question.findById(req.params.id);
     res.redirect(`/admin?company=${question.company}`);
   } catch (err) {
