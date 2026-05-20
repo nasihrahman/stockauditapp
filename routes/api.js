@@ -241,6 +241,21 @@ router.put('/question/:id', async (req, res) => {
   }
 });
 
+// --- Update Question Weight (AJAX) ---
+router.put('/question/:id/weight', async (req, res) => {
+  try {
+    const { weightage } = req.body;
+    let parsed = parseInt(weightage, 10);
+    if (isNaN(parsed) || parsed < 1) parsed = 1;
+    const updated = await Question.findByIdAndUpdate(req.params.id, { weightage: parsed }, { new: true });
+    if (!updated) return res.status(404).json({ success: false, message: 'Question not found' });
+    res.json({ success: true, question: updated });
+  } catch (err) {
+    console.error('Error updating question weight:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 
 // POST /api/clear-all - clears all answers from the database
 router.post('/clear-all/:companyId', async (req, res) => {
