@@ -210,6 +210,22 @@ router.post('/question/reorder', isAdmin, async (req, res) => {
   }
 });
 
+// POST route to delete a question
+router.post('/question/delete/:id', isAdmin, async (req, res) => {
+  try {
+    const q = await Question.findById(req.params.id);
+    if (!q) return res.status(404).send('Question not found');
+    const companyId = q.company;
+    await Question.findByIdAndDelete(req.params.id);
+    // Optionally: remove related answers if present
+    // await Answer.deleteMany({ question: req.params.id });
+    res.redirect(`/admin?company=${companyId}`);
+  } catch (err) {
+    console.error('Error deleting question:', err);
+    res.status(500).send('Failed to delete question');
+  }
+});
+
 
 
 // // GET route to fix question order (run once)
