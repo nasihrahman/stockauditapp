@@ -4,32 +4,38 @@ A modern, mobile-friendly stock auditing system for companies, built with Node.j
 
 **Live Site:** [https://stockauditapp.onrender.com/](https://stockauditapp.onrender.com/)
 
+## About
+
+This is a stock auditing system built as a freelance engagement for a trading company based in Bahrain (May–June 2025). It gives auditors a structured, mobile-friendly way to walk through a company's inventory against a weighted checklist, attach evidence, and generate a scored report on the spot. The app handles inventory/company management, categorized audit questions with per-question weighting, and PDF audit reporting.
+
 ## Features
 
-- Company management (create, edit, delete companies)
-- Categorized audit questions (Yes/No/N/A)
-- Per-question comments and image upload (gallery or camera)
-- Admin panel for managing questions and categories
-- Info panel with editable company/audit info
-- Dynamic scoring and summary panel
-- AJAX-based answer saving and retrieval
-- Responsive, modern UI (Bootstrap + custom styles)
-- PDF export of audit results
-- User authentication and roles (admin, user)
+- Company management (create, edit, delete companies) with a dashboard listing all companies
+- Categorized audit questions (Yes/No/N/A) with configurable, per-question weightage/scoring
+- Admin panel for managing categories and questions, including drag-to-reorder
+- Per-question comments and image upload (gallery or camera), backed by Cloudinary
+- Editable info panel (company, location, date, branch, manager, inspector)
+- Dynamic per-category and total scoring with a live summary panel
+- AJAX-based answer saving/retrieval, so progress is autosaved as you go
+- PDF export of the full audit report (via PDFKit/pdfmake)
+- User authentication with role-based access (admin vs. regular user), including an admin "add user" flow
 
 ## Tech Stack
-- Node.js + Express
-- MongoDB (Mongoose)
-- EJS templates
-- Bootstrap 5
-- Multer (file uploads)
-- Cloudinary (optional, for image hosting)
+- **Backend:** Node.js, Express
+- **Database:** MongoDB with Mongoose (Company, Category, Question, Answer, Info, User models)
+- **Views:** EJS templates
+- **Frontend:** Bootstrap 5, vanilla JS (AJAX)
+- **File uploads:** Multer + Cloudinary (`multer-storage-cloudinary`) for image hosting
+- **Image processing:** Sharp
+- **PDF generation:** PDFKit and pdfmake
+- **Auth/session:** express-session, bcryptjs
+- **Config:** dotenv for environment variables
 
 ## Getting Started
 
 1. **Clone the repo:**
    ```sh
-   git clone https://github.com/yourusername/stockauditapp.git
+   git clone https://github.com/nasihrahman/stockauditapp.git
    cd stockauditapp
    ```
 2. **Install dependencies:**
@@ -48,10 +54,12 @@ A modern, mobile-friendly stock auditing system for companies, built with Node.j
 
 ## Folder Structure
 - `app.js` - Main Express app
-- `routes/` - API and page routes
-- `models/` - Mongoose models (Company, Info, Category, Question, Answer)
-- `views/` - EJS templates
+- `cloudinary.js` - Cloudinary + Multer storage configuration for image uploads
+- `routes/` - API and page routes (auth, audit, admin, api, PDF generation)
+- `models/` - Mongoose models (Company, Info, Category, Question, Answer, User)
+- `views/` - EJS templates (audit form, admin panel, dashboard, login, user/category/question editors)
 - `public/` - Static files (CSS, JS, images)
+- `indstyle.css` - Styling for the main audit page
 
 
 ---

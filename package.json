@@ -6,8 +6,28 @@
   "scripts": {
     "start": "node app.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nasihrahman/stockauditapp.git"
+  },
+  "keywords": [
+    "stock-audit",
+    "inventory",
+    "express",
+    "mongodb",
+    "ejs",
+    "audit"
+  ],
+  "author": "Nasih Rahman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nasihrahman/stockauditapp/issues"
+  },
+  "homepage": "https://github.com/nasihrahman/stockauditapp#readme",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^1.41.3",
     "dotenv": "^16.6.1",

@@ -1,5 +1,23 @@
-.env
-uploads/
-.env.example
-internal_docs/
+# dependencies
 node_modules/
+
+# environment variables
+.env
+.env.local
+
+# runtime / uploads
+uploads/
+
+# internal notes (not for public repo)
+internal_docs/
+context/
+
+# editor / OS
+.vscode/
+.gemini/
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+npm-debug.log*
